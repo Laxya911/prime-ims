@@ -264,12 +264,6 @@ const Purchase = () => {
     companyId = session.data.user.companyId;
     // Now you can use companyId
   }
-  useEffect(() => {
-    if (companyId) {
-      generatePurchaseNumber();
-    }
-  }, [companyId]);
-
   const generatePurchaseNumber = async () => {
     try {
       // Make an API call to fetch existing purchase order numbers for the company from the backend
@@ -305,6 +299,13 @@ const Purchase = () => {
       console.log(error);
     }
   };
+  useEffect(() => {
+    if (companyId) {
+      generatePurchaseNumber();
+    }
+  },  [session.status, session.data,companyId, generatePurchaseNumber]);
+
+
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();

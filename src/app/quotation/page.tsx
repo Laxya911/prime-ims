@@ -267,11 +267,6 @@ const Quotations = () => {
     companyId = session.data.user.companyId;
     // Now you can use companyId
   }
-  useEffect(() => {
-    if (companyId) {
-      generateQuotationNumber();
-    }
-  }, [companyId]);
   const generateQuotationNumber = async () => {
     try {
       // Make an API call to fetch existing quotation numbers for the company from the backend
@@ -310,6 +305,13 @@ const Quotations = () => {
       console.log(error);
     }
   };
+  
+  useEffect(() => {
+    if (companyId) {
+      generateQuotationNumber();
+    }
+  }, [session.status, session.data,companyId, generateQuotationNumber]);
+ 
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
