@@ -1,0 +1,100 @@
+
+
+.heading {
+  font-size: 28px;
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 18px;
+}
+
+.form {
+  width: 100%;
+  max-width: 70%;
+  margin-left: auto;
+  margin-right: auto;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+}
+
+.formGroup label {
+  margin-bottom: 2px;
+}
+
+.input {
+  padding: 5px;
+  border: 2px solid #bbb;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.saveButton {
+  width: 100%;
+  cursor: pointer;
+  background-color: #53c28b;
+  border: none;
+  border-radius: 5px;
+  color: #eee;
+  padding: 5px;
+}
+
+.cancelButton {
+  width: 100%;
+  cursor: pointer;
+  background-color: #9d8c32;
+  border: none;
+  border-radius: 5px;
+  color: #504b4b;
+  padding: 5px;
+}
+
+@media (max-width: 1024px) {
+  .form {
+    width: 100%;
+    max-width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+}
+
+@media (max-width: 600px) {
+  .form {
+    width: 100%;
+    max-width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .buttonGroup {
+    flex-direction: column;
+    margin-top: 0;
+  }
+  .saveButton {
+    background-color: #53c28b;
+    border: none;
+    border-radius: 5px;
+    color: #eee;
+  }
+  .cancelButton {
+    background-color: #9d8c32;
+    border: none;
+    border-radius: 5px;
+    color: #504b4b;
+  }
+}
