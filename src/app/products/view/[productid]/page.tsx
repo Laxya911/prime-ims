@@ -63,8 +63,6 @@ const UpdatePO: React.FC<UpdateProps> = ({ params: { productid } }) => {
     axios
       .put(`/api/product/${productid}`, formData)
       .then((response) => {
-        // formRef.current.reset();
-        // window.location.reload(false);
         toast.success("Product Updated successfully");
       })
       .catch((error) => {
