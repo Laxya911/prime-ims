@@ -204,29 +204,25 @@ const CreateInvoice = () => {
     companyId = session.data.user.companyId;
     // Now you can use companyId
   }
-  useEffect(() => {
-    if (companyId) {
-      generateInvoiceNumber();
-    }
-  }, [companyId]);
-
   const generateInvoiceNumber = async () => {
     try {
       // Make an API call to fetch existing invoice numbers for the company from the backend
-      const response = await axios.get(`/api/primeinvoice?companyId=${companyId}`);
+      const response = await axios.get(
+        `/api/primeinvoice?companyId=${companyId}`
+      );
       const companyInvoices = response.data;
 
-        const companyInvoiceNumbers = companyInvoices
-              .filter(
-                (invoice: { companyId: string; invoiceNumber: string }) =>
-                  invoice.companyId === companyId
-              )
-              .map((invoice: { invoiceNumber: string }) => {
-                const parts = invoice.invoiceNumber.split("-");
-                const lastPart = parts[parts.length - 1];
-                return parseInt(lastPart, 10);
-              })
-              .filter((number: number) => !isNaN(number));
+      const companyInvoiceNumbers = companyInvoices
+        .filter(
+          (invoice: { companyId: string; invoiceNumber: string }) =>
+            invoice.companyId === companyId
+        )
+        .map((invoice: { invoiceNumber: string }) => {
+          const parts = invoice.invoiceNumber.split("-");
+          const lastPart = parts[parts.length - 1];
+          return parseInt(lastPart, 10);
+        })
+        .filter((number: number) => !isNaN(number));
       // Calculate the maximum invoice number for the company and increment
       const maxInvoiceNumber =
         companyInvoiceNumbers.length > 0
@@ -250,6 +246,14 @@ const CreateInvoice = () => {
       console.log(error);
     }
   };
+  
+  useEffect(() => {
+    if (companyId) {
+      generateInvoiceNumber();
+    }
+  }, [session, session.data, companyId, generateInvoiceNumber]);
+
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 

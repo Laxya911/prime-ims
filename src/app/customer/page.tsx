@@ -20,9 +20,28 @@ const Customer = () => {
     }
   }, [session.status, router]);
 
-
-const{ customer,   allCustomer,setCustomer,filterCustomer,customerOnPage,customerPerPage, searchTerm,handleCancel,handleDelete,handleUpdate,setFilterCustomer,selectCustomer,setSearchTerm,selectedCustomerId,handleCustomerSelect,isEditing,setCustomerOnPage,setAllCustomer,setIsEditing,isFormSubmitted,setIsFormSubmitted,
-} = CustomerApi();
+  const {
+    customer,
+    allCustomer,
+    setCustomer,
+    filterCustomer,
+    customerOnPage,
+    customerPerPage,
+    searchTerm,
+    handleCancel,
+    handleDelete,
+    handleUpdate,
+    setFilterCustomer,
+    selectCustomer,
+    setSearchTerm,
+    selectedCustomerId,
+    handleCustomerSelect,
+    isEditing,
+    setCustomerOnPage,
+    setAllCustomer,
+    setIsEditing,
+    setIsFormSubmitted,
+  } = CustomerApi();
 
   // handleSubmit Logic
   const handleSubmit = async (e: React.FormEvent) => {
@@ -34,7 +53,6 @@ const{ customer,   allCustomer,setCustomer,filterCustomer,customerOnPage,custome
       companyId: session?.data?.user.companyId,
       date_created: new Date(),
     };
-    console.log(updatedCustomer);
     axios
       .post("/api/customer", updatedCustomer)
       .then(async (res) => {
@@ -60,7 +78,7 @@ const{ customer,   allCustomer,setCustomer,filterCustomer,customerOnPage,custome
       }
     };
     if (session?.status === "authenticated") fetchCustomer();
-  }, [session]);
+  }, [session.status, session.data]);
 
   useEffect(() => {
     // Filter po based on searchTerm
@@ -76,8 +94,8 @@ const{ customer,   allCustomer,setCustomer,filterCustomer,customerOnPage,custome
     setCustomerOnPage(1);
   }, [searchTerm, allCustomer]);
 
-   // Pagination Logic
-   const handleNextPage = () => {
+  // Pagination Logic
+  const handleNextPage = () => {
     const pageCount = Math.ceil(allCustomer.length / customerOnPage);
     if (customerOnPage === pageCount) return;
     setCustomerOnPage((prevPage) => prevPage + 1);
@@ -396,9 +414,9 @@ const{ customer,   allCustomer,setCustomer,filterCustomer,customerOnPage,custome
         <div className="relative shadow-md sm:rounded-lg mt-4">
           {/* Search Input */}
           <div className="flex flex-col justify-between lg:flex-row lg:items-end gap-2 sm:gap-4 sm:text-center sm:mb-4 lg:mb-2 px-8 py-1">
-          <div className="text-center text-2xl  font-medium">
-            Customer List
-          </div>
+            <div className="text-center text-2xl  font-medium">
+              Customer List
+            </div>
             {/* <button
               className="bg-success text-white rounded  flex px-4 py-1"
               // onClick={exportToExcel}

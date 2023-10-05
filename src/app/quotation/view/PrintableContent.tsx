@@ -24,6 +24,7 @@ const generatePrintableContent = (
       <Page>
         <View style={styles.container}>
           <View>
+             {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <Image
               src={
                 companyData.logo

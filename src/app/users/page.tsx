@@ -62,11 +62,11 @@ const UserLists = () => {
           }
         }
       } catch (error) {
-        console.error(error);
+        console.error(error); 
       }
     };
     fetchUsersAndCompanies();
-  }, []);
+  }, [session.status, session.data]);
 
   const handleUpdateUser = async (_id: string) => {
     try {

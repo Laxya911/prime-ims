@@ -67,7 +67,7 @@ const CustomerApi = () => {
       }
     };
     if (session?.status === "authenticated") fetchCustomer();
-  }, [session]);
+  }, [session.status, session.data, setAllCustomer]);
 
   useEffect(() => {
     // Filter po based on searchTerm
@@ -81,7 +81,7 @@ const CustomerApi = () => {
     setFilterCustomer(filteredData);
     // Reset the po page to the first page whenever the searchTerm changes
     setCustomerOnPage(1);
-  }, [searchTerm, allCustomer]);
+  }, [searchTerm, allCustomer, setFilterCustomer, setCustomerOnPage]);
   const [isEditing, setIsEditing] = useState(false);
 
   const [selectedCustomerId, setSelectedCustomerId] = useState(""); // Track the selected vendor's _id
