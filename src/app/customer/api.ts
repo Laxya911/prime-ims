@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import React, { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
@@ -153,20 +153,24 @@ const CustomerApi = () => {
 
   // Handle the delete operation
   const handleDelete = async () => {
-    const shouldDelete = window.confirm("Are you sure to Delete ??");
-    if (shouldDelete) {
-      try {
-        await axios.delete(`/api/customer/${selectedCustomerId}`);
-        toast.success("Customer deleted successfully!");
-        setAllCustomer((prevallCustomer) =>
-          prevallCustomer.filter((vendor) => vendor._id !== selectedCustomerId)
-        );
-        setIsEditing(false); // Disable edit mode
-        setSelectedCustomerId(""); // Clear selected vendor
-        setCustomer({ ...initialCustomerState }); // Clear input fields
-      } catch (error) {
-        console.error("Error deleting vendor data:", error);
-        toast.error("Something went wrong while deleting vendor data");
+    if (typeof window !== "undefined") {
+      const shouldDelete = window.confirm("Are you sure to Delete ??");
+      if (shouldDelete) {
+        try {
+          await axios.delete(`/api/customer/${selectedCustomerId}`);
+          toast.success("Customer deleted successfully!");
+          setAllCustomer((prevallCustomer) =>
+            prevallCustomer.filter(
+              (vendor) => vendor._id !== selectedCustomerId
+            )
+          );
+          setIsEditing(false); // Disable edit mode
+          setSelectedCustomerId(""); // Clear selected vendor
+          setCustomer({ ...initialCustomerState }); // Clear input fields
+        } catch (error) {
+          console.error("Error deleting vendor data:", error);
+          toast.error("Something went wrong while deleting vendor data");
+        }
       }
     }
   };
@@ -177,7 +181,28 @@ const CustomerApi = () => {
   };
 
   return {
-    customer,allCustomer,setCustomer,setFilterCustomer,setIsEditing,setSearchTerm,setCustomerOnPage,setAllCustomer,filterCustomer,customerOnPage,customerPerPage, searchTerm,handleCancel,handleDelete,handleUpdate,selectCustomer,handleCustomerSelect,isEditing,selectedCustomerId,setSelectedCustomerId,isFormSubmitted, setIsFormSubmitted
-  }
+    customer,
+    allCustomer,
+    setCustomer,
+    setFilterCustomer,
+    setIsEditing,
+    setSearchTerm,
+    setCustomerOnPage,
+    setAllCustomer,
+    filterCustomer,
+    customerOnPage,
+    customerPerPage,
+    searchTerm,
+    handleCancel,
+    handleDelete,
+    handleUpdate,
+    selectCustomer,
+    handleCustomerSelect,
+    isEditing,
+    selectedCustomerId,
+    setSelectedCustomerId,
+    isFormSubmitted,
+    setIsFormSubmitted,
+  };
 };
-export default CustomerApi
+export default CustomerApi;

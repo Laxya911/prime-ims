@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import {ProductTypes} from "@/app/types/product"
+import { ProductTypes } from "@/app/types/product";
 
 const ProductApi = () => {
   const session = useSession();
@@ -29,7 +29,7 @@ const ProductApi = () => {
           } else {
             // Filter Invoices to display only the ones created by the logged-in user
             const filteredData = data.filter(
-              (po: { companyId: string; }) =>
+              (po: { companyId: string }) =>
                 po.companyId === session.data.user.companyId
             );
             const sortedPurchaseOrder = filteredData.sort(
@@ -49,23 +49,25 @@ const ProductApi = () => {
   }, [session.status, session.data]);
 
   const handleDelete = (_id: string) => {
-    const shouldDelete = window.confirm("Are You Sure to Delete??")
-    if (shouldDelete){
-    axios
-      .delete(`/api/product/${_id}`)
-      .then((response) => {
-        console.log(response.data); // Handle the response data
-        toast.success("Product Deleted Successfully");
-        setAllProducts((prevInvoice) =>
-          prevInvoice.filter((allProducts) => allProducts._id !== _id)
-        );
-      })
-      .catch((error) => {
-        toast.error("Product Not Deleted");
-        console.error(error); // Handle the error
-      });
+    if (typeof window !== "undefined") {
+      const shouldDelete = window.confirm("Are You Sure to Delete??");
+      if (shouldDelete) {
+        axios
+          .delete(`/api/product/${_id}`)
+          .then((response) => {
+            console.log(response.data); // Handle the response data
+            toast.success("Product Deleted Successfully");
+            setAllProducts((prevInvoice) =>
+              prevInvoice.filter((allProducts) => allProducts._id !== _id)
+            );
+          })
+          .catch((error) => {
+            toast.error("Product Not Deleted");
+            console.error(error); // Handle the error
+          });
+      }
+    }
   };
-};
   return {
     allProducts,
     handleDelete,

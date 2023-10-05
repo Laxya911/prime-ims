@@ -67,7 +67,7 @@ const Vendor = () => {
 
     if (!isGstVatNoValid(vendor.gst_vat_no)) {
       toast.error("Invalid GST/VAT number");
-      return; 
+      return;
     }
     const updatedVendor = {
       ...vendor,
@@ -100,7 +100,7 @@ const Vendor = () => {
     const fetchVendors = async () => {
       try {
         const response = await axios.get("api/vendor");
-      
+
         setAllVendor(response.data);
       } catch (error) {
         console.error("Error fetching company data:", error);
@@ -122,7 +122,7 @@ const Vendor = () => {
     // Reset the po page to the first page whenever the searchTerm changes
     setItemonPage(1);
   }, [searchTerm, allvendor]);
-  
+
   const [isEditing, setIsEditing] = useState(false);
   const [selectedVendorId, setSelectedVendorId] = useState(""); // Track the selected vendor's _id
 
@@ -156,7 +156,7 @@ const Vendor = () => {
   const handleUpdate = async () => {
     if (!isGstVatNoValid(vendor.gst_vat_no)) {
       toast.error("Invalid GST/VAT number");
-      return; 
+      return;
     }
     const updatedVendor = {
       ...vendor,
@@ -193,20 +193,22 @@ const Vendor = () => {
   };
   // Handle the delete operation
   const handleDelete = async () => {
-    const shouldDelete = window.confirm("Are you sure to Delete ??");
-    if (shouldDelete) {
-      try {
-        await axios.delete(`/api/vendor/${selectedVendorId}`);
-        toast.success("Vendor data deleted successfully!");
-        setAllVendor((prevAllVendor) =>
-          prevAllVendor.filter((vendor) => vendor._id !== selectedVendorId)
-        );
-        setIsEditing(false); // Disable edit mode
-        setSelectedVendorId(""); // Clear selected vendor
-        setVendor({ ...initialVendorState }); // Clear input fields
-      } catch (error) {
-        console.error("Error deleting vendor data:", error);
-        toast.error("Something went wrong while deleting vendor data");
+    if (typeof window !== "undefined") {
+      const shouldDelete = window.confirm("Are you sure to Delete ??");
+      if (shouldDelete) {
+        try {
+          await axios.delete(`/api/vendor/${selectedVendorId}`);
+          toast.success("Vendor data deleted successfully!");
+          setAllVendor((prevAllVendor) =>
+            prevAllVendor.filter((vendor) => vendor._id !== selectedVendorId)
+          );
+          setIsEditing(false); // Disable edit mode
+          setSelectedVendorId(""); // Clear selected vendor
+          setVendor({ ...initialVendorState }); // Clear input fields
+        } catch (error) {
+          console.error("Error deleting vendor data:", error);
+          toast.error("Something went wrong while deleting vendor data");
+        }
       }
     }
   };
@@ -218,8 +220,6 @@ const Vendor = () => {
     setSelectedVendorId(""); // Clear selected vendor
     setVendor({ ...initialVendorState }); // Clear input fields
   };
-
-
 
   // Pagination Logic
   const handleNext = () => {
@@ -237,10 +237,7 @@ const Vendor = () => {
   };
   const itemStartIndex = (itemonPage - 1) * itemPerPage;
   const itemEndIndex = itemStartIndex + itemPerPage;
-  const itemPage = filterItems.slice(
-    itemStartIndex,
-    itemEndIndex
-  );
+  const itemPage = filterItems.slice(itemStartIndex, itemEndIndex);
   const pageCount = Math.ceil(filterItems.length / itemPerPage);
   if (session.status === "authenticated") {
     return (
@@ -291,7 +288,7 @@ const Vendor = () => {
                 name="company"
                 type="text"
                 placeholder="Company Name"
-                value={vendor.company ? vendor.company :""}
+                value={vendor.company ? vendor.company : ""}
                 className={styles.input}
                 readOnly={!isEditing}
                 onChange={(e) =>
@@ -306,7 +303,7 @@ const Vendor = () => {
                 type="number"
                 name="contact_no"
                 placeholder="vendors Phone"
-                value={vendor.contact_no ? vendor.contact_no :""}
+                value={vendor.contact_no ? vendor.contact_no : ""}
                 className={styles.input}
                 required={true}
                 readOnly={!isEditing}
@@ -323,7 +320,7 @@ const Vendor = () => {
                 name="email"
                 className={styles.input}
                 placeholder="vendors Email"
-                value={vendor.email? vendor.email:""}
+                value={vendor.email ? vendor.email : ""}
                 required={true}
                 readOnly={!isEditing}
                 onChange={(e) =>
@@ -339,7 +336,7 @@ const Vendor = () => {
                 type="text"
                 placeholder="GST/VAT"
                 className={styles.input}
-                value={vendor.gst_vat_no ? vendor.gst_vat_no :""}
+                value={vendor.gst_vat_no ? vendor.gst_vat_no : ""}
                 readOnly={!isEditing}
                 required={true}
                 onChange={(e) =>
@@ -355,7 +352,7 @@ const Vendor = () => {
                 type="text"
                 placeholder="Pin Code"
                 className={styles.input}
-                value={vendor.zip ?vendor.zip :""}
+                value={vendor.zip ? vendor.zip : ""}
                 readOnly={!isEditing}
                 required={true}
                 onChange={(e) =>
@@ -371,7 +368,7 @@ const Vendor = () => {
                 type="text"
                 placeholder="country "
                 className={styles.input}
-                value={vendor.country?vendor.country :""}
+                value={vendor.country ? vendor.country : ""}
                 readOnly={!isEditing}
                 onChange={(e) =>
                   isEditing &&
@@ -386,7 +383,7 @@ const Vendor = () => {
                 type="text"
                 placeholder="state "
                 className={styles.input}
-                value={vendor.state ?vendor.state :""}
+                value={vendor.state ? vendor.state : ""}
                 readOnly={!isEditing}
                 onChange={(e) =>
                   isEditing &&
@@ -401,7 +398,7 @@ const Vendor = () => {
                 type="text"
                 placeholder="city "
                 className={styles.input}
-                value={vendor.city ?vendor.city :""}
+                value={vendor.city ? vendor.city : ""}
                 readOnly={!isEditing}
                 onChange={(e) =>
                   isEditing &&
@@ -414,7 +411,7 @@ const Vendor = () => {
               <input
                 placeholder="Address"
                 className={styles.input}
-                value={vendor.address ?vendor.address:""}
+                value={vendor.address ? vendor.address : ""}
                 readOnly={!isEditing}
                 required={true}
                 onChange={(e) =>
@@ -433,7 +430,7 @@ const Vendor = () => {
                 name="name"
                 className={styles.input}
                 placeholder="vendor Name"
-                value={vendor.vName?vendor.vName:""}
+                value={vendor.vName ? vendor.vName : ""}
                 required={true}
                 onChange={(e) =>
                   setVendor((prevState) => ({
@@ -446,7 +443,7 @@ const Vendor = () => {
                 name="company"
                 type="text"
                 placeholder="Company Name"
-                value={vendor.company?vendor.company:""}
+                value={vendor.company ? vendor.company : ""}
                 className={styles.input}
                 onChange={(e) =>
                   setVendor((prevState) => ({
@@ -459,7 +456,7 @@ const Vendor = () => {
                 type="number"
                 name="contact_no"
                 placeholder="vendors Phone"
-                value={vendor.contact_no?vendor.contact_no:""}
+                value={vendor.contact_no ? vendor.contact_no : ""}
                 className={styles.input}
                 required={true}
                 onChange={(e) =>
@@ -475,7 +472,7 @@ const Vendor = () => {
                 className={styles.input}
                 placeholder="vendors Email"
                 required={true}
-                value={vendor.email?vendor.email:""}
+                value={vendor.email ? vendor.email : ""}
                 onChange={(e) =>
                   setVendor((prevState) => ({
                     ...prevState,
@@ -489,7 +486,7 @@ const Vendor = () => {
                 placeholder="GST/VAT"
                 className={styles.input}
                 required={true}
-                value={vendor.gst_vat_no?vendor.gst_vat_no:""}
+                value={vendor.gst_vat_no ? vendor.gst_vat_no : ""}
                 onChange={(e) =>
                   setVendor((prevState) => ({
                     ...prevState,
@@ -502,7 +499,7 @@ const Vendor = () => {
                 type="text"
                 placeholder="Pin Code"
                 className={styles.input}
-                value={vendor.zip?vendor.zip:""}
+                value={vendor.zip ? vendor.zip : ""}
                 required={true}
                 onChange={(e) =>
                   setVendor((prevState) => ({
@@ -516,7 +513,7 @@ const Vendor = () => {
                 type="text"
                 placeholder="country "
                 className={styles.input}
-                value={vendor.country?vendor.country:""}
+                value={vendor.country ? vendor.country : ""}
                 onChange={(e) =>
                   setVendor((prevState) => ({
                     ...prevState,
@@ -529,7 +526,7 @@ const Vendor = () => {
                 type="text"
                 placeholder="state "
                 className={styles.input}
-                value={vendor.state?vendor.state:""}
+                value={vendor.state ? vendor.state : ""}
                 onChange={(e) =>
                   setVendor((prevState) => ({
                     ...prevState,
@@ -542,7 +539,7 @@ const Vendor = () => {
                 type="text"
                 placeholder="city "
                 className={styles.input}
-                value={vendor.city?vendor.city:""}
+                value={vendor.city ? vendor.city : ""}
                 onChange={(e) =>
                   setVendor((prevState) => ({
                     ...prevState,
@@ -553,7 +550,7 @@ const Vendor = () => {
               <input
                 placeholder="Address"
                 className={styles.input}
-                value={vendor.address ?vendor.address:""}
+                value={vendor.address ? vendor.address : ""}
                 required={true}
                 onChange={(e) =>
                   setVendor((prevState) => ({
@@ -741,8 +738,7 @@ const Vendor = () => {
             <span className="text-md font-normal ">
               Showing{" "}
               <span>
-                {itemStartIndex + 1}-
-                {Math.min(itemEndIndex, allvendor.length)}
+                {itemStartIndex + 1}-{Math.min(itemEndIndex, allvendor.length)}
               </span>{" "}
               of <span> {allvendor.length}</span>
             </span>

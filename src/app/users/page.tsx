@@ -6,14 +6,14 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import UnAthorized from "@/components/unauthorized";
-import AuthUser from '@/utils/auth'
+import AuthUser from "@/utils/auth";
 import { UserTypes } from "../types/userType";
 import { CompanyTypes } from "../types/company";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 interface CustomUser extends UserTypes {
   isActive: boolean;
   companyName: string;
-  createdAt: Date; 
+  createdAt: Date;
 }
 const UserLists = () => {
   const session = useSession();
@@ -36,7 +36,7 @@ const UserLists = () => {
 
         // Create a map of company IDs to their names for efficient lookup
         const companyMap = new Map();
-        companiesList.forEach((company: { _id: string; name: string; }) => {
+        companiesList.forEach((company: { _id: string; name: string }) => {
           companyMap.set(company._id, company.name);
         });
 
@@ -45,24 +45,26 @@ const UserLists = () => {
         const userList = usersResponse.data;
         // console.log(userList)
         // Modify the user list to include company names
-        const usersWithCompanyNames = userList.map((user: { assignedCompany: string; }) => ({
-          ...user,
-          companyName: companyMap.get(user.assignedCompany) || "Not Assigned",
-        }));
+        const usersWithCompanyNames = userList.map(
+          (user: { assignedCompany: string }) => ({
+            ...user,
+            companyName: companyMap.get(user.assignedCompany) || "Not Assigned",
+          })
+        );
         if (session.status === "authenticated" && session.data) {
           if (session.data.user.role === "superadmin") {
             // Display all users for superadmin
             setAllusers(usersWithCompanyNames);
           } else {
             const filteredData = usersWithCompanyNames.filter(
-              (userCompany: { companyId: string; }) =>
+              (userCompany: { companyId: string }) =>
                 userCompany.companyId === session.data.user.companyId
             );
             setAllusers(filteredData);
           }
         }
       } catch (error) {
-        console.error(error); 
+        console.error(error);
       }
     };
     fetchUsersAndCompanies();
@@ -72,7 +74,7 @@ const UserLists = () => {
     try {
       const response = await axios.get(`/api/users/${_id}`);
       const userData = response.data;
-      router.push(`/users/${_id}`, { state: { userData } }as any);
+      router.push(`/users/${_id}`, { state: { userData } } as any);
       // console.log(userData);
     } catch (error) {
       console.error(error);
@@ -80,23 +82,25 @@ const UserLists = () => {
   };
 
   const handelDeleteUser = (_id: string) => {
-    const shouldDelete = window.confirm("Are You Sure To Delete??")
-    if (shouldDelete){
-    axios
-      .delete(`/api/users/${_id}`)
-      .then((response) => {
-        console.log(response.data); // Handle the response data
-        toast.success("User Deleted Successfully");
-        setAllusers((prevClients) =>
-          prevClients.filter((user) => user._id !== _id)
-        );
-      })
-      .catch((error) => {
-        toast.error("User Not Deleted");
-        console.error(error); // Handle the error
-      });
+    if (typeof window !== "undefined") {
+      const shouldDelete = window.confirm("Are You Sure To Delete??");
+      if (shouldDelete) {
+        axios
+          .delete(`/api/users/${_id}`)
+          .then((response) => {
+            console.log(response.data); // Handle the response data
+            toast.success("User Deleted Successfully");
+            setAllusers((prevClients) =>
+              prevClients.filter((user) => user._id !== _id)
+            );
+          })
+          .catch((error) => {
+            toast.error("User Not Deleted");
+            console.error(error); // Handle the error
+          });
+      }
+    }
   };
-}
   // Pagination Logic
 
   const handleNextPage = () => {
@@ -117,7 +121,7 @@ const UserLists = () => {
   const usersOnPage = allusers.slice(userStartIndex, userEndIndex);
   const pageCount = Math.ceil(allusers.length / usersPerPage);
 
-  const {isAuthorized} = AuthUser();
+  const { isAuthorized } = AuthUser();
   if (!isAuthorized) {
     // Display a message or redirect to another page
     return (
@@ -130,7 +134,7 @@ const UserLists = () => {
   if (session) {
     return (
       <>
-      <Breadcrumb pageName="Users" />
+        <Breadcrumb pageName="Users" />
 
         <div className="relative mb-10 overflow-x-auto shadow-md sm:rounded-lg">
           <div className="flex justify-center text-center text-2xl mb-6 font-medium">

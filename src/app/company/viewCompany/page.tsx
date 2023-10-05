@@ -36,29 +36,33 @@ const MessageList = () => {
     try {
       const response = await axios.get(`/api/company/${_id}`);
       const compData = response.data;
-      router.push(`/company/viewCompany/${_id}`, { state: { compData } }as any);
+      router.push(`/company/viewCompany/${_id}`, {
+        state: { compData },
+      } as any);
       console.log(compData);
     } catch (error) {
       console.error(error);
     }
   };
   const handleDelete = (_id: string) => {
-    const shouldDelete = window.confirm("Are you sure you want to delete?");
-    if (shouldDelete) {
-    axios
-      .delete(`/api/company/${_id}`)
-      .then((response) => {
-        console.log(response.data); 
-        toast.success("Company Deleted Successfully");
-        setAllCompany((prevCompany) =>
-          prevCompany.filter((company) => company._id !== _id)
-        );
-      })
-      .catch((error) => {
-        toast.error("Company Not Deleted");
-        console.error(error); // Handle the error
-      });
-    };
+    if (typeof window !== "undefined") {
+      const shouldDelete = window.confirm("Are you sure you want to delete?");
+      if (shouldDelete) {
+        axios
+          .delete(`/api/company/${_id}`)
+          .then((response) => {
+            console.log(response.data);
+            toast.success("Company Deleted Successfully");
+            setAllCompany((prevCompany) =>
+              prevCompany.filter((company) => company._id !== _id)
+            );
+          })
+          .catch((error) => {
+            toast.error("Company Not Deleted");
+            console.error(error); // Handle the error
+          });
+      }
+    }
   };
 
   // Pagination Logic
@@ -83,7 +87,7 @@ const MessageList = () => {
   if (session) {
     return (
       <>
-      <Breadcrumb pageName="Companies" />
+        <Breadcrumb pageName="Companies" />
         <div className=" shadow-md sm:rounded-lg">
           <div className="flex justify-center text-center text-2xl mb-4 sm:mb-10 font-medium">
             Company List
@@ -131,7 +135,6 @@ const MessageList = () => {
                   <th scope="col" className="px-4 py-1">
                     Action
                   </th>
-              
                 </tr>
               </thead>
               <tbody>
@@ -167,12 +170,11 @@ const MessageList = () => {
                         onClick={() => handleUpdate(company._id)}
                         className="cursor-pointer text-warning"
                       />
-                       <FaTrash
+                      <FaTrash
                         onClick={() => handleDelete(company._id)}
                         className="cursor-pointer text-danger"
                       />
                     </td>
-                 
                   </tr>
                 ))}
               </tbody>

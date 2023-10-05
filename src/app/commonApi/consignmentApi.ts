@@ -60,6 +60,7 @@ const ConsignmentAPI = () => {
   
 
   const handleDelete = (id: string) => {
+    if (typeof window !== 'undefined') {
     const shouldDelete = window.confirm("Are You Sure ??")
     if (shouldDelete){
     axios
@@ -76,6 +77,7 @@ const ConsignmentAPI = () => {
         console.error(error); // Handle the error
       });
   };
+}
 };
   return {
     consignment,

@@ -3,12 +3,10 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { PurchaseProduct} from "@/app/types/product";
-
+import { PurchaseProduct } from "@/app/types/product";
 
 const PrimeInvoiceApi = () => {
   const session = useSession();
-
 
   const [allInvoices, setAllInvoices] = useState<PurchaseProduct[]>([]);
   useEffect(() => {
@@ -30,7 +28,6 @@ const PrimeInvoiceApi = () => {
             }
           } else {
             if (data && Array.isArray(data) && data.length > 0) {
-
               const filteredData = data.filter(
                 (po: { companyId: string }) =>
                   po.companyId === session.data.user.companyId
@@ -54,22 +51,24 @@ const PrimeInvoiceApi = () => {
   }, [session.status, session.data]);
 
   const handleDelete = (_id: string) => {
-    const shouldDelete = window.confirm("Are You Sure to Delete??");
-    if (shouldDelete) {
-      axios
-        .delete(`/api/primeinvoice/${_id}`)
-        .then((response) => {
+    if (typeof window !== "undefined") {
+      const shouldDelete = window.confirm("Are You Sure to Delete??");
+      if (shouldDelete) {
+        axios
+          .delete(`/api/primeinvoice/${_id}`)
+          .then((response) => {
             toast.success("Invoice Deleted Successfully");
             setAllInvoices((prevInvoice) =>
-            prevInvoice.filter(
-              (allInvoicesOrder) => allInvoicesOrder._id !== _id
+              prevInvoice.filter(
+                (allInvoicesOrder) => allInvoicesOrder._id !== _id
               )
-              );
-        })
-        .catch((error) => {
-          toast.error("Invoice Not Deleted");
-          console.error(error); // Handle the error
-        });
+            );
+          })
+          .catch((error) => {
+            toast.error("Invoice Not Deleted");
+            console.error(error); // Handle the error
+          });
+      }
     }
   };
   return {

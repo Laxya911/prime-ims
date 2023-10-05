@@ -3,12 +3,10 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { PurchaseProduct} from "@/app/types/product";
-
+import { PurchaseProduct } from "@/app/types/product";
 
 const PurchaseOrder = () => {
   const session = useSession();
-
 
   const [allPurchase, setAllPurchase] = useState<PurchaseProduct[]>([]);
   useEffect(() => {
@@ -30,7 +28,6 @@ const PurchaseOrder = () => {
             }
           } else {
             if (data && Array.isArray(data) && data.length > 0) {
-
               const filteredData = data.filter(
                 (po: { companyId: string }) =>
                   po.companyId === session.data.user.companyId
@@ -54,22 +51,24 @@ const PurchaseOrder = () => {
   }, [session.status, session.data]);
 
   const handleDelete = (_id: string) => {
-    const shouldDelete = window.confirm("Are You Sure to Delete??");
-    if (shouldDelete) {
-      axios
-        .delete(`/api/purchase/${_id}`)
-        .then((response) => {
+    if (typeof window !== "undefined") {
+      const shouldDelete = window.confirm("Are You Sure to Delete??");
+      if (shouldDelete) {
+        axios
+          .delete(`/api/purchase/${_id}`)
+          .then((response) => {
             toast.success("po Deleted Successfully");
             setAllPurchase((prevInvoice) =>
-            prevInvoice.filter(
-              (allPurchaseOrder) => allPurchaseOrder._id !== _id
+              prevInvoice.filter(
+                (allPurchaseOrder) => allPurchaseOrder._id !== _id
               )
-              );
-        })
-        .catch((error) => {
-          toast.error("PO Not Deleted");
-          console.error(error); // Handle the error
-        });
+            );
+          })
+          .catch((error) => {
+            toast.error("PO Not Deleted");
+            console.error(error); // Handle the error
+          });
+      }
     }
   };
   return {

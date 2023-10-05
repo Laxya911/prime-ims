@@ -28,7 +28,7 @@ const InvoiceAPI = () => {
           } else {
             // Filter Invoices to display only the ones created by the logged-in user
             const filteredData = data.filter(
-              (consignment: { companyId: string; }) =>
+              (consignment: { companyId: string }) =>
                 consignment.companyId === session.data.user.companyId
             );
             const sortedInvoices = filteredData.sort(
@@ -48,23 +48,25 @@ const InvoiceAPI = () => {
   }, [session.status, session.data]);
 
   const handelDeleteInvoice = (_id: string) => {
-    const shouldDelete = window.confirm("Are You Sure to Delete??")
-    if (shouldDelete){
-    axios
-      .delete(`/api/primeinvoice/${_id}`)
-      .then((response) => {
-        console.log(response.data); // Handle the response data
-        toast.success("Invoice Deleted Successfully");
-        setAllInvoices((prevInvoice) =>
-          prevInvoice.filter((allInvoices) => allInvoices._id !== _id)
-        );
-      })
-      .catch((error) => {
-        toast.error("Invoice Not Deleted");
-        console.error(error); // Handle the error
-      });
+    if (typeof window !== "undefined") {
+      const shouldDelete = window.confirm("Are You Sure to Delete??");
+      if (shouldDelete) {
+        axios
+          .delete(`/api/primeinvoice/${_id}`)
+          .then((response) => {
+            console.log(response.data); // Handle the response data
+            toast.success("Invoice Deleted Successfully");
+            setAllInvoices((prevInvoice) =>
+              prevInvoice.filter((allInvoices) => allInvoices._id !== _id)
+            );
+          })
+          .catch((error) => {
+            toast.error("Invoice Not Deleted");
+            console.error(error); // Handle the error
+          });
+      }
+    }
   };
-};
   return {
     allInvoices,
     handelDeleteInvoice,

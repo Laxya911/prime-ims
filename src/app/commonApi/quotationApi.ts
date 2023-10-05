@@ -54,6 +54,7 @@ const Quotations = () => {
   }, [session.status, session.data]);
 
   const handleDelete = (_id: string) => {
+    if (typeof window !== 'undefined') {
     const shouldDelete = window.confirm("Are You Sure to Delete??");
     if (shouldDelete) {
       axios
@@ -71,6 +72,7 @@ const Quotations = () => {
           console.error(error); // Handle the error
         });
     }
+  }
   };
   return {
     allQuotation,
