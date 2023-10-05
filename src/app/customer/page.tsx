@@ -92,7 +92,7 @@ const Customer = () => {
     setFilterCustomer(filteredData);
     // Reset the po page to the first page whenever the searchTerm changes
     setCustomerOnPage(1);
-  }, [searchTerm, allCustomer,setCustomerOnPage]);
+  }, [searchTerm, allCustomer,setCustomerOnPage, setFilterCustomer]);
 
   // Pagination Logic
   const handleNextPage = () => {

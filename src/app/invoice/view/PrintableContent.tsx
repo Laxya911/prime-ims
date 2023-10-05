@@ -147,8 +147,7 @@ const generatePrintableContent = (
                 2. All disputes are subject to Delhi Jurisdiction only.
               </Text>
               <Text>
-               {/* eslint-disable-next-line jsx-a11y/alt-text */}
-              3. {companyData.name}'s slaibility is as per the clause specified in
+              3. {companyData.name}&rsquo;s slaibility is as per the clause specified in
                 Airwaybill.
               </Text>
             </View>
