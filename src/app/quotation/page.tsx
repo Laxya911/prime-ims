@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -267,7 +267,7 @@ const Quotations = () => {
     companyId = session.data.user.companyId;
     // Now you can use companyId
   }
-  const generateQuotationNumber = async () => {
+  const generateQuotationNumber = useCallback( async () => {
     try {
       // Make an API call to fetch existing quotation numbers for the company from the backend
       const response = await axios.get(`/api/quotation?companyId=${companyId}`);
@@ -304,7 +304,7 @@ const Quotations = () => {
     } catch (error) {
       console.log(error);
     }
-  };
+  },[companyId]);
   
   useEffect(() => {
     if (companyId) {

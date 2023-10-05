@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -197,27 +197,79 @@ const CreateInvoice = () => {
   };
 
   // invoice number generator
+  // const [invoiceNumber, setInvoiceNumber] = useState("");
+  // let companyId = "";
+
+  // if (session.status === "authenticated" && session.data?.user?.companyId) {
+  //   companyId = session.data.user.companyId;
+  //   // Now you can use companyId
+  // }
+  // const generateInvoiceNumber = async () => {
+  //   try {
+  //     // Make an API call to fetch existing invoice numbers for the company from the backend
+  //     const response = await axios.get(
+  //       `/api/primeinvoice?companyId=${companyId}`
+  //     );
+  //     const companyInvoices = response.data;
+
+  //     const companyInvoiceNumbers = companyInvoices
+  //       .filter(
+  //         (invoice: { companyId: string; invoiceNumber: string }) =>
+  //           invoice.companyId === companyId
+  //       )
+  //       .map((invoice: { invoiceNumber: string }) => {
+  //         const parts = invoice.invoiceNumber.split("-");
+  //         const lastPart = parts[parts.length - 1];
+  //         return parseInt(lastPart, 10);
+  //       })
+  //       .filter((number: number) => !isNaN(number));
+  //     // Calculate the maximum invoice number for the company and increment
+  //     const maxInvoiceNumber =
+  //       companyInvoiceNumbers.length > 0
+  //         ? Math.max(...companyInvoiceNumbers)
+  //         : 0;
+  //     const nextInvoiceNumber = maxInvoiceNumber + 1;
+
+  //     // Generate the next unique invoice number
+  //     const todayDate = new Date()
+  //       .toLocaleDateString("en-US", {
+  //         year: "numeric",
+  //         month: "2-digit",
+  //         day: "2-digit",
+  //       })
+  //       .replace(/\//g, "");
+
+  //     // const newInvoiceNumber = `${companyId}-${todayDate}-${nextInvoiceNumber}`;
+  //     const newInvoiceNumber = `${companyId}-${todayDate}-INV-${nextInvoiceNumber}`;
+  //     setInvoiceNumber(newInvoiceNumber);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  
+  // useEffect(() => {
+  //   if (companyId) {
+  //     generateInvoiceNumber();
+  //   }
+  // }, [session, session.data, companyId, generateInvoiceNumber]);
+
   const [invoiceNumber, setInvoiceNumber] = useState("");
   let companyId = "";
-
+  
   if (session.status === "authenticated" && session.data?.user?.companyId) {
     companyId = session.data.user.companyId;
     // Now you can use companyId
   }
-  const generateInvoiceNumber = async () => {
+  
+  const generateInvoiceNumber = useCallback(async () => {
     try {
       // Make an API call to fetch existing invoice numbers for the company from the backend
-      const response = await axios.get(
-        `/api/primeinvoice?companyId=${companyId}`
-      );
+      const response = await axios.get(`/api/primeinvoice?companyId=${companyId}`);
       const companyInvoices = response.data;
-
+  
       const companyInvoiceNumbers = companyInvoices
-        .filter(
-          (invoice: { companyId: string; invoiceNumber: string }) =>
-            invoice.companyId === companyId
-        )
-        .map((invoice: { invoiceNumber: string }) => {
+        .filter((invoice: { companyId: string; invoiceNumber: string }) => invoice.companyId === companyId)
+        .map((invoice: { invoiceNumber: string; }) => {
           const parts = invoice.invoiceNumber.split("-");
           const lastPart = parts[parts.length - 1];
           return parseInt(lastPart, 10);
@@ -229,7 +281,7 @@ const CreateInvoice = () => {
           ? Math.max(...companyInvoiceNumbers)
           : 0;
       const nextInvoiceNumber = maxInvoiceNumber + 1;
-
+  
       // Generate the next unique invoice number
       const todayDate = new Date()
         .toLocaleDateString("en-US", {
@@ -238,21 +290,21 @@ const CreateInvoice = () => {
           day: "2-digit",
         })
         .replace(/\//g, "");
-
+  
       // const newInvoiceNumber = `${companyId}-${todayDate}-${nextInvoiceNumber}`;
       const newInvoiceNumber = `${companyId}-${todayDate}-INV-${nextInvoiceNumber}`;
       setInvoiceNumber(newInvoiceNumber);
     } catch (error) {
       console.log(error);
     }
-  };
+  }, [companyId]);
   
   useEffect(() => {
     if (companyId) {
       generateInvoiceNumber();
     }
   }, [session, session.data, companyId, generateInvoiceNumber]);
-
+  
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
