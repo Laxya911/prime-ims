@@ -1,5 +1,4 @@
 "use client";
-
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import FirstSec from "@/components/FirstSection/FirstSection";
 import SecondSection from "@/components/SecondSection/SecondSecion";

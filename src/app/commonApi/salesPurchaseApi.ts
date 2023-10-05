@@ -43,18 +43,6 @@ const SalesPurchases = () => {
     }
   }, [allPurchase]);
 
-
-
-//   useEffect(() => {
-//     if (allSells) {
-//       // Create an object to store quantities by product name and month
-//       const totalSells: Record<string, number> = {};
-//       allSells.forEach((sells) => {
-//         const grandSells = sells.subTotal;
-//       });
-//       setTotalSells(totalBuyingPrice);
-//     }
-//   }, [allSells]);
   useEffect(() => {
     if (allSells) {
       let totalSellsAmount = 0;

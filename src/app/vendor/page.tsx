@@ -192,6 +192,7 @@ const Vendor = () => {
     date_created: new Date(),
   };
   // Handle the delete operation
+  
   const handleDelete = async () => {
     if (typeof window !== "undefined") {
       const shouldDelete = window.confirm("Are you sure to Delete ??");
