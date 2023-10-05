@@ -2,7 +2,10 @@
 import { ApexOptions } from "apexcharts";
 import React, { useEffect, useState } from "react";
 import { PurchaseProduct } from "@/app/types/product";
-import ReactApexChart from "react-apexcharts";
+import dynamic from "next/dynamic";
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 import SalesPurchases from "@/app/commonApi/salesPurchaseApi";
 
 interface ChartOneProps {
@@ -243,6 +246,11 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
   }, [allPurchase]);
   
   const revenue = totalBuyingPrice - totalSells;
+
+    // NextJS Requirement
+    const isWindowAvailable = () => typeof window !== "undefined";
+
+    if (!isWindowAvailable()) return <></>;
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">

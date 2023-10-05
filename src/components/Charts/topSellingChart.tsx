@@ -1,7 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { ApexOptions } from "apexcharts";
-import ReactApexChart from "react-apexcharts";
+import dynamic from "next/dynamic";
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 import SalesApi from "@/app/commonApi/salesApi";
 
 interface TopSellingStates {
@@ -42,7 +45,10 @@ const TopSellingItems: React.FC = () => {
       position: "bottom",
     },
   };
+  // NextJS Requirement
+  const isWindowAvailable = () => typeof window !== "undefined";
 
+  if (!isWindowAvailable()) return <></>;
   return (
     <div className=" justify-center">
       <p className="flex text-center justify-center">Top Selling Items</p>

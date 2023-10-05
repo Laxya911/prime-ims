@@ -1,7 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { ApexOptions } from "apexcharts";
-import ReactApexChart from "react-apexcharts";
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
+});
 import AllSells from "@/app/commonApi/salesApi";
 
 interface chartCustomer {
@@ -59,6 +62,10 @@ const ChartCustomers: React.FC = () => {
       position: "bottom",
     },
   };
+  // NextJS Requirement
+  const isWindowAvailable = () => typeof window !== "undefined";
+
+  if (!isWindowAvailable()) return <></>;
 
   return (
     <div className=" justify-center">
