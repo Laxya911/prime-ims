@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@types/node": "20.5.7",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "apexcharts": "^3.43.0",
@@ -33,8 +32,6 @@
     "react-icons": "^4.10.1",
     "react-toastify": "^9.1.3",
     "tailwindcss": "3.3.3",
-    "typescript": "5.2.2",
-    "uuid": "^9.0.0",
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
@@ -42,17 +39,16 @@
     "@types/bcryptjs": "^2.4.3",
     "@types/file-saver": "^2.0.5",
     "@types/jsonwebtoken": "^9.0.2",
-    "@types/node": "latest",
+    "@types/node": "^20.8.2",
     "@types/qrcode": "^1.5.2",
     "@types/react": "latest",
     "@types/react-dom": "latest",
-    "@types/uuid": "^9.0.3",
     "autoprefixer": "latest",
     "encoding": "^0.1.13",
     "eslint": "latest",
     "eslint-config-next": "latest",
     "postcss": "latest",
     "tailwindcss": "latest",
-    "typescript": "latest"
+    "typescript": "^5.2.2"
   }
 }
