@@ -200,9 +200,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             </li>
                             <li>
                               <Link
-                                href="/invoice/viewInvoices"
+                                href="/invoice/view"
                                 className={`group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ${
-                                  pathname === "/invoice/viewInvoices" &&
+                                  pathname === "/invoice/view" &&
                                   "text-white"
                                 }`}
                               >

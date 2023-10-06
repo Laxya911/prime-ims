@@ -197,62 +197,6 @@ const CreateInvoice = () => {
   };
 
   // invoice number generator
-  // const [invoiceNumber, setInvoiceNumber] = useState("");
-  // let companyId = "";
-
-  // if (session.status === "authenticated" && session.data?.user?.companyId) {
-  //   companyId = session.data.user.companyId;
-  //   // Now you can use companyId
-  // }
-  // const generateInvoiceNumber = async () => {
-  //   try {
-  //     // Make an API call to fetch existing invoice numbers for the company from the backend
-  //     const response = await axios.get(
-  //       `/api/primeinvoice?companyId=${companyId}`
-  //     );
-  //     const companyInvoices = response.data;
-
-  //     const companyInvoiceNumbers = companyInvoices
-  //       .filter(
-  //         (invoice: { companyId: string; invoiceNumber: string }) =>
-  //           invoice.companyId === companyId
-  //       )
-  //       .map((invoice: { invoiceNumber: string }) => {
-  //         const parts = invoice.invoiceNumber.split("-");
-  //         const lastPart = parts[parts.length - 1];
-  //         return parseInt(lastPart, 10);
-  //       })
-  //       .filter((number: number) => !isNaN(number));
-  //     // Calculate the maximum invoice number for the company and increment
-  //     const maxInvoiceNumber =
-  //       companyInvoiceNumbers.length > 0
-  //         ? Math.max(...companyInvoiceNumbers)
-  //         : 0;
-  //     const nextInvoiceNumber = maxInvoiceNumber + 1;
-
-  //     // Generate the next unique invoice number
-  //     const todayDate = new Date()
-  //       .toLocaleDateString("en-US", {
-  //         year: "numeric",
-  //         month: "2-digit",
-  //         day: "2-digit",
-  //       })
-  //       .replace(/\//g, "");
-
-  //     // const newInvoiceNumber = `${companyId}-${todayDate}-${nextInvoiceNumber}`;
-  //     const newInvoiceNumber = `${companyId}-${todayDate}-INV-${nextInvoiceNumber}`;
-  //     setInvoiceNumber(newInvoiceNumber);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  
-  // useEffect(() => {
-  //   if (companyId) {
-  //     generateInvoiceNumber();
-  //   }
-  // }, [session, session.data, companyId, generateInvoiceNumber]);
-
   const [invoiceNumber, setInvoiceNumber] = useState("");
   let companyId = "";
   
@@ -403,16 +347,16 @@ const CreateInvoice = () => {
               <table className="w-full text-xs text-center mb-4">
                 <thead className="mb-4">
                   <tr className="text-xs text-center ">
-                    <th className="px-2 py-1 w-30">P Name</th>
-                    <th className="px-2 py-1 w-30">P Code</th>
-                    <th className="px-2 py-1 w-15">In Stock</th>
-                    <th className="px-2 py-1 w-20">Qty </th>
-                    <th className="px-2 py-1 w-20">Rate</th>
-                    <th className="px-2 py-1 w-20">Total</th>
-                    <th className="px-2 py-1 w-35">Payment Status</th>
-                    <th className="px-2 py-1 w-15">GST</th>
-                    <th className="px-2 py-1 w-20">Remarks</th>
-                    <th className="px-2 py-1 w-20"></th>
+                    <th className="px-1 py-1 w-30">Item</th>
+                    <th className="px-1 py-1 w-30">iCode</th>
+                    <th className="px-1 py-1 w-15">InStock</th>
+                    <th className="px-1 py-1 w-20">Qty </th>
+                    <th className="px-1 py-1 w-20">Rate</th>
+                    <th className="px-1 py-1 w-20">Total</th>
+                    <th className="px-1 py-1 w-35">Payment</th>
+                    <th className="px-1 py-1 w-15">GST</th>
+                    <th className="px-1 py-1 w-20">Remarks</th>
+                    <th className="px-1 py-1 w-20"></th>
                   </tr>
                 </thead>
                 {products.length > 0 && (
@@ -424,14 +368,14 @@ const CreateInvoice = () => {
                             type="text"
                             value={product.productName ?? ""}
                             placeholder="P. Name"
-                            className="px-2 py-1 w-30 rounded"
+                            className="px-1 py-1 w-30 rounded"
                             readOnly={true}
                           />
                         </td>
                         <td>
                           <input
                             type="text"
-                            className="px-2 py-1 w-20 rounded"
+                            className="px-1 py-1 w-20 rounded"
                             placeholder="P. code"
                             value={product.productCode.split("-")[1] ?? ""}
                             readOnly={true}
@@ -441,7 +385,7 @@ const CreateInvoice = () => {
                         <td>
                           <input
                             type="number"
-                            className="px-2 py-1 w-15 rounded"
+                            className="px-1 py-1 w-15 rounded"
                             value={product.inStock ?? 0}
                             readOnly={true}
                           />
@@ -450,7 +394,7 @@ const CreateInvoice = () => {
                         <td>
                           <input
                             type="number"
-                            className="px-2 py-1 w-20 rounded"
+                            className="px-1 py-1 w-20 rounded"
                             value={
                               isNaN(product.newOrder) ? 0 : product.newOrder
                             }
@@ -470,7 +414,7 @@ const CreateInvoice = () => {
                         <td className="px-4">
                           <input
                             type="number"
-                            className="px-2 py-1 w-30 rounded"
+                            className="px-1 py-1 w-30 rounded"
                             value={product.sellingPrice ?? 0}
                             onChange={(e) =>
                               handleProductChange(
@@ -485,7 +429,7 @@ const CreateInvoice = () => {
                         <td className="px-4">
                           <input
                             type="number"
-                            className="px-2 py-1 w-30 rounded"
+                            className="px-1 py-1 w-30 rounded"
                             value={product.total ?? 0}
                             readOnly={true}
                           />
@@ -501,7 +445,7 @@ const CreateInvoice = () => {
                                 e.target.value
                               )
                             }
-                            className="px-2 py-1 w-36 rounded"
+                            className="px-1 py-1 w-36 rounded"
                           >
                             <option value="Pending">Pending</option>
                             <option value="Partial">Partial Paid</option>
@@ -512,7 +456,7 @@ const CreateInvoice = () => {
                         <td className="px-4">
                           <input
                             type="number"
-                            className="px-2 py-1 w-15 rounded"
+                            className="px-1 py-1 w-15 rounded"
                             min="0"
                             value={product.gst ?? 0}
                             readOnly={true}
@@ -522,7 +466,7 @@ const CreateInvoice = () => {
                           <input
                             type="text"
                             placeholder="Remarks"
-                            className="px-2 py-1 w-30 rounded"
+                            className="px-1 py-1 w-30 rounded"
                             value={product.remark ?? ""}
                             onChange={(e) =>
                               handleProductChange(

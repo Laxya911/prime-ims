@@ -44,11 +44,13 @@ const DropdownUser = () => {
   if (session.status === "authenticated" && session.data && session.data.user) {
     return (
       <div className="relative">
-        <Link
-          ref={trigger}
-          onClick={() => setDropdownOpen(!dropdownOpen)}
+        <button
+           onClick={(e) => {
+            e.preventDefault();
+            setDropdownOpen(!dropdownOpen);
+          }}
+          aria-label="user profile dropdown"
           className="flex items-center gap-4"
-          href="#"
         >
           <span className="hidden text-right lg:block">
             <span className="block text-sm font-medium text-black dark:text-white">
@@ -83,7 +85,7 @@ const DropdownUser = () => {
               fill=""
             />
           </svg>
-        </Link>
+        </button>
 
         {/* <!-- Dropdown Start --> */}
         <div

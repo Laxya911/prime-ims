@@ -53,6 +53,15 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
       },
     },
     responsive: [
+   
+      {
+        breakpoint: 786,
+        options: {
+          chart: {
+            height: 375,
+          },
+        },
+      },
       {
         breakpoint: 1024,
         options: {
@@ -252,10 +261,10 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
 
     if (!isWindowAvailable()) return <></>;
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+    <div className="col-span-12 rounded-sm border border-stroke bg-white px-1 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
-        <div className="flex w-full flex-wrap gap-3 sm:gap-5">
-          <div className="flex min-w-47.5">
+        <div className="flex w-full flex-wrap gap-2 sm:gap-5 mb-2">
+          <div className="flex min-w-47.5 ">
             <span className="mt-1 mr-2 flex h-4 w-full max-w-4 items-center justify-center rounded-full border border-primary">
               <span className="block h-2.5 w-full max-w-2.5 rounded-full bg-primary"></span>
             </span>
@@ -297,7 +306,7 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
           </div>
         </div> */}
       </div>
-      <div id="chartOne" className="-ml-5 h-[355px] w-[103%] bg-bodydark1">
+      <div id="chartOne" className=" h-[355px] w-[100%] bg-bodydark1">
         <ReactApexChart
           options={chartOptions}
           series={chartOptions.series || []}

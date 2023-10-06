@@ -176,13 +176,13 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
                   <table className="w-full text-xs text-center mb-4">
                     <thead className="mb-4">
                       <tr className="text-xs text-center ">
-                        <th className="px-2 py-1 w-30">P Name</th>
-                        <th className="px-2 py-1 w-30">P Code</th>
+                        <th className="px-2 py-1 w-30">Item</th>
+                        <th className="px-2 py-1 w-30">iCode</th>
                         <th className="px-2 py-1 w-20">Order Qty</th>
                   
                         <th className="px-2 py-1 w-20">Rate</th>
                         <th className="px-2 py-1 w-20">Total</th>
-                        <th className="px-2 py-1 w-35">Payment Status</th>
+                        <th className="px-2 py-1 w-35">Payment</th>
                         <th className="px-2 py-1 w-15">GST</th>
                         <th className="px-2 py-1 w-20">Remarks</th>
                         <th className="px-2 py-1 w-20"></th>

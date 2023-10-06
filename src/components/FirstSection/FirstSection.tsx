@@ -43,7 +43,7 @@ const FirstSec = () => {
           <button
             type="button"
             onClick={() => handleUpdateUser(session?.data?.user.id)}
-            className="shadow-lg px-3 py-1 rounded-full bg-amber text-gray"
+            className="shadow-lg p-1.5 rounded-full bg-amber text-gray"
           >
             Update Profile
           </button>
@@ -54,16 +54,16 @@ const FirstSec = () => {
             <span className="text-md py-1  font-medium">
               Quotations {totalQuotations}
             </span>
-            <div className="flex  gap-12 mt-2 ">
+            <div className="flex  gap-10 mt-2 ">
               <Link
                 href="/quotation"
-                className="inline-flex items-center  px-3 py-2   rounded hover:bg-success  "
+                className="inline-flex items-center  p-1.5   rounded hover:bg-success  "
               >
                 <FaUserPlus />
               </Link>
               <Link
                 href="/quotation/view"
-                className="inline-flex items-center px-3 py-2 rounded  hover:bg-success"
+                className="inline-flex items-center p-1.5 rounded  hover:bg-success"
               >
                 <FaEye />
               </Link>
@@ -73,16 +73,16 @@ const FirstSec = () => {
             <span className="text-md py-1  font-medium">
               Invoices {totalInvoices}
             </span>
-            <div className="flex  gap-12 mt-2 ">
+            <div className="flex  gap-10 mt-2 ">
               <Link
                 href="/invoice"
-                className="inline-flex items-center  px-3 py-2   rounded hover:bg-success  "
+                className="inline-flex items-center  p-1.5   rounded hover:bg-success  "
               >
                 <FaUserPlus />
               </Link>
               <Link
                 href="/invoice/view"
-                className="inline-flex items-center px-3 py-2 rounded  hover:bg-success"
+                className="inline-flex items-center p-1.5 rounded  hover:bg-success"
               >
                 <FaEye />
               </Link>
@@ -92,16 +92,16 @@ const FirstSec = () => {
             <span className="text-md py-1  font-medium">
               Vendors {totalVendor}
             </span>
-            <div className="flex  gap-12 mt-2 ">
+            <div className="flex  gap-10 mt-2 ">
               <Link
                 href="/vendor"
-                className="inline-flex items-center  px-3 py-2   rounded hover:bg-success  "
+                className="inline-flex items-center  p-1.5   rounded hover:bg-success  "
               >
                 <FaUserPlus />
               </Link>
               <Link
                 href="/vendor"
-                className="inline-flex items-center px-3 py-2 rounded  hover:bg-success"
+                className="inline-flex items-center p-1.5 rounded  hover:bg-success"
               >
                 <FaEye />
               </Link>
@@ -109,18 +109,18 @@ const FirstSec = () => {
           </div>
           <div className="flex shadow   flex-col items-center py-2 border  rounded-lg hover:scale-105 transition-transform duration-300   ">
             <span className="text-md py-1  font-medium">
-              Customer {totalCustomers}
+              Customers {totalCustomers}
             </span>
-            <div className="flex  gap-12 mt-2 ">
+            <div className="flex  gap-10 mt-2 ">
               <Link
                 href="/customer"
-                className="inline-flex  items-center  px-3 py-2   rounded hover:bg-success  "
+                className="inline-flex  items-center  p-1.5   rounded hover:bg-success  "
               >
                 <FaUserPlus />
               </Link>
               <Link
                 href="/customer"
-                className="inline-flex items-center px-3 py-2 rounded    hover:bg-success"
+                className="inline-flex items-center p-1.5 rounded    hover:bg-success"
               >
                 <FaEye />
               </Link>
@@ -130,16 +130,16 @@ const FirstSec = () => {
             <span className="text-md py-1  font-medium">
               Products {totalProducts}
             </span>
-            <div className="flex  gap-12 mt-2 ">
+            <div className="flex  gap-10 mt-2 ">
               <Link
                 href="/products"
-                className="inline-flex  items-center  px-3 py-2   rounded hover:bg-success  "
+                className="inline-flex  items-center  p-1.5   rounded hover:bg-success  "
               >
                 <FaUserPlus />
               </Link>
               <Link
                 href="/products/view"
-                className="inline-flex items-center px-3 py-2 rounded    hover:bg-success"
+                className="inline-flex items-center p-1.5 rounded    hover:bg-success"
               >
                 <FaEye />
               </Link>
@@ -149,16 +149,16 @@ const FirstSec = () => {
             <span className="text-md py-1  font-medium">
               Purchases {totalPurchase}
             </span>
-            <div className="flex  gap-12 mt-2 ">
+            <div className="flex  gap-10 mt-2 ">
               <Link
                 href="/purchase"
-                className="inline-flex  items-center  px-3 py-2   rounded hover:bg-success  "
+                className="inline-flex  items-center  p-1.5   rounded hover:bg-success  "
               >
                 <FaUserPlus />
               </Link>
               <Link
                 href="/purchase/view"
-                className="inline-flex items-center px-3 py-2 rounded    hover:bg-success"
+                className="inline-flex items-center p-1.5 rounded    hover:bg-success"
               >
                 <FaEye />
               </Link>
@@ -171,16 +171,16 @@ const FirstSec = () => {
                 <span className="text-md py-1  font-medium">
                   Users {totalUsers}
                 </span>
-                <div className="flex  gap-12 mt-2 ">
+                <div className="flex  gap-10 mt-2 ">
                   <Link
                     href="/auth/signup"
-                    className="inline-flex  items-center  px-3 py-2   rounded hover:bg-success  "
+                    className="inline-flex  items-center  p-1.5   rounded hover:bg-success  "
                   >
                     <FaUserPlus />
                   </Link>
                   <Link
                     href="/users"
-                    className="inline-flex items-center px-3 py-2 rounded    hover:bg-success"
+                    className="inline-flex items-center p-1.5 rounded    hover:bg-success"
                   >
                     <FaEye />
                   </Link>
@@ -194,16 +194,16 @@ const FirstSec = () => {
                 <span className="text-md py-1  font-medium">
                   Companies {totalCompanies}
                 </span>
-                <div className="flex  gap-12 mt-2 ">
+                <div className="flex  gap-10 mt-2 ">
                   <Link
                     href="/company"
-                    className="inline-flex  items-center  px-3 py-2   rounded hover:bg-success  "
+                    className="inline-flex  items-center  p-1.5   rounded hover:bg-success  "
                   >
                     <FaUserPlus />
                   </Link>
                   <Link
                     href="/company/viewCompany"
-                    className="inline-flex items-center px-3 py-2 rounded    hover:bg-success"
+                    className="inline-flex items-center p-1.5 rounded    hover:bg-success"
                   >
                     <FaEye />
                   </Link>

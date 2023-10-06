@@ -5,7 +5,6 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-// import styles from "./vendor.module.css";
 import styles from "../common.module.css";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { VendorTypes } from "@/app/types/vendor";

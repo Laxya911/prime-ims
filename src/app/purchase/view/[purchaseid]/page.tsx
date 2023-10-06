@@ -251,11 +251,11 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
                   <table className="w-full text-xs text-center mb-4">
                     <thead className="mb-4">
                       <tr className="text-xs text-center ">
-                        <th className="px-2 py-1 w-30">P Name</th>
-                        <th className="px-2 py-1 w-30">P Code</th>
-                        <th className="px-2 py-1 w-20">Order Qty</th>
-                        <th className="px-2 py-1 w-20">Recv Qty</th>
-                        <th className="px-2 py-1 w-30">Bal. Qty</th>
+                        <th className="px-2 py-1 w-30">Item</th>
+                        <th className="px-2 py-1 w-30">iCode</th>
+                        <th className="px-2 py-1 w-20">Order</th>
+                        <th className="px-2 py-1 w-20">Received</th>
+                        <th className="px-2 py-1 w-30">Balance</th>
                         <th className="px-2 py-1 w-15">New Recv</th>
                         <th className="px-2 py-1 w-15">New Balance</th>
                         <th className="px-2 py-1 w-20">Rate</th>

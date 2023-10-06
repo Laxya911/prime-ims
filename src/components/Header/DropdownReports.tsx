@@ -38,11 +38,14 @@ const DropdownReports = () => {
   if (session.status === "authenticated" && session.data && session.data.user) {
     return (
       <div className="relative">
-        <Link
+        <button
           ref={trigger}
-          onClick={() => setDropdownOpen(!dropdownOpen)}
+          onClick={(e) => {
+            e.preventDefault();
+            setDropdownOpen(!dropdownOpen);
+          }}
+          aria-label="report dropdown"
           className="flex items-center gap-4"
-          href="#"
         >
           <span className=" text-right ">
             <span className="block text-sm font-medium text-black dark:text-white">
@@ -65,7 +68,7 @@ const DropdownReports = () => {
               fill=""
             />
           </svg>
-        </Link>
+        </button>
 
         {/* <!-- Dropdown Start --> */}
         <div

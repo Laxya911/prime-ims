@@ -119,7 +119,7 @@ const generatePrintableContent = (
                 2. All disputes are subject to Delhi Jurisdiction only.
               </Text>
               <Text>
-                3. Fastlines laibility is as per the clause specified in
+                3. {companyData.name}&rsquo;s laibility is as per the clause specified in
                 Airwaybill.
               </Text>
             </View>

@@ -14,7 +14,7 @@ const Dashboard = () => {
       <Breadcrumb pageName="" />
       <FirstSec />
       <SecondSection />
-      <div className="flex justify-between mb-2">
+      <div className="flex flex-col sm:flex-row justify-between gap-4 mb-2 ">
         <div className="w-full">
 
       <ChartCustomers/>
@@ -28,6 +28,7 @@ const Dashboard = () => {
       <TopSellingItems />
         </div>
       </div>
+      <hr className="mt-4 mb-2"/>
       <ChartOne allPurchase={allPurchase} />
 
     </>
