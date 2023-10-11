@@ -6,7 +6,6 @@
     align-items: center;
     justify-content: center;
   }
-
  
   .formgroup {
     width: 100%;
@@ -42,16 +41,14 @@
     margin-top: 10px;
   }
   
-  /* .invButton {
-    width: 120px;
-    padding: 6px;
-    cursor: pointer;
-    background-color: #1e9ff4;
+  .disabledButton {
+    width: 100px;
+    background-color: #9aa0a3;
     border: none;
     border-radius: 5px;
     color: #000000;
-    margin: 10px;
-  } */
+    padding: 6px;
+  }
 
   .saveButton {
     width: 100px;

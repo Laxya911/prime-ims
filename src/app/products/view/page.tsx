@@ -159,6 +159,8 @@ const ProductList = () => {
     <Loading/>
     );
   }
+  const dataLength = allProducts.length > 0;
+
   if (session) {
     return (
       <>
@@ -167,7 +169,8 @@ const ProductList = () => {
           <div className="flex justify-center text-center text-2xl m-2 sfont-medium">
            Products List
           </div>
-
+          {dataLength ? (
+            <>
           {/* Search Input */}
           <div className="flex flex-col items-center lg:flex-row-reverse lg:items-end gap-2 sm:gap-4 sm:text-center sm:mb-4 lg:mb-0 px-8 py-1">
             <button
@@ -402,6 +405,12 @@ const ProductList = () => {
               </li>
             </ul>
           </nav>
+          </>
+          ) : (
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-lg text-gray-500 p-10">No data available</p>
+            </div>
+          )}
         </div>
       </>
     );

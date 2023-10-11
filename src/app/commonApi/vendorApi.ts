@@ -3,17 +3,17 @@ import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { PurchaseProduct } from "@/app/types/product";
+import { VendorTypes } from "@/app/types/vendor";
 
-const ProductApi = () => {
+const VendorApi = () => {
   const session = useSession();
 
-  const [allProducts, setAllProducts] = useState<PurchaseProduct[]>([]);
+  const [allVendors, setAllVendors] = useState<VendorTypes[]>([]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
+    const fetchVendors = async () => {
       try {
-        const response = await fetch(`/api/product`);
+        const response = await fetch(`/api/vendor`);
         const data = await response.json();
         // console.log(data)
         // Filter Invoices based on user role and ownership
@@ -21,11 +21,11 @@ const ProductApi = () => {
           if (session.data.user.role === "superadmin") {
             // Display all Invoices for superadmin
             const sortedPurchaseOrder = data.sort(
-              (a: PurchaseProduct, b: PurchaseProduct) =>
+              (a: VendorTypes, b: VendorTypes) =>
                 new Date(b.date_created).getTime() -
                 new Date(a.date_created).getTime()
             );
-            setAllProducts(sortedPurchaseOrder);
+            setAllVendors(sortedPurchaseOrder);
           } else {
             // Filter Invoices to display only the ones created by the logged-in user
             const filteredData = data.filter(
@@ -33,11 +33,11 @@ const ProductApi = () => {
                 po.companyId === session.data.user.companyId
             );
             const sortedPurchaseOrder = filteredData.sort(
-              (a: PurchaseProduct, b: PurchaseProduct) =>
+              (a: VendorTypes, b: VendorTypes) =>
                 new Date(b.date_created).getTime() -
                 new Date(a.date_created).getTime()
             );
-            setAllProducts(sortedPurchaseOrder);
+            setAllVendors(sortedPurchaseOrder);
           }
         }
       } catch (error) {
@@ -45,39 +45,32 @@ const ProductApi = () => {
       }
     };
 
-    fetchProducts();
+    fetchVendors();
   }, [session.status, session.data]);
-
-  const updateProducts = (updatedProducts: PurchaseProduct[]) => {
-    // Update the allProducts state with the new data
-    setAllProducts(updatedProducts);
-  };
-
 
   const handleDelete = (_id: string) => {
     if (typeof window !== "undefined") {
       const shouldDelete = window.confirm("Are You Sure to Delete??");
       if (shouldDelete) {
         axios
-          .delete(`/api/product/${_id}`)
+          .delete(`/api/vendor/${_id}`)
           .then((response) => {
             console.log(response.data); // Handle the response data
-            toast.success("Product Deleted Successfully");
-            setAllProducts((prevInvoice) =>
-              prevInvoice.filter((allProducts) => allProducts._id !== _id)
+            toast.success("Vendor Deleted Successfully");
+            setAllVendors((prevInvoice) =>
+              prevInvoice.filter((allVendors) => allVendors._id !== _id)
             );
           })
           .catch((error) => {
-            toast.error("Product Not Deleted");
+            toast.error("Vendor Not Deleted");
             console.error(error); // Handle the error
           });
       }
     }
   };
   return {
-    allProducts,
-    updateProducts,
+    allVendors,
     handleDelete,
   };
 };
-export default ProductApi;
+export default VendorApi;

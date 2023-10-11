@@ -12,7 +12,14 @@ export const GET = async (request: NextRequest) => {
   } else {
     try {
       await connectDB();
-      const products = await Product.find();
+      const { role, companyId } = session.user;
+      let products;
+      if (role === "superadmin") {
+        products = await Product.find();
+      } else {
+        products = await Product.find({ companyId });
+      }
+      // const products = await Product.find();
       return new NextResponse(JSON.stringify(products), { status: 200 });
     } catch (err) {
       return new NextResponse("Database Error", { status: 500 });

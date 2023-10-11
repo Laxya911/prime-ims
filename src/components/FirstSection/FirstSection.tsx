@@ -1,7 +1,6 @@
 "use client";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import Link from "next/link";
-import axios from "axios";
 import { FaEye, FaUserPlus } from "react-icons/fa";
 import Api from "@/app/commonApi/dashApi";
 import AuthUser from "@/utils/auth";
@@ -20,35 +19,13 @@ const FirstSec = () => {
     totalCompanies,
     totalPurchase,
   } = Api();
-  // console.log(session);
-
-
-  const router = useRouter();
-  const handleUpdateUser = async (id: string) => {
-    try {
-      const response = await axios.get(`/api/users/${session?.data?.user.id}`);
-      const userData = response.data;
-      router.push(`/users/${id}`, { state: { userData } } as any);
-      // console.log(userData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   if (session.status === "authenticated" && session.data && session.data.user) {
     return (
-      <div>
-        <div className="flex  md:flex-row justify-center text-center py-4 gap-2 lg:gap-8">
-          <h3 className=" text-xl"> Welcome {session.data.user.name} </h3>
-          <button
-            type="button"
-            onClick={() => handleUpdateUser(session?.data?.user.id)}
-            className="shadow-lg p-1.5 rounded-full bg-amber text-gray"
-          >
-            Update Profile
-          </button>
+      <>
+        <div className="flex  md:flex-row justify-center text-center py-2 mb-4 gap-2 lg:gap-8">
+          <h3 className=" text-xl"> Welcome {session.data.user.name}, Good Day 🙏</h3>
         </div>
-
         <div className="  grid grid-cols-2 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-8 2xl:gap-7.5">
           <div className="flex shadow flex-col items-center py-2 border  rounded-lg hover:scale-105 transition-transform duration-300   ">
             <span className="text-md py-1  font-medium">
@@ -212,7 +189,7 @@ const FirstSec = () => {
             </>
           )}
         </div>
-      </div>
+      </>
     );
   }
 };

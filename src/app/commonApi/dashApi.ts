@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 import { useSession } from "next-auth/react";
-import { InvoiceType } from "@/app/types/invoice";
 import { PurchaseProduct } from "../types/product";
 import { CustomerTypes } from "../types/vendor";
 
@@ -11,7 +10,6 @@ const Api = () => {
   if (session.status === "unauthenticated") {
     redirect("/auth/signin");
   }
-  // console.log(session.data);
   const [totalUsers, setTotalUsers] = useState("");
   const [totalCompanies, setTotalCompanies] = useState("");
   const [totalCustomers, setTotalCustomers] = useState("");
@@ -19,9 +17,8 @@ const Api = () => {
   const [totalProducts, setTotalProducts] = useState("");
   const [totalPurchase, setTotalPurchase] = useState("");
   const [totalQuotations, setTotalQuotations] = useState("");
-
-  const [totalMessages, setTotalMessages] = useState("");
-  const [totalEmployees, setTotalEmployees] = useState("");
+  // const [totalMessages, setTotalMessages] = useState("");
+  // const [totalEmployees, setTotalEmployees] = useState("");
   const [totalInvoices, setTotalInvoices] = useState("");
 
   // Employee
@@ -47,8 +44,8 @@ const Api = () => {
 
   // }, []);
 
-   // Purchases
-   useEffect(() => {
+  // Purchases
+  useEffect(() => {
     const fetchPurchase = async () => {
       try {
         const response = await fetch(`/api/purchase`);
@@ -62,7 +59,8 @@ const Api = () => {
           } else {
             // Filter Invoices to display only the ones created by the logged-in user
             const filteredData = data.filter(
-              (purchase: { companyId: string; }) => purchase.companyId === session.data.user.companyId
+              (purchase: { companyId: string }) =>
+                purchase.companyId === session.data.user.companyId
             );
             setTotalPurchase(filteredData.length);
           }
@@ -86,13 +84,12 @@ const Api = () => {
         if (session.status === "authenticated" && session.data) {
           if (session.data.user.role === "superadmin") {
             // Display all Invoices for superadmin
-
             setTotalCustomers(data.length);
           } else {
             // Filter Invoices to display only the ones created by the logged-in user
             const filteredData = data.filter(
               (customer: CustomerTypes) =>
-              customer.companyId === session.data.user.companyId
+                customer.companyId === session.data.user.companyId
             );
             setTotalCustomers(filteredData.length);
           }
@@ -105,43 +102,44 @@ const Api = () => {
   }, [session.status, session.data]);
 
   // messages
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("/api/messages", {
-          cache: "no-store",
-        });
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const res = await fetch("/api/messages", {
+  //         cache: "no-store",
+  //       });
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const result = await res.json();
-        // console.log(result)
-        setTotalMessages(result.length);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
-// Quotations
+  //       if (!res.ok) {
+  //         throw new Error("Failed to fetch data");
+  //       }
+  //       const result = await res.json();
+  //       // console.log(result)
+  //       setTotalMessages(result.length);
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+
+  // Quotations
   useEffect(() => {
-    const fetchInvoices = async () => {
+    const fetchQuote = async () => {
       try {
         const response = await fetch(`/api/quotation`);
         const data = await response.json();
 
-        // Filter Invoices based on user role and ownership
+        // Filter quotations based on user role and ownership
         if (session.status === "authenticated" && session.data) {
           if (session.data.user.role === "superadmin") {
-            // Display all Invoices for superadmin
+            // Display all quotations for superadmin
 
             setTotalQuotations(data.length);
           } else {
-            // Filter Invoices to display only the ones created by the logged-in user
+            // Filter quotations to display only the ones created by the logged-in user
             const filteredData = data.filter(
-              (Invoice: PurchaseProduct) =>
-                Invoice.companyId === session.data.user.companyId
+              (quote: PurchaseProduct) =>
+                quote.companyId === session.data.user.companyId
             );
             setTotalQuotations(filteredData.length);
           }
@@ -151,20 +149,19 @@ const Api = () => {
       }
     };
 
-    fetchInvoices();
+    fetchQuote();
   }, [session.status, session.data]);
-// invoice
+
+  // invoice
   useEffect(() => {
     const fetchInvoices = async () => {
       try {
         const response = await fetch(`/api/primeinvoice`);
         const data = await response.json();
-
         // Filter Invoices based on user role and ownership
         if (session.status === "authenticated" && session.data) {
           if (session.data.user.role === "superadmin") {
             // Display all Invoices for superadmin
-
             setTotalInvoices(data.length);
           } else {
             // Filter Invoices to display only the ones created by the logged-in user
@@ -179,27 +176,25 @@ const Api = () => {
         console.log(error);
       }
     };
-
     fetchInvoices();
   }, [session.status, session.data]);
-  // console.log("Total Invoices", totalInvoices)
-// vendors
+
+  // vendors
   useEffect(() => {
     const FetchClients = async () => {
       try {
         const response = await fetch(`/api/vendor`);
         const data = await response.json();
-
-        // Filter Invoices based on user role and ownership
+        // Filter vendors based on user role and ownership
         if (session.status === "authenticated" && session.data) {
           if (session.data.user.role === "superadmin") {
-            // Display all Invoices for superadmin
-
+            // Display all vendor for superadmin
             setTotalVendor(data.length);
           } else {
-            // Filter Invoices to display only the ones created by the logged-in user
+            // Filter vendor to display only the ones created by the logged-in user
             const filteredData = data.filter(
-              (client: { companyId: string; }) => client.companyId === session.data.user.companyId
+              (client: { companyId: string }) =>
+                client.companyId === session.data.user.companyId
             );
             setTotalVendor(filteredData.length);
           }
@@ -208,26 +203,26 @@ const Api = () => {
         console.log(error);
       }
     };
-
     FetchClients();
   }, [session.status, session.data]);
-// Product
+
+  // Product
   useEffect(() => {
-    const fetchConsignment = async () => {
+    const fetchProduct = async () => {
       try {
         const response = await fetch(`/api/product`);
         const data = await response.json();
 
-        // Filter consignment based on user role and ownership
+        // Filter products based on user role and ownership
         if (session.status === "authenticated" && session.data) {
           if (session.data.user.role === "superadmin") {
-            // Display all consignment for superadmin
+            // Display all products for superadmin
             setTotalProducts(data.length);
           } else {
-            // Filter consignment to display only the ones created by the logged-in user
+            // Filter products to display only the ones created by the logged-in user
             const filteredData = data.filter(
-              (consignment: PurchaseProduct) =>
-                consignment.companyId === session.data.user.companyId
+              (product: PurchaseProduct) =>
+                product.companyId === session.data.user.companyId
             );
             setTotalProducts(filteredData.length);
           }
@@ -236,9 +231,9 @@ const Api = () => {
         console.log(error);
       }
     };
-
-    fetchConsignment();
+    fetchProduct();
   }, [session.status, session.data]);
+
   // user
   useEffect(() => {
     const fetchUsers = async () => {
@@ -252,12 +247,13 @@ const Api = () => {
         const result = await res.json();
         if (session.status === "authenticated" && session.data) {
           if (session.data.user.role === "superadmin") {
-            // Display all consignment for superadmin
+            // Display all users for superadmin
             setTotalUsers(result.length);
           } else {
-            // Filter consignment to display only the ones created by the logged-in user
+            // Filter users to display only the ones created by the logged-in user
             const filteredData = result.filter(
-              (allUsers: { companyId: string; }) => allUsers.companyId === session.data.user.companyId
+              (allUsers: { companyId: string }) =>
+                allUsers.companyId === session.data.user.companyId
             );
             setTotalUsers(filteredData.length);
           }
@@ -269,38 +265,37 @@ const Api = () => {
 
     fetchUsers();
   }, [session.status, session.data]);
+
   // company
-  useEffect(() => {
-    const fetchCompanies = async () => {
-      try {
-        const res = await fetch("/api/company", {
-          cache: "no-store",
-        });
+  if (session?.data?.user.role === "superadmin") {
+    useEffect(() => {
+      const fetchCompanies = async () => {
+        try {
+          const res = await fetch("/api/company", {
+            cache: "no-store",
+          });
 
-        if (!res.ok) {
-          throw new Error("Failed to fetch data");
+          if (!res.ok) {
+            throw new Error("Failed to fetch data");
+          }
+          const result = await res.json();
+          setTotalCompanies(result.length);
+        } catch (error) {
+          console.error(error);
         }
-        const result = await res.json();
-        // console.log(result)
-        setTotalCompanies(result.length);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchCompanies();
-  }, []);
-
-    return {
-      totalVendor,
-      totalCustomers,
-      totalUsers,
-      totalCompanies,
-      totalProducts,
-      totalMessages,
-      totalEmployees,
-      totalQuotations,
-      totalInvoices,
-      totalPurchase,
-    };
+      };
+      fetchCompanies();
+    }, [session.status, session.data]);
+  }
+  return {
+    totalVendor,
+    totalCustomers,
+    totalUsers,
+    totalCompanies,
+    totalProducts,
+    totalQuotations,
+    totalInvoices,
+    totalPurchase,
+  };
 };
 export default Api;

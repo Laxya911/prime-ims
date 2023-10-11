@@ -40,12 +40,16 @@ const DropdownUser = () => {
     document.addEventListener("keydown", keyHandler);
     return () => document.removeEventListener("keydown", keyHandler);
   });
-  const linkHref = session?.status === "authenticated" ? `/users/${session?.data?.user?.id}` : "#";
+  const linkHref =
+    session?.status === "authenticated"
+      ? `/users/${session?.data?.user?.id}`
+      : "#";
   if (session.status === "authenticated" && session.data && session.data.user) {
     return (
       <div className="relative">
         <button
-           onClick={(e) => {
+          ref={trigger}
+          onClick={(e) => {
             e.preventDefault();
             setDropdownOpen(!dropdownOpen);
           }}
@@ -97,7 +101,6 @@ const DropdownUser = () => {
           }`}
         >
           <ul className="flex flex-col gap-5 border-b border-stroke px-6 py-7.5 dark:border-strokedark">
-        
             <li>
               <Link
                 href={linkHref}
@@ -151,7 +154,7 @@ const DropdownUser = () => {
         {/* <!-- Dropdown End --> */}
       </div>
     );
-  };
+  }
 };
 
 export default DropdownUser;

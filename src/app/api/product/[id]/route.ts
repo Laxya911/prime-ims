@@ -51,140 +51,138 @@ export const PUT = async (
   { params }: { params: { id: string } }
 ) => {
   const session = await getServerSession(options);
-  
+
   if (!session || !session.user) {
     // Not Signed in
     return new NextResponse("unauthorized", { status: 401 });
-  } else {
+  }
+  try {
     const { id } = params;
     const isMultipleUpdate = id.includes(",");
-    
-    try {
-      if (isMultipleUpdate) {
-        // Handle multiple product updates
-        const productIds = id.split(",");
-        const { productUpdates } = await request.json();
-        await connectDB();
-        
-        for (const productId of productIds) {
-          const productUpdate = productUpdates.find(
-            (product: { productId: any }) => product.productId === productId
-          );
-  
-          if (!productUpdate) {
-            return new NextResponse(
-              `Product update not found for ID: ${productId}`,
-              {
-                status: 404, // Not Found
-              }
-            );
-          }
-          const {
-            productCode,
-            productName,
-            category,
-            buyingPrice,
-            addedOn,
-            companyId,
-            created_by,
-          } = productUpdate;
-          
-          const inStockValue = parseInt(productUpdate.inStock, 10);
+    const isProductUpdate = request.headers.get("X-Product-Update") === "true";
 
-          if (isNaN(inStockValue)) {
-            // Handle the case where inStock is not a valid number
-            return new NextResponse(
-              `Invalid 'inStock' value for ID: ${productId}`,
-              {
-                status: 400, // Bad Request
-              }
-            );
-          }
-  
-          const updatedProduct = await Product.findByIdAndUpdate(
-            productId,
-            {
-              productCode,
-              productName,
-              category,
-              $inc: { inStock: inStockValue },
-              buyingPrice,
-              addedOn,
-              companyId,
-              created_by,
-            },
-            { new: true }
-          );
-  
-          console.log(updatedProduct);
-  
-          if (!updatedProduct) {
-            return new NextResponse("Product not found", {
-              status: 404, // Not Found
-            });
-          }
-        }
-        
-        return new NextResponse("Products have been updated", {
-          status: 200, // OK
+    if (isProductUpdate) {
+      // Handle product details update
+      const productData = await request.json();
+      await connectDB();
+
+      const updatedProduct = await Product.findByIdAndUpdate(id, productData, {
+        new: true,
+      });
+
+      if (!updatedProduct) {
+        return new NextResponse("Product not found", {
+          status: 404, // Not Found
         });
-      } else {
-        // Handle single product update
-        const {
-          productCode,
-          productName,
-          category,
-          buyingPrice,
-          addedOn,
-          companyId,
-          created_by,
-          inStock,
-        } = await request.json();
+      }
 
-        const inStockValue = parseInt(inStock, 10);
+      return new NextResponse("Product has been updated", {
+        status: 200, // OK
+      });
+    } else if (isMultipleUpdate) {
+      // Handle multiple product updates
+      const productIds = id.split(",");
+      const { productUpdates } = await request.json();
+      await connectDB();
 
-        if (isNaN(inStockValue)) {
-          // Handle the case where inStock is not a valid number
+      for (const productId of productIds) {
+        const productUpdate = productUpdates.find(
+          (product: { productId: any }) => product.productId === productId
+        );
+
+        if (!productUpdate) {
           return new NextResponse(
-            "Invalid 'inStock' value",
+            `Product update not found for ID: ${productId}`,
             {
-              status: 400, // Bad Request
+              status: 404, // Not Found
             }
           );
         }
+        // Check if recvQty or newOrder field contains a value
+        const fieldName: "recvQty" | "newOrder" | null =
+          productUpdate.recvQty || productUpdate.newOrder
+            ? productUpdate.recvQty
+              ? "recvQty"
+              : "newOrder"
+            : null;
 
+        if (fieldName === null) {
+          console.warn(`No 'recvQty' or 'newOrder' value for ID: ${productId}`);
+        }
+        const { ...otherFields } = productUpdate;
+
+        const updateQuery: Record<string, any> = {};
+
+        if (fieldName === "recvQty") {
+          updateQuery.$inc = { inStock: parseInt(productUpdate.recvQty, 10) };
+        } else if (fieldName === "newOrder") {
+          updateQuery.$inc = { inStock: -parseInt(productUpdate.newOrder, 10) };
+        }
+        // Use $set for other fields
+        updateQuery.$set = {
+          ...otherFields,
+        };
         const updatedProduct = await Product.findByIdAndUpdate(
-          id,
-          {
-            productCode,
-            productName,
-            category,
-            buyingPrice,
-            $inc: { inStock: inStockValue },
-            addedOn,
-            companyId,
-            created_by,
-          },
+          productId,
+          updateQuery,
           { new: true }
         );
 
         console.log(updatedProduct);
-        
+
         if (!updatedProduct) {
           return new NextResponse("Product not found", {
             status: 404, // Not Found
           });
         }
+      }
 
-        return new NextResponse("Product has been updated", {
-          status: 200, // OK
+      return new NextResponse("Products have been updated", {
+        status: 200, // OK
+      });
+    } else {
+      // Handle single product update
+      const { recvQty, newOrder, ...otherFields } = await request.json();
+      await connectDB();
+
+      // Check if recvQty or newOrder field contains a value
+      const fieldName: "recvQty" | "newOrder" | null =
+        recvQty || newOrder ? (recvQty ? "recvQty" : "newOrder") : null;
+
+      if (fieldName === null) {
+        console.warn(`No 'recvQty' or 'newOrder' value`);
+      }
+
+      const updateQuery: Record<string, any> = {};
+
+      if (fieldName === "recvQty") {
+        updateQuery.$inc = { inStock: parseInt(recvQty, 10) };
+      } else if (fieldName === "newOrder") {
+        updateQuery.$inc = { inStock: -parseInt(newOrder, 10) };
+      }
+      // Use $set for other fields
+      updateQuery.$set = {
+        ...otherFields,
+      };
+      const updatedProduct = await Product.findByIdAndUpdate(id, updateQuery, {
+        new: true,
+      });
+
+      console.log(updatedProduct);
+
+      if (!updatedProduct) {
+        return new NextResponse("Product not found", {
+          status: 404, // Not Found
         });
       }
-    } catch (err) {
-      const error = err as Error;
-      return new NextResponse(error.message, {
-        status: 500, // Internal Server Error
+      return new NextResponse("Product has been updated", {
+        status: 200, // OK
       });
     }
+  } catch (err) {
+    const error = err as Error;
+    return new NextResponse(error.message, {
+      status: 500, // Internal Server Error
+    });
   }
 };

@@ -7,9 +7,11 @@ import { PurchaseProduct } from "@/app/types/product";
 
 const PurchaseOrder = () => {
   const session = useSession();
+const [loading, setLoading]= useState(false)
 
   const [allPurchase, setAllPurchase] = useState<PurchaseProduct[]>([]);
   useEffect(() => {
+    setLoading(true)
     const fetchProducts = async () => {
       try {
         const response = await fetch(`/api/purchase`);
@@ -23,8 +25,11 @@ const PurchaseOrder = () => {
                   new Date(a.date_created).getTime()
               );
               setAllPurchase(shortedPurchase);
+              setLoading(false)
             } else {
               console.error("Data or products array is undefined.");
+              setLoading(false)
+
             }
           } else {
             if (data && Array.isArray(data) && data.length > 0) {
@@ -38,8 +43,10 @@ const PurchaseOrder = () => {
                   new Date(a.date_created).getTime()
               );
               setAllPurchase(shortedPurchase);
+              setLoading(false)
             } else {
               console.error("Data or products array is undefined.");
+              setLoading(false)
             }
           }
         }
@@ -71,9 +78,10 @@ const PurchaseOrder = () => {
       }
     }
   };
+
   return {
     allPurchase,
-    // allPurchaseOrder,
+    loading,
     handleDelete,
   };
 };

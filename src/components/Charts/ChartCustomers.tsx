@@ -49,14 +49,13 @@ const ChartCustomers: React.FC = () => {
     }
   }, [allSells]);
 
-
   const options: ApexOptions = {
     chart: {
       type: "pie",
     },
     labels: state.labels,
     series: state.series,
-    colors: ["#259AE6", "#FFA70B", "#ff6666","#10B981", "#375E83" ],
+    colors: ["#259AE6", "#FFA70B", "#ff6666", "#10B981", "#375E83"],
     legend: {
       show: true,
       position: "bottom",
@@ -64,17 +63,29 @@ const ChartCustomers: React.FC = () => {
   };
   // NextJS Requirement
   const isWindowAvailable = () => typeof window !== "undefined";
-
   if (!isWindowAvailable()) return <></>;
 
-  return (
-    <div className=" justify-center">
-      <p className="flex text-center justify-center">Top 5 Customers</p>
-      <div>
-        <ReactApexChart options={options} series={state.series} type="pie" />
+  const isDataAvailable = allSells.length > 0;
+  if (allSells) {
+    return (
+      <div className=" justify-center">
+        <p className="flex text-center justify-center">Top 5 Customers</p>
+        <div className="flex flex-col items-center justify-center">
+          <ReactApexChart options={options} series={state.series} type="pie" />
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <>
+        <div className="flex flex-col items-center justify-center">
+          <p className="text-lg text-gray-500 p-10">
+            No customer data available
+          </p>
+        </div>
+      </>
+    );
+  }
 };
 
 export default ChartCustomers;

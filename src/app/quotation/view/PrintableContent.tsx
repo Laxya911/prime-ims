@@ -153,9 +153,9 @@ const generatePrintableContent = (
             </View>
             <View style={styles.bankDetails}>
               <Text>BANK DETAILS: </Text>
-              <Text>A/C NO. 532801010320263</Text>
-              <Text>UNION BANK OF INDIA</Text>
-              <Text>IFSC CODE: UBIN0553280</Text>
+              <Text>A/C NO. {companyData.account_no}</Text>
+              <Text>Bank Name: {companyData.bank_name}</Text>
+              <Text>IFSC CODE: {companyData.ifsc_code}</Text>
               <Text>A/C TYPE : CURRENT</Text>
             </View>
           </View>

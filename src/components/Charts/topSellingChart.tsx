@@ -12,8 +12,6 @@ interface TopSellingStates {
   labels: string[];
 }
 const TopSellingItems: React.FC = () => {
-
-
   const [state, setState] = useState<TopSellingStates>({
     series: [],
     labels: [],
@@ -32,7 +30,7 @@ const TopSellingItems: React.FC = () => {
       });
     }
   }, [topSellingItems]);
-  
+
   const options: ApexOptions = {
     chart: {
       type: "pie",
@@ -47,16 +45,28 @@ const TopSellingItems: React.FC = () => {
   };
   // NextJS Requirement
   const isWindowAvailable = () => typeof window !== "undefined";
-
   if (!isWindowAvailable()) return <></>;
-  return (
-    <div className=" justify-center">
-      <p className="flex text-center justify-center">Top Selling Items</p>
-      <div>
-        <ReactApexChart options={options} series={state.series} type="pie" />
+
+  if (topSellingItems) {
+    return (
+      <div className=" justify-center">
+        <p className="flex text-center justify-center">Top Selling Items</p>
+        <div className="flex flex-col items-center justify-center ">
+          <ReactApexChart options={options} series={state.series} type="pie" />
+        </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <>
+        <div className="flex flex-col items-center justify-center">
+          <p className="text-lg text-gray-500 p-10">
+            No sells data available
+          </p>
+        </div>
+      </>
+    );
+  }
 };
 
 export default TopSellingItems;

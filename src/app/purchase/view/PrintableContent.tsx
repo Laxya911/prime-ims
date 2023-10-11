@@ -23,8 +23,8 @@ const generatePrintableContent = (
     <Document>
       <Page>
         <View style={styles.container}>
-          <View>
-             {/* eslint-disable-next-line jsx-a11y/alt-text */}
+          <View style={styles.topHeading}>
+            {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <Image
               src={
                 companyData.logo
@@ -33,26 +33,24 @@ const generatePrintableContent = (
               }
               style={styles.logo}
             />
-          </View>
-          <View style={styles.heading}>
+
             <View>
               <Text style={styles.title}>Purchase Details</Text>
             </View>
-            <View>
-            <Text style={styles.invoiceNumber}>
+            <View style={styles.invoiceNumber}>
+              <Text>
                 Date: {new Date(purchaseData.date_created).toDateString()}
               </Text>
 
-              <Text style={styles.invoiceNumber}>
-                PO Number: {purchaseData.po_Number}
-              </Text>
-            
+              <Text>PO Number: {purchaseData.po_Number}</Text>
             </View>
           </View>
           <View style={styles.Details}>
             {/* Display Left side */}
             <View style={styles.companyDetails}>
-              <Text  style={styles.companyText}>Buyer Name: {companyData.name} </Text>
+              <Text style={styles.companyText}>
+                Buyer Name: {companyData.name}{" "}
+              </Text>
               <Text style={styles.companyText}>
                 Number: {companyData.contact}{" "}
               </Text>
@@ -65,19 +63,23 @@ const generatePrintableContent = (
               <Text style={styles.companyText}>
                 GST No. {companyData.gstNo}{" "}
               </Text>
-              <Text style={styles.companyText}>
+              {/* <Text style={styles.companyText}>
                 PAN No. {companyData.pancard}{" "}
-              </Text>
+              </Text> */}
             </View>
 
             {/* Display Right side */}
 
             <View style={styles.customerDetails}>
-              <Text style={styles.detailsText}>Supplier Details: {purchaseData.vName}</Text>
+              <Text style={styles.detailsText}>
+                Supplier Details: {purchaseData.vName}
+              </Text>
               <Text style={styles.detailsText}>
                 Contact: {purchaseData.contact_no}
               </Text>
-              <Text style={styles.detailsText}>Email: {purchaseData.email}</Text>
+              <Text style={styles.detailsText}>
+                Email: {purchaseData.email}
+              </Text>
               <Text style={styles.detailsText}>
                 Address: {purchaseData.address}
               </Text>
@@ -115,9 +117,8 @@ const generatePrintableContent = (
           {/* Display Calculation */}
           <View style={styles.Details}>
             <View style={styles.companyDetails}>
-              <Text style={styles.amount}>
-                {" "}
-                Note:- taxes will be calculate as percentage base if applicable
+              <Text style={styles.note}>
+                Note*:- taxes will be calculate as percentage base if applicable!
               </Text>
             </View>
             <View style={styles.calculation}>
@@ -138,7 +139,6 @@ const generatePrintableContent = (
           </View>
           <View style={styles.horizontalLine} />
 
-
           <View style={styles.conditions}>
             <View>
               <Text>Terms & Conditions :</Text>
@@ -147,16 +147,18 @@ const generatePrintableContent = (
                 2. All disputes are subject to Delhi Jurisdiction only.
               </Text>
               <Text>
-                3. {companyData.name}&rsquo;s laibility is as per the clause specified in
-                Airwaybill.
+                3. {companyData.name}&rsquo;s laibility is as per the clause
+                specified in Airwaybill.
               </Text>
             </View>
             <View style={styles.bankDetails}>
               <Text>BANK DETAILS: </Text>
-              <Text>A/C NO. 532801010320263</Text>
-              <Text>UNION BANK OF INDIA</Text>
-              <Text>IFSC CODE: UBIN0553280</Text>
-              <Text>A/C TYPE : CURRENT</Text>
+              <Text>Bank Name: {companyData.bank_name}</Text>
+              <Text>A/C NO. {companyData.account_no}</Text>
+              <Text>IFSC CODE: {companyData.ifsc_code}</Text>
+              <Text>A/C TYPE : {companyData.account_type}</Text>
+              <Text>Branch : {companyData.b_branch}</Text>
+              <Text>Address : {companyData.b_address}</Text>
             </View>
           </View>
           <View style={styles.terms}>
@@ -179,30 +181,27 @@ const styles = StyleSheet.create({
     padding: 15,
     margin: 10,
   },
-  heading: {
-    display: "flex",
-    marginBottom: 3,
+  topHeading: {
     flexDirection: "row",
+    marginRight: 35,
+    marginLeft: 35,
     justifyContent: "space-between",
-    marginRight: "80px",
-    marginLeft: "50px",
-    paddingBottom: "4px",
   },
   title: {
-    alignSelf: "flex-end",
-    fontSize: "16px",
+    textAlign: "center",
+    marginLeft: 20,
+    fontSize: "12px",
   },
   invoiceNumber: {
     fontSize: "10px",
-    marginBottom: "4px",
-    alignSelf: "flex-end",
+    textAlign: "left",
+    marginRight: 10,
+    padding: 1,
   },
+
   logo: {
     height: 36,
-    width: "100%",
     justifyContent: "center",
-    paddingLeft: "220px",
-    paddingRight: "220px",
     marginBottom: "10px",
     textAlign: "center",
   },
@@ -218,18 +217,19 @@ const styles = StyleSheet.create({
   },
   customerDetails: {
     width: "50%",
+    textAlign: "center",
   },
   companyText: {
     fontSize: "10px",
-    marginLeft: 50,
+    marginLeft: 40,
     textAlign: "left",
     flexWrap: "wrap",
     padding: 2,
   },
   detailsText: {
     fontSize: "10px",
-    marginRight: 10,
-    textAlign: "center",
+    marginLeft: 80,
+    textAlign: "left",
     flexWrap: "wrap",
     padding: 2,
   },
@@ -274,6 +274,10 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignSelf: "flex-end",
   },
+  note: {
+    fontSize: "10px",
+    textAlign: "center",
+  },
   amount: {
     fontSize: "8px",
     marginLeft: 90,
@@ -281,12 +285,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     width: "50%", // Add width: "100%" to make the text take full width
   },
-  totalInWords: {
-    fontSize: "12px",
-    marginBottom: "2px",
-    padding: 3,
-    width: "100%",
-  },
+
   terms: {
     marginTop: "12px",
     marginBottom: "14px",

@@ -11,10 +11,15 @@ export const GET = async (request: NextRequest) => {
     return new NextResponse("unauthorized", { status: 401 });
   } else {
     try {
+      
       await connectDB();
-
-      const users = await User.find();
-      // console.log(users)
+      const { role, companyId } = session.user;
+      let users;
+      if (role === "superadmin") {
+        users = await User.find();
+      } else {
+        users = await User.find({ companyId });
+      }
       return new NextResponse(JSON.stringify(users), { status: 200 });
     } catch (err) {
       return new NextResponse("Database Error", { status: 500 });

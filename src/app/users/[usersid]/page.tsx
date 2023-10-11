@@ -6,10 +6,11 @@ import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import styles from "@/app/common.module.css";
 import { UserTypes } from "@/app/types/userType";
-import { CompanyTypes } from "@/app/types/company";
 import NotFound from "@/components/notFound";
 import AuthUsers from "@/utils/auth";
+import CompApi from "@/app/commonApi/compApi"
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import Loading from "@/app/loading";
 interface UpdateProps {
   params: {
     usersid: string;
@@ -18,8 +19,10 @@ interface UpdateProps {
 const UpdateUser:React.FC<UpdateProps> = ({ params: { usersid } }) => {
   const router = useRouter();
   const { data: session, status } = useSession();
-  // console.log(session);
   const {isAuthorized}= AuthUsers()
+  const {allCompany}= CompApi()
+const [loading,setLoading] = useState (true)
+
   useEffect(() => {
     if (status === "unauthenticated") {
       router.push("/auth/signin");
@@ -49,9 +52,11 @@ const UpdateUser:React.FC<UpdateProps> = ({ params: { usersid } }) => {
         const response = await axios.get(`/api/users/${usersid}`);
         const userData = response.data;
         setUser(userData);
-        console.log(userData);
+        setLoading(false)
       } catch (error) {
         console.error(error);
+        setLoading(false)
+
       }
     };
     if (usersid) {
@@ -59,26 +64,6 @@ const UpdateUser:React.FC<UpdateProps> = ({ params: { usersid } }) => {
     }
   }, [usersid]);
 
-  const [companyList, setCompanyList] = useState<CompanyTypes[]>([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("/api/company", {
-          cache: "no-store",
-        });
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        const result = await res.json();
-        // console.log(result)
-        setCompanyList(result);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   // Reset the form fields when isFormSubmitted is true
   useEffect(() => {
@@ -128,7 +113,13 @@ const UpdateUser:React.FC<UpdateProps> = ({ params: { usersid } }) => {
   };
 
   const isSuperAdmin = session && session.user.role === "superadmin";
-
+  if (loading) {
+    return (
+      <>
+        <Loading />
+      </>
+    );
+  };
   if (!user || !user._id) {
     return (
       <>
@@ -137,10 +128,9 @@ const UpdateUser:React.FC<UpdateProps> = ({ params: { usersid } }) => {
     );
   };
 
-  if (session) {
+
     return (
       <>
-  
       <Breadcrumb pageName="Update User" />
         <div className="flex item-center, justify-center text-2xl, font-medium mt-6 mb-8"> Update {user.name} Details</div>
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -231,13 +221,13 @@ const UpdateUser:React.FC<UpdateProps> = ({ params: { usersid } }) => {
                     setUser((prevState) => ({
                       ...prevState,
                       assignedCompany: e.target.value,
-                      companyId: companyList.find((comp) => comp._id === e.target.value)?.companyId || "",
+                      companyId: allCompany.find((comp) => comp._id === e.target.value)?.companyId || "",
                     }))}
                     
                   className={styles.input}
                 >
                   <option value="">Select Company</option>
-                  {companyList.map((comp) => (
+                  {allCompany.map((comp) => (
                     <option key={comp._id} value={comp._id}>
                       {comp.name}
                     </option>
@@ -275,7 +265,6 @@ const UpdateUser:React.FC<UpdateProps> = ({ params: { usersid } }) => {
         </form>
       </>
     );
-  }
 };
 
 export default UpdateUser;

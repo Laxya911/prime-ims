@@ -3,7 +3,8 @@ import connectDB from "@/utils/dbConnect";
 import Vendor from "@/models/vendorModel";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
-export const GET = async () => {
+
+export const GET = async (request: NextRequest) => {
   const session = await getServerSession(options);
   if (!session || !session.user) {
     // Not Signed in
@@ -11,9 +12,15 @@ export const GET = async () => {
   } else {
     try {
       await connectDB();
-      const Clients = await Vendor.find();
+      const { role, companyId } = session.user;
+      let vendors;
+      if (role === "superadmin") {
+        vendors = await Vendor.find();
+      } else {
+        vendors = await Vendor.find({ companyId });
+      }
       // console.log(Vendors)
-      return new NextResponse(JSON.stringify(Clients), { status: 200 });
+      return new NextResponse(JSON.stringify(vendors), { status: 200 });
     } catch (err) {
       return new NextResponse("Database Error", { status: 500 });
     }

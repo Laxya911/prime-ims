@@ -18,6 +18,7 @@ export interface Company extends Document {
   zip: string ,
   bank_name: string ,
   account_no: string ,
+  account_type: string ,
   ifsc_code: string ,
   b_branch: string ,
   b_address: string ,

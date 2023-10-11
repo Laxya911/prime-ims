@@ -4,7 +4,7 @@ import Quotation from "@/models/quotationModel";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
 
-export const GET = async () => {
+export const GET = async (request: NextRequest) => {
   const session = await getServerSession(options);
   if (!session || !session.user) {
     // Not Signed in
@@ -12,8 +12,15 @@ export const GET = async () => {
   } else {
     try {
       await connectDB();
-      const invoices = await Quotation.find();
-      return new NextResponse(JSON.stringify(invoices), { status: 200 });
+      const { role, companyId } = session.user;
+      let quotations;
+      if (role === "superadmin") {
+        quotations = await Quotation.find();
+      } else {
+        quotations = await Quotation.find({ companyId });
+      }
+      // const quotations = await Quotation.find();
+      return new NextResponse(JSON.stringify(quotations), { status: 200 });
     } catch (err) {
       return new NextResponse("Database Error", { status: 500 });
     }

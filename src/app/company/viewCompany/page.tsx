@@ -8,7 +8,8 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import Image from "next/image";
 import { CompanyTypes } from "@/app/types/company";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-
+import UnAthorized from "@/components/unauthorized";
+import AuthUsers from "@/utils/auth";
 const MessageList = () => {
   const session = useSession();
   const router = useRouter();
@@ -18,6 +19,14 @@ const MessageList = () => {
       router.push("/auth/signin");
     }
   }, [session.status, router]);
+
+  const {isSuperAdmin}= AuthUsers();
+  // if (!isSuperAdmin) {
+  //   return(
+  //     <UnAthorized/>
+  //   )
+  // }
+
   const [allCompany, setAllCompany] = useState<CompanyTypes[]>([]);
   const [companyPage, setCompanyPage] = useState(1);
   const companyPerPage = 10;
@@ -94,45 +103,45 @@ const MessageList = () => {
           </div>
           <div className=" overflow-x-auto">
             <table className="w-full text-sm  text-gray-700 ">
-              <thead className="text-gray-700 text-center bg-gray-50 ">
+              <thead className=" border-b text-gray-700 text-left bg-gray-50 ">
                 <tr>
-                  <th scope="col" className=" py-1">
+                  <th className=" py-1">
                     Name
                   </th>
-                  <th scope="col" className=" py-1">
+                  <th className=" py-1">
                     ID
                   </th>
-                  <th scope="col" className=" py-1">
+                  <th className=" px-2 py-1">
                     Logo
                   </th>
-                  <th scope="col" className="px-4 py-1">
+                  <th className=" py-1">
                     Website
                   </th>
-                  <th scope="col" className="px-4 py-1">
+                  <th className=" py-1">
                     Email
                   </th>
-                  <th scope="col" className="px-4 py-1">
+                  <th className=" py-1">
                     Contact
                   </th>
-                  <th scope="col" className="px-4 py-1">
+                  <th className=" py-1">
                     GST
                   </th>
-                  <th scope="col" className="px-4 py-1">
+                  <th className=" py-1">
                     Pancard
                   </th>
-                  <th scope="col" className="px-4 py-1">
+                  <th className=" py-1">
                     Address
                   </th>
-                  <th scope="col" className="px-4 py-1">
+                  <th className=" py-1">
                     State
                   </th>
-                  <th scope="col" className="px-4 py-1">
+                  <th className=" py-1">
                     Country
                   </th>
-                  <th scope="col" className=" py-1">
+                  <th className=" py-1">
                     Joined
                   </th>
-                  <th scope="col" className="px-4 py-1">
+                  <th className=" py-1">
                     Action
                   </th>
                 </tr>
@@ -144,8 +153,8 @@ const MessageList = () => {
                     className="border-b text-gray-800 cursor-pointer hover:bg-hoverl dark:hover:bg-dark-hover"
                   >
                     <td className=" py-1">{company.name}</td>
-                    <td className="px-2 py-1">{company.companyId}</td>
-                    <td className="px-2 py-1">
+                    <td className=" py-1">{company.companyId}</td>
+                    <td className=" p-2">
                       <Image
                         className=" rounded"
                         src={company.logo ? company.logo : "/images/logo.png"}
@@ -154,18 +163,18 @@ const MessageList = () => {
                         alt="Logo"
                       />
                     </td>
-                    <td className="px-2 py-1">{company.company_Url}</td>
-                    <td className="px-4 py-1">{company.email}</td>
-                    <td className="px-4 py-1">{company.contact}</td>
-                    <td className="px-4 py-1">{company.gstNo}</td>
-                    <td className="px-4 py-1">{company.pancard}</td>
-                    <td className="px-4 py-1">{company.address}</td>
-                    <td className="px-4 py-1">{company.state}</td>
-                    <td className="px-4 py-1">{company.country}</td>
+                    <td className=" py-1">{company.company_Url}</td>
+                    <td className=" py-1">{company.email}</td>
+                    <td className=" py-1">{company.contact}</td>
+                    <td className=" py-1">{company.gstNo}</td>
+                    <td className=" py-1">{company.pancard}</td>
+                    <td className=" py-1">{company.address}</td>
+                    <td className=" py-1">{company.state}</td>
+                    <td className=" py-1">{company.country}</td>
                     <td className=" py-1">
-                      {new Date(company.date_created).toDateString()}
+                      {new Date(company.createdAt).toDateString()}
                     </td>
-                    <td className="px-4 flex justify-between  py-2">
+                    <td className=" flex justify-between  py-2">
                       <FaEdit
                         onClick={() => handleUpdate(company._id)}
                         className="cursor-pointer text-warning"

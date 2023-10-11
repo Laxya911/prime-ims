@@ -35,6 +35,7 @@ export interface Products {
 }
 
 export interface PurchaseProduct {
+  customerId: string;
   newRecvQty: number;
   _id: string;
   vName: string;

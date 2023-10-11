@@ -27,7 +27,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const { companyData } = CompApi();
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
-
   let storedSidebarExpanded = "true";
   const [sidebarExpanded, setSidebarExpanded] = useState(
     storedSidebarExpanded === null ? false : storedSidebarExpanded === "true"
@@ -68,6 +67,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       document.querySelector("body")?.classList.remove("sidebar-expanded");
     }
   }, [sidebarExpanded]);
+
+  const linkHref = `/settings/${companyData?._id}`
 
   if (session.status === "authenticated" && session.data && session.data.user) {
     return (
@@ -497,6 +498,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             <>
               <ul className="flex flex-col gap-1.5">
                 {/* <!-- Menu Item Auth Pages --> */}
+                {isAuthorized && (
                 <SidebarLinkGroup
                   activeCondition={
                     pathname === "/auth" || pathname.includes("auth")
@@ -591,6 +593,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     );
                   }}
                 </SidebarLinkGroup>
+                )}
                 {/* <!-- Menu Item Auth Pages --> */}
 
                 {/* <!-- Menu Users  --> */}
@@ -640,7 +643,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 {/* <!-- Menu Item Settings --> */}
                 <li>
                   <Link
-                    href="/settings"
+                    href={linkHref}
                     className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                       pathname.includes("settings") &&
                       "bg-graydark dark:bg-meta-4"
@@ -680,19 +683,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 </li>
                 {/* <!-- Menu Item Settings --> */}
                 {/* <!-- Menu Item Tracking --> */}
-                <li>
-                  <Link
-                    href="/tracking"
-                    target="_blank"
-                    className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
-                      pathname.includes("tracking") &&
-                      "bg-graydark dark:bg-meta-4"
-                    }`}
-                  >
-                    <FaSearch />
-                    Tracking
-                  </Link>
-                </li>
+             
                 {/* <!-- Menu Item Tracking --> */}
               </ul>
             </>

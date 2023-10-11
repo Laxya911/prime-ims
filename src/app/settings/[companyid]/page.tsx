@@ -5,25 +5,36 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import styles from "@/app/common.module.css";
+import NotFound from "@/components/notFound";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import Loading from "@/app/loading";
 import AuthUsers from "@/utils/auth";
 import UnAthorized from "@/components/unauthorized";
 
-const AddCompany = () => {
+interface updatedCompanyProps {
+  params: {
+    companyid: string;
+  };
+}
+const UpdateCompanyDetails: React.FC<updatedCompanyProps> = ({
+  params: { companyid },
+}) => {
   const session = useSession();
   const router = useRouter();
+
   useEffect(() => {
     if (session.status === "unauthenticated") {
       router.replace("/auth/signin");
     }
   }, [session.status, router]);
-  
-  const { isSuperAdmin } = AuthUsers();
-  if (!isSuperAdmin) {
+  const [loading, setLoading] = useState(false);
+
+  const { isAuthorized } = AuthUsers();
+  if (!isAuthorized) {
     return <UnAthorized />;
   }
-
   const [formData, setFormData] = useState({
+    _id: "",
     logo: "",
     name: "",
     contact: "",
@@ -53,59 +64,70 @@ const AddCompany = () => {
       [name]: value,
     }));
   };
+  useEffect(() => {
+    const getCompanyDetails = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(`/api/company/${companyid}`);
+        const companyData = response.data;
+        setFormData(companyData);
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+        setLoading(false);
+      }
+    };
+    if (companyid) {
+      getCompanyDetails();
+    }
+  }, [companyid]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const updatedForm = {
         ...formData,
-        created_by: session?.data?.user?.id,
+        created_by: session?.data?.user.email,
       };
 
-      const response = await axios.post("/api/company", updatedForm);
+      const response = await axios.put(
+        `/api/company/${companyid}`,
+        updatedForm
+      );
       if (response.status === 201) {
-        toast.success("Company Added successfully!");
-        setFormData({
-          logo: "",
-          name: "",
-          contact: "",
-          email: "",
-          company_Url: "",
-          companyId: "",
-          doj: "",
-          pancard: "",
-          gstNo: "",
-          address: "",
-          country: "",
-          state: "",
-          city: "",
-          zip: "",
-          bank_name: "",
-          account_no: "",
-          account_type: "",
-          ifsc_code: "",
-          b_branch: "",
-          b_address: "",
-        });
+        toast.success("Company Updated successfully!");
       }
     } catch (error) {
       console.error(error);
-      toast.error("Error occurred while saving Company data!");
+      toast.error("Error occurred while updating Company data!");
     }
   };
   const handleCancel = (e: React.FormEvent) => {
     e.preventDefault();
-    router.push("/");
+    router.push("/companies");
   };
-
-
+  if (loading) {
+    return (
+      <>
+        <Loading />
+      </>
+    );
+  }
+  if (!formData || !formData._id) {
+    return (
+      <>
+        <NotFound />
+      </>
+    );
+  }
   return (
     <>
-      <Breadcrumb pageName="Company" />
-      <div className="text-center text-2xl justify-center  mb-6 ">
-        <h2>Add New Company </h2>
+      <Breadcrumb pageName="Setting Company" />
+      <div className="text-center text-2xl justify-center rounded mb-6 py-1 shadow-sm shadow-warning ">
+        <h2>Update Company Details </h2>
       </div>
-      <div className={styles.employee}>
-        <form className={styles.form} onSubmit={handleSubmit}>
+      <form className="shadow-xl shadow-warning mt-2 rounded py-4" onSubmit={handleSubmit}>
+        <div className={styles.form}>
           <div className={styles.formGroup}>
             <label htmlFor="name">Company Name:</label>
             <input
@@ -120,11 +142,11 @@ const AddCompany = () => {
             />
           </div>
           <div className={styles.formGroup}>
-            <label htmlFor="companyId">Company Id:</label>
+            <label htmlFor="name">Company ID:</label>
             <input
               type="text"
               className={styles.input}
-              id="CompanyId"
+              id="companyId"
               name="companyId"
               placeholder="Com. Name"
               value={formData.companyId}
@@ -136,7 +158,7 @@ const AddCompany = () => {
             <label htmlFor="name">Contact Number:</label>
 
             <input
-              type="number"
+              type="text"
               className={styles.input}
               id="contact"
               name="contact"
@@ -212,7 +234,6 @@ const AddCompany = () => {
               required
             />
           </div>
-
           <div className={styles.formGroup}>
             <label htmlFor="country">Country:</label>
             <input
@@ -265,6 +286,40 @@ const AddCompany = () => {
               required
             />
           </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="url">Website:</label>
+            <input
+              type="text"
+              className={styles.input}
+              id="url"
+              name="company_Url"
+              placeholder="Com. url"
+              value={formData.company_Url}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className={styles.formGroup}>
+            <label htmlFor="url">Company Logo:</label>
+            <input
+              type="text"
+              className={styles.input}
+              id="logo"
+              name="logo"
+              placeholder="Com. Logo"
+              value={formData.logo}
+              onChange={handleChange}
+              required
+            />
+          </div>
+        </div>
+
+        {/* Bank Details */}
+        <div className="text-center text-2xl mt-6 mb-4">
+          {" "}
+          Update Bank Details
+        </div>
+        <div className={styles.form}>
           <div className={styles.formGroup}>
             <label htmlFor="bank_name">Bank Name:</label>
 
@@ -347,35 +402,12 @@ const AddCompany = () => {
               required
             />
           </div>
-          <div className={styles.formGroup}>
-            <label htmlFor="url">Website:</label>
-            <input
-              type="text"
-              className={styles.input}
-              id="url"
-              name="company_Url"
-              placeholder="Com. url"
-              value={formData.company_Url}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className={styles.formGroup}>
-            <label htmlFor="url">Company Logo:</label>
-            <input
-              type="text"
-              className={styles.input}
-              id="logo"
-              name="logo"
-              placeholder="Logo"
-              value={formData.logo}
-              onChange={handleChange}
-              required
-            />
-          </div>
 
-          <br />
-          <div className={styles.buttonGroup}>
+          {/* buttons */}
+        </div>
+
+        <div className="py-6 ">
+          <div className="flex flex-col sm:flex-row gap-6  text-center justify-center ">
             <button type="submit" className={styles.saveButton}>
               Submit
             </button>
@@ -387,10 +419,10 @@ const AddCompany = () => {
               Cancel
             </button>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </>
   );
 };
 
-export default AddCompany;
+export default UpdateCompanyDetails;

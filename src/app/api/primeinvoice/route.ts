@@ -3,7 +3,8 @@ import { getServerSession } from "next-auth";
 import connectDB from "@/utils/dbConnect";
 import PrimeInvoice from "@/models/InvoiceModel";
 import { options } from "../auth/[...nextauth]/options";
-export const GET = async () => {
+
+export const GET = async (request: NextRequest) => {
   const session = await getServerSession(options);
   if (!session || !session.user) {
     // Not Signed in
@@ -11,7 +12,14 @@ export const GET = async () => {
   } else {
     try {
       await connectDB();
-      const invoices = await PrimeInvoice.find();
+      const { role, companyId } = session.user;
+      let invoices;
+      if (role === "superadmin") {
+        invoices = await PrimeInvoice.find();
+      } else {
+        invoices = await PrimeInvoice.find({ companyId });
+      }
+      // const invoices = await PrimeInvoice.find();
       return new NextResponse(JSON.stringify(invoices), { status: 200 });
     } catch (err) {
       return new NextResponse("Database Error", { status: 500 });

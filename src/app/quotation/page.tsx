@@ -10,6 +10,7 @@ import styles from "@/app/common.module.css";
 import { useSession } from "next-auth/react";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { PurchaseProduct } from "../types/product";
+import { CustomerTypes } from "../types/vendor";
 
 type ProductField = keyof PurchaseProduct;
 
@@ -45,73 +46,79 @@ const Quotations = () => {
     gst_vat_no: "",
   });
 
-  const [allCustomer, setAllCustomer] = useState<PurchaseProduct[]>([]);
-  useEffect(() => {
-    const fetchCustomer = async () => {
-      try {
-        const response = await axios.get("api/customer");
-        setAllCustomer(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching customer data:", error);
-      }
-    };
-    if (session?.status === "authenticated") fetchCustomer();
-  }, [session]);
-
-  const [selectedCustomerId, setSelectedCustomerId] = useState("");
-  const handleCustomerSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedId = e.target.value;
-    setSelectedCustomerId(selectedId);
-    // Find the selected vendor's data and populate the input fields
-    const selectedCustomer = allCustomer.find(
-      (customer) => customer._id === selectedId
-    );
-    if (selectedCustomer) {
-      setCustomer(selectedCustomer);
-    }
-    setProducts([]);
-    setSelectedProductId(null);
-    setSelectedProductIds([]);
-  };
-
+  const [allCustomer, setAllCustomer] = useState<CustomerTypes[]>([]);
+  const [selectedCustomerId, setSelectedCustomerId] = useState<string>("");
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(
     null
   );
+
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const response = await axios.get("api/customer");
+        setAllCustomer(response.data);
+      } catch (error) {
+        console.error("Error fetching customer data:", error);
+      }
+    };
+
+    if (session?.status === "authenticated") {
+      fetchCustomers();
+    }
+  }, [session]);
+
+  const handleCustomerSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedId = e.target.value;
+    setSelectedCustomerId(selectedId);
+    const selectedCustomer = allCustomer.find(
+      (customer) => customer._id === selectedId
+    );
+
+    if (selectedCustomer) {
+      setCustomer(selectedCustomer);
+    }
+
+    // Reset product related states when a new customer is selected
+    setProducts([]);
+    setSelectedProductId(null);
+    setSelectedProductIds([]);
+  };
   const handleProductSelect = async (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const selectedId = e.target.value;
+
     if (selectedProductIds.includes(selectedId)) {
       toast.error("Product already selected.");
       return;
     }
+
     const selectedProduct = allProduct.find(
       (product) => product._id === selectedId
     );
+
     try {
-      // Make an API call to fetch the purchase data for the selected vendor
+      // Make an API call to fetch the quotation data for the selected customer
       const quoteResponse = await axios.get(
         `/api/quotation?customerId=${selectedCustomerId}`
       );
-      let minimumSellingPrice = Number.MIN_SAFE_INTEGER; // Initialize with a large value
+      
+      let maximumSellingPrice = Number.MIN_SAFE_INTEGER; // Initialize with a small value
       let matchingProduct: PurchaseProduct | undefined = undefined;
-
+      
       for (const quote of quoteResponse.data) {
-        // Filter products that belong to the selected vendor
-        const selectedVendorProducts = quote.products.filter(
-          (product: { customerName: string; customerId: string }) =>
-            product.customerId === selectedCustomerId ||
-            product.customerName === customer.customerName
+        const selectedCustomerProducts = quote.products.filter(
+          (product: { customerId: string; customerName: string }) =>
+            product.customerId === selectedCustomerId || product.customerName === customer.customerName
         );
 
-        for (const product of selectedVendorProducts) {
+        for (const product of selectedCustomerProducts) {
           if (
             product._id === selectedId &&
-            product.sellingPrice < minimumSellingPrice
+            product.sellingPrice > maximumSellingPrice
           ) {
-            minimumSellingPrice = product.sellingPrice;
+            maximumSellingPrice = product.sellingPrice;
             matchingProduct = product;
           }
         }
@@ -120,13 +127,12 @@ const Quotations = () => {
       let newProduct: PurchaseProduct;
 
       if (matchingProduct) {
-        console.log(matchingProduct);
         newProduct = {
           ...selectedProduct!,
           newOrder: 0,
           recvQty: 0,
           balQty: 0,
-          sellingPrice: minimumSellingPrice,
+          sellingPrice: maximumSellingPrice,
           date_created: new Date(),
           customerName: customer.customerName,
           contact_no: customer.contact_no,
@@ -134,14 +140,14 @@ const Quotations = () => {
           address: customer.address,
           gst_vat_no: customer.gst_vat_no,
           qNumber: qNumber,
-          total: (selectedProduct?.newOrder || 0) * minimumSellingPrice,
+          total: (selectedProduct?.newOrder || 0) * maximumSellingPrice,
           created_by: session?.data?.user.email,
         };
       } else {
+        // If no matching product is found, use the product's default sellingPrice
         const selectedProduct = allProduct.find(
           (product) => product._id === selectedId
-        );
-
+          );
         if (selectedProduct) {
           const initialTotal =
             (selectedProduct.newOrder || 0) *
@@ -162,9 +168,10 @@ const Quotations = () => {
             total: initialTotal,
             created_by: session?.data?.user.email,
           };
+      
         }
       }
-
+      
       setSelectedProductIds((prevIds) => [...prevIds, selectedId]);
       setProducts((prevProducts) => [...prevProducts, newProduct]);
       setSelectedProductId(selectedId);
@@ -267,7 +274,7 @@ const Quotations = () => {
     companyId = session.data.user.companyId;
     // Now you can use companyId
   }
-  const generateQuotationNumber = useCallback( async () => {
+  const generateQuotationNumber = useCallback(async () => {
     try {
       // Make an API call to fetch existing quotation numbers for the company from the backend
       const response = await axios.get(`/api/quotation?companyId=${companyId}`);
@@ -304,14 +311,13 @@ const Quotations = () => {
     } catch (error) {
       console.log(error);
     }
-  },[companyId]);
-  
+  }, [companyId]);
+
   useEffect(() => {
     if (companyId) {
       generateQuotationNumber();
     }
-  }, [session.status, session.data,companyId, generateQuotationNumber]);
- 
+  }, [session.status, session.data, companyId, generateQuotationNumber]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -352,12 +358,12 @@ const Quotations = () => {
         //           // Handle success of the PUT request
         //           toast.success("Product updated successfully");
         //           // Continue with the rest of your logic (clearing data, generating numbers, etc.)
-                  setSelectedCustomerId(""); // Clear selected vendor
-                  setqNumber("");
-                  setProducts([]); // Clear products
-                  setSelectedProductIds([]);
-                  setSelectedProductId(null);
-                  generateQuotationNumber();
+        setSelectedCustomerId(""); // Clear selected vendor
+        setqNumber("");
+        setProducts([]); // Clear products
+        setSelectedProductIds([]);
+        setSelectedProductId(null);
+        generateQuotationNumber();
         //         })
         //         .catch((error) => {
         //           toast.error("Error updating Product");

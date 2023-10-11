@@ -11,6 +11,7 @@ const quotationSchema = new Schema(
         productCode: String,
         category: String,
         buyingPrice: {type: Number, default: 0},
+        sellingPrice: Number,
         recvQty: {type: Number, default: 0},
         newRecvQty: {type: Number, default: 0},
         newBal: {type: Number, default: 0},

@@ -53,7 +53,6 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
       },
     },
     responsive: [
-   
       {
         breakpoint: 786,
         options: {
@@ -143,6 +142,9 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
       const averageBuyingPrice: Record<string, number> = {}; // Change to a flat structure
       const totalBuyingPriceByProduct: Record<string, number> = {};
 
+      // Initialize an array to hold all unique product names
+      const uniqueProductNames: string[] = [];
+
       allPurchase.forEach((purchase) => {
         purchase.products.forEach((product) => {
           const productName = product.productName;
@@ -158,10 +160,14 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
             } else {
               totalBuyingPriceByProduct[productName] += totalCost;
             }
+
+            // Add the product name to the uniqueProductNames array if it's not already present
+            if (!uniqueProductNames.includes(productName)) {
+              uniqueProductNames.push(productName);
+            }
           }
         });
       });
-
       // Now, totalBuyingPriceByProduct contains the total buying price for each product
 
       // Calculate the total buying price across all products
@@ -172,6 +178,7 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
 
       // Set the total buying price in your component state
       setTotalBuyingPrice(totalBuyingPrice);
+
       // Extract unique months from your data
       const uniqueMonths: string[] = [];
 
@@ -196,10 +203,8 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
           if (!quantitiesByMonth[purchaseMonth][productName]) {
             quantitiesByMonth[purchaseMonth][productName] = 0;
           }
-
           // Update the quantity for the product in the specific month
           quantitiesByMonth[purchaseMonth][productName] += quantity;
-
           // Calculate the average buying price
           if (!averageBuyingPrice[productName]) {
             averageBuyingPrice[productName] = product.buyingPrice;
@@ -231,12 +236,10 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
 
       // Create series data based on quantitiesByMonth
       const seriesData = uniqueMonths.map((month) => {
-        const data = Object.keys(quantitiesByMonth[month] || {}).map(
-          (productName) => ({
-            x: productName,
-            y: quantitiesByMonth[month][productName] || 0,
-          })
-        );
+        const data = uniqueProductNames.map((productName) => ({
+          x: productName,
+          y: quantitiesByMonth[month]?.[productName] || 0, // Use 0 if data is missing
+        }));
 
         return {
           name: month,
@@ -247,19 +250,20 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
       setChartOptions((prevOptions) => ({
         ...prevOptions,
         xaxis: {
-          categories: uniqueMonths,
+          categories: uniqueProductNames,
         },
         series: seriesData,
       }));
     }
   }, [allPurchase]);
-  
+
   const revenue = totalBuyingPrice - totalSells;
 
-    // NextJS Requirement
-    const isWindowAvailable = () => typeof window !== "undefined";
+  // NextJS Requirement
+  const isWindowAvailable = () => typeof window !== "undefined";
+  if (!isWindowAvailable()) return <></>;
+  const isDataAvailable = allPurchase.length > 0;
 
-    if (!isWindowAvailable()) return <></>;
   return (
     <div className="col-span-12 rounded-sm border border-stroke bg-white px-1 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
@@ -306,12 +310,18 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
           </div>
         </div> */}
       </div>
+      {isDataAvailable ? (
       <div id="chartOne" className=" h-[355px] w-[100%] bg-bodydark1">
         <ReactApexChart
           options={chartOptions}
           series={chartOptions.series || []}
         />
       </div>
+      ):(
+        <div className="flex flex-col items-center justify-center">
+        <p className="text-lg text-gray-500 p-10">No data available</p>
+        </div>
+        )}
     </div>
   );
 };

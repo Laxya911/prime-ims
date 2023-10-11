@@ -4,7 +4,7 @@ import Purchase from "@/models/purchaseModel";
 import { getServerSession } from "next-auth";
 import { options } from "../auth/[...nextauth]/options";
 
-export const GET = async () => {
+export const GET = async (request: NextRequest) => {
   const session = await getServerSession(options);
   if (!session || !session.user) {
     // Not Signed in
@@ -12,8 +12,15 @@ export const GET = async () => {
   } else {
     try {
       await connectDB();
-      const invoices = await Purchase.find();
-      return new NextResponse(JSON.stringify(invoices), { status: 200 });
+      const { role, companyId } = session.user;
+      let purchases;
+      if (role === "superadmin") {
+        purchases = await Purchase.find();
+      } else {
+        purchases = await Purchase.find({ companyId });
+      }
+      // const purchases = await Purchase.find();
+      return new NextResponse(JSON.stringify(purchases), { status: 200 });
     } catch (err) {
       return new NextResponse("Database Error", { status: 500 });
     }

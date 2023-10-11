@@ -7,7 +7,7 @@ import { options } from "../auth/[...nextauth]/options";
 
 export const POST = async (request: NextRequest) => {
   const session = await getServerSession(options);
-  if (!session || !session.user) {
+  if (!session || session.user.role !== "superadmin") {
     // Not Signed in
     return new NextResponse("unauthorized", { status: 401 });
   } else {
@@ -28,6 +28,7 @@ export const POST = async (request: NextRequest) => {
       zip,
       bank_name,
       account_no,
+      account_type,
       ifsc_code,
       b_branch,
       b_address,
@@ -54,6 +55,7 @@ export const POST = async (request: NextRequest) => {
         zip,
         bank_name,
         account_no,
+        account_type,
         ifsc_code,
         b_branch,
         b_address,
@@ -73,7 +75,6 @@ export const POST = async (request: NextRequest) => {
   }
 };
 
-
 export const GET = async (request: NextRequest) => {
   const session = await getServerSession(options);
   if (!session || !session.user) {
@@ -82,10 +83,15 @@ export const GET = async (request: NextRequest) => {
   } else {
     try {
       await connectDB();
-
-      const company = await Company.find();
-      // console.log(employee)
-      return new NextResponse(JSON.stringify(company), { status: 200 });
+      const { role, companyId } = session.user;
+      let companies;
+      if (role === "superadmin") {
+        companies = await Company.find();
+      } else {
+        companies = await Company.find({ companyId });
+      }
+      // const company = await Company.find();
+      return new NextResponse(JSON.stringify(companies), { status: 200 });
     } catch (err) {
       return new NextResponse("Database Error", { status: 500 });
     }

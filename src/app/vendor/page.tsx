@@ -239,6 +239,9 @@ const Vendor = () => {
   const itemEndIndex = itemStartIndex + itemPerPage;
   const itemPage = filterItems.slice(itemStartIndex, itemEndIndex);
   const pageCount = Math.ceil(filterItems.length / itemPerPage);
+
+  const dataLength = allvendor.length > 0;
+
   if (session.status === "authenticated") {
     return (
       <>
@@ -593,10 +596,11 @@ const Vendor = () => {
           )}
         </div>
         <div className="relative mb-4 mt-6 shadow-md sm:rounded-lg">
+          {dataLength ? (
+            <>
           <div className="flex justify-center text-center text-2xl m-2 sfont-medium">
             Vendors List
           </div>
-
           {/* Search Input */}
           <div className="flex flex-col items-center lg:flex-row-reverse lg:items-end gap-2 sm:gap-4 sm:text-center sm:mb-4 lg:mb-0 px-8 py-1">
             {/* <button
@@ -803,6 +807,12 @@ const Vendor = () => {
               </li>
             </ul>
           </nav>
+          </>
+          ) : (
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-lg text-gray-500 p-10">No Vendors Entry Available</p>
+            </div>
+          )}
         </div>
       </>
     );

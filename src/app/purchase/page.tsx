@@ -3,12 +3,14 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FaPlus, FaTrash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
 import styles from "../common.module.css";
 import { useSession } from "next-auth/react";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { PurchaseProduct } from "../types/product";
+import ProductApi from "../commonApi/productApi";
+import VendorApi from "../commonApi/vendorApi";
 
 type ProductField = keyof PurchaseProduct;
 
@@ -22,18 +24,9 @@ const Purchase = () => {
     }
   }, [session.status, router]);
   const [products, setProducts] = useState<PurchaseProduct[]>([]);
-  const [allProduct, setallProduct] = useState<PurchaseProduct[]>([]);
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get("api/product");
-        setallProduct(response.data);
-      } catch (error) {
-        console.error("Error fetching product data:", error);
-      }
-    };
-    if (session?.status === "authenticated") fetchProducts();
-  }, [session]);
+
+  const {allProducts, updateProducts} = ProductApi();
+
   const [vendor, setVendor] = useState({
     vName: "",
     contact_no: "",
@@ -42,26 +35,14 @@ const Purchase = () => {
     gst_vat_no: "",
   });
 
-  const [allvendor, setAllVendor] = useState<PurchaseProduct[]>([]);
-  useEffect(() => {
-    const fetchVendors = async () => {
-      try {
-        const response = await axios.get("api/vendor");
-        setAllVendor(response.data);
-
-      } catch (error) {
-        console.error("Error fetching vendor data:", error);
-      }
-    };
-    if (session?.status === "authenticated") fetchVendors();
-  }, [session]);
+  const {allVendors} = VendorApi();
 
   const [selectedVendorId, setSelectedVendorId] = useState("");
   const handleVendorSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedId = e.target.value;
     setSelectedVendorId(selectedId);
     // Find the selected vendor's data and populate the input fields
-    const selectedVendor = allvendor.find(
+    const selectedVendor = allVendors.find(
       (vendor) => vendor._id === selectedId
     );
     if (selectedVendor) {
@@ -76,6 +57,8 @@ const Purchase = () => {
   const [selectedProductId, setSelectedProductId] = useState<string | null>(
     null
   );
+  const [isProductSelected, setIsProductSelected] = useState(false);
+
   const handleProductSelect = async (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -84,7 +67,7 @@ const Purchase = () => {
       toast.error("Product already selected.");
       return;
     }
-    const selectedProduct = allProduct.find(
+    const selectedProduct = allProducts.find(
       (product) => product._id === selectedId
     );
     try {
@@ -135,7 +118,7 @@ const Purchase = () => {
           created_by: session?.data?.user.email,
         };
       } else {
-        const selectedProduct = allProduct.find(
+        const selectedProduct = allProducts.find(
           (product) => product._id === selectedId
         );
 
@@ -165,6 +148,7 @@ const Purchase = () => {
       setSelectedProductIds((prevIds) => [...prevIds, selectedId]);
       setProducts((prevProducts) => [...prevProducts, newProduct]);
       setSelectedProductId(selectedId);
+      setIsProductSelected(selectedId.length > 0);
     } catch (error) {
       console.error("Error fetching purchase data:", error);
       toast.error("Error fetching purchase data");
@@ -231,7 +215,8 @@ const Purchase = () => {
     setSelectedProductIds((prevIds) =>
       prevIds.filter((id) => id !== removedProductId)
     );
-    setSelectedProductId(null);
+    setIsProductSelected(products.length > 1);
+    // setSelectedProductId(null);
   };
 
   const calculateSubTotal = () => {
@@ -298,15 +283,28 @@ const Purchase = () => {
     } catch (error) {
       console.log(error);
     }
-  },[companyId]);
+  }, [companyId]);
   useEffect(() => {
     if (companyId) {
       generatePurchaseNumber();
     }
-  },  [session.status, session.data,companyId, generatePurchaseNumber]);
+  }, [session.status, session.data, companyId, generatePurchaseNumber]);
 
 
-
+  const handleRefresh = () => {
+    // Implement a function to refresh product data in the ProductApi component
+    // This function should make a request to get the latest product data and update the 'allProducts' state in ProductApi
+    axios
+      .get('/api/product')
+      .then((response) => {
+        const updatedProducts = response.data;
+        // Call the 'updateProducts' function in the ProductApi to update the 'allProducts' state
+        updateProducts(updatedProducts);
+      })
+      .catch((error) => {
+        console.error('Error refreshing product data: ', error);
+      });
+  };
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const subTotal = calculateSubTotal();
@@ -331,21 +329,19 @@ const Purchase = () => {
     axios
       .post("/api/purchase", purchaseData)
       .then((response) => {
-        // Handle success of the POST request
         toast.success("Purchase Created successfully");
         // After the POST request is successful, send a PUT request to update product quantities
         if (selectedProductIds.length === 1) {
           // Handle a single ID
           const productId = selectedProductIds[0];
           const product = products.find((product) => product._id === productId);
-          const inStock = product?.recvQty || 0; // Use the appropriate quantity field
+          const recvQty = product?.recvQty || 0; // Use the appropriate quantity field
           // Proceed with the PUT request to api/product for a single ID
           axios
-            .put(`/api/product/${productId}`, { inStock })
+            .put(`/api/product/${productId}`, { recvQty })
             .then((response) => {
-              // Handle success of the PUT request
               toast.success("Product updated successfully");
-              // Continue with the rest of your logic (clearing data, generating numbers, etc.)
+              handleRefresh();
               setSelectedVendorId(""); // Clear selected vendor
               setpo_number(""); // Clear po number
               setProducts([]); // Clear products
@@ -362,17 +358,17 @@ const Purchase = () => {
           // Handle multiple IDs
           const productUpdates = products.map((product) => ({
             productId: product._id,
-            inStock: product.recvQty || 0, // Use the appropriate quantity field
+            recvQty: product.recvQty || 0, // Use the appropriate quantity field
           }));
+          console.log(productUpdates);
           // Proceed with the PUT request to api/product for multiple IDs
           axios
             .put(`/api/product/${selectedProductIds.join(",")}`, {
               productUpdates,
             })
             .then((response) => {
-              // Handle success of the PUT request
               toast.success("Products updated successfully");
-              // Continue with the rest of your logic (clearing data, generating numbers, etc.)
+              handleRefresh();
               setSelectedVendorId(""); // Clear selected vendor
               setpo_number(""); // Clear po number
               setProducts([]); // Clear products
@@ -386,12 +382,10 @@ const Purchase = () => {
               console.error("Error updating products", error);
             });
         } else {
-          // Handle the case where no products are selected
           toast.warning("No products selected for update");
         }
       })
       .catch((error) => {
-        // Handle error of the POST request
         console.log(error);
         toast.error("Error Creating Purchase");
       });
@@ -426,7 +420,7 @@ const Purchase = () => {
                 className={styles.input}
               >
                 <option value="">Select Vendor</option>
-                {allvendor.map((vendor) => (
+                {allVendors.map((vendor) => (
                   <option key={vendor._id} value={vendor._id}>
                     {vendor.vName}
                   </option>
@@ -440,7 +434,7 @@ const Purchase = () => {
                 disabled={!selectedVendorId}
               >
                 <option value="">Select Product</option>
-                {allProduct.map((product) => (
+                {allProducts.map((product) => (
                   <option key={product._id} value={product._id}>
                     {product.productName}
                   </option>
@@ -640,9 +634,16 @@ const Purchase = () => {
 
           <hr className="mt-1" />
           <div className="flex py-2 px-2 mt-2 sm:px-80 gap-4 flex-col sm:flex-row">
-            <button className={styles.saveButton} onSubmit={handleSubmit}>
+            <button
+              className={
+                isProductSelected ? styles.saveButton : styles.disabledButton
+              }
+              onSubmit={handleSubmit}
+              disabled={!isProductSelected}
+            >
               Save
             </button>
+
             <button type="button" className={styles.cancelButton}>
               <Link href="/"> Cancel</Link>
             </button>

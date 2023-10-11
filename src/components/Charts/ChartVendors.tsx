@@ -6,17 +6,15 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 import PurchaseOrder from "@/app/commonApi/purchaseApi";
-import AllSells from "@/app/commonApi/salesApi";
 
-interface ChartThreeState {
+interface ChartVendorState {
   series: number[];
   labels: string[];
 }
-const ChartThree: React.FC = () => {
+const ChartVendor: React.FC = () => {
   const { allPurchase } = PurchaseOrder();
-  const { allSells } = AllSells();
 
-  const [state, setState] = useState<ChartThreeState>({
+  const [state, setState] = useState<ChartVendorState>({
     series: [],
     labels: [],
   });
@@ -51,7 +49,6 @@ const ChartThree: React.FC = () => {
     }
   }, [allPurchase]);
 
-
   const options: ApexOptions = {
     chart: {
       type: "pie",
@@ -64,18 +61,35 @@ const ChartThree: React.FC = () => {
       position: "bottom",
     },
   };
+
   // NextJS Requirement
   const isWindowAvailable = () => typeof window !== "undefined";
-
   if (!isWindowAvailable()) return <></>;
-  return (
-    <div className=" justify-center">
-      <p className="flex text-center justify-center">Top 5 Vendors</p>
-      <div>
-        <ReactApexChart options={options} series={state.series} type="pie" />
-      </div>
-    </div>
-  );
+
+  if (allPurchase) {
+    return (
+      <>
+        <div className=" justify-center">
+          <p className="flex text-center justify-center">Top 5 Vendors</p>
+          <div className="flex flex-col items-center justify-center ">
+            <ReactApexChart
+              options={options}
+              series={state.series}
+              type="pie"
+            />
+          </div>
+        </div>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <div className="flex flex-col items-center justify-center">
+          <p className="text-lg text-gray-500 p-10">No vendor data available</p>
+        </div>
+      </>
+    );
+  }
 };
 
-export default ChartThree;
+export default ChartVendor;

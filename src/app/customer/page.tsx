@@ -116,6 +116,7 @@ const Customer = () => {
   );
   const pageCount = Math.ceil(filterCustomer.length / customerPerPage);
 
+  const dataLength = allCustomer.length > 0;
   if (session.status === "authenticated") {
     return (
       <>
@@ -412,6 +413,8 @@ const Customer = () => {
           )}
         </div>
         <div className="relative shadow-md sm:rounded-lg mt-4">
+        {dataLength ? (
+            <>
           {/* Search Input */}
           <div className="flex flex-col justify-between lg:flex-row lg:items-end gap-2 sm:gap-4 sm:text-center sm:mb-4 lg:mb-2 px-8 py-1">
             <div className="text-center text-2xl  font-medium">
@@ -622,6 +625,12 @@ const Customer = () => {
               </li>
             </ul>
           </nav>
+          </>
+          ) : (
+            <div className="flex flex-col items-center justify-center">
+              <p className="text-lg text-gray-500 p-10">No Customers Entry Available</p>
+            </div>
+          )}
         </div>
       </>
     );
