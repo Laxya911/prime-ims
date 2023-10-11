@@ -148,49 +148,6 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { quotationid } }) => {
         updatedData
       );
       toast.success("quotation updated successfully");
-      // if (selectedProductIds.length === 1) {
-      //   // Handle a single ID
-      //   const productId = selectedProductIds[0];
-      //   const product = products.find((product) => product._id === productId);
-      //   const inStock = product?.newRecvQty || 0; // Use the appropriate quantity field
-      //   // Proceed with the PUT request to api/product for a single ID
-      //   axios
-      //     .put(`/api/product/${productId}`, { inStock })
-      //     .then((response) => {
-      //       // Handle success of the PUT request
-      //       toast.success("Product updated successfully");
-      //       // Continue with the rest of your logic (clearing data, generating numbers, etc.)
-      //     })
-      //     .catch((error) => {
-      //       toast.error("Error updating Product");
-      //       // Handle error of the PUT request
-      //       console.error("Error updating product", error);
-      //     });
-      // } else if (selectedProductIds.length > 1) {
-      //   // Handle multiple IDs
-      //   const productUpdates = products.map((product) => ({
-      //     productId: product._id,
-      //     inStock: product.newRecvQty || 0, // Use the appropriate quantity field
-      //   }));
-      //   // Proceed with the PUT request to api/product for multiple IDs
-      //   axios
-      //     .put(`/api/product/${selectedProductIds.join(",")}`, {
-      //       productUpdates,
-      //     })
-      //     .then((response) => {
-      //       // Handle success of the PUT request
-      //       toast.success("Products updated successfully");
-      //       // Continue with the rest of your logic (clearing data, generating numbers, etc.)
-      //     })
-      //     .catch((error) => {
-      //       toast.error("Error updating Products");
-      //       // Handle error of the PUT request
-      //       console.error("Error updating products", error);
-      //     });
-      // } else {
-      //   // Handle the case where no products are selected
-      //   toast.warning("No products selected for update");
-      // }
     } catch (error) {
       console.error("Error updating Quotation:", error);
       toast.error("Error updating Quotation");

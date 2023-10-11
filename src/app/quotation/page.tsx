@@ -141,7 +141,6 @@ const Quotations = () => {
           gst_vat_no: customer.gst_vat_no,
           qNumber: qNumber,
           total: (selectedProduct?.newOrder || 0) * maximumSellingPrice,
-          created_by: session?.data?.user.email,
         };
       } else {
         // If no matching product is found, use the product's default sellingPrice
@@ -166,7 +165,6 @@ const Quotations = () => {
             gst_vat_no: customer.gst_vat_no,
             qNumber: qNumber,
             total: initialTotal,
-            created_by: session?.data?.user.email,
           };
       
         }

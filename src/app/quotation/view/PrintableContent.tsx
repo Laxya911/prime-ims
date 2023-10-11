@@ -153,10 +153,12 @@ const generatePrintableContent = (
             </View>
             <View style={styles.bankDetails}>
               <Text>BANK DETAILS: </Text>
-              <Text>A/C NO. {companyData.account_no}</Text>
               <Text>Bank Name: {companyData.bank_name}</Text>
+              <Text>A/C NO. {companyData.account_no}</Text>
               <Text>IFSC CODE: {companyData.ifsc_code}</Text>
-              <Text>A/C TYPE : CURRENT</Text>
+              <Text>A/C TYPE : {companyData.account_type}</Text>
+              <Text>Branch : {companyData.b_branch}</Text>
+              <Text>Address : {companyData.b_address}</Text>
             </View>
           </View>
           <View style={styles.terms}>
