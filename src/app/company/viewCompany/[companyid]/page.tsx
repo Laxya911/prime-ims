@@ -29,10 +29,7 @@ const UpdateCompany: React.FC<updatedCompanyProps> = ({
   }, [session.status, router]);
   const [loading, setLoading] = useState(false);
   
-  const { isSuperAdmin } = AuthUsers();
-  if (!isSuperAdmin) {
-    return <UnAthorized />;
-  }
+
   const [formData, setFormData] = useState({
     _id: "",
     logo: "",
@@ -122,6 +119,10 @@ const UpdateCompany: React.FC<updatedCompanyProps> = ({
         <NotFound />
       </>
     );
+  }
+  const { isSuperAdmin } = AuthUsers();
+  if (!isSuperAdmin) {
+    return <UnAthorized />;
   }
   return (
     <>

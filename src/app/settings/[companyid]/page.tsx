@@ -29,10 +29,7 @@ const UpdateCompanyDetails: React.FC<updatedCompanyProps> = ({
   }, [session.status, router]);
   const [loading, setLoading] = useState(false);
 
-  const { isAuthorized } = AuthUsers();
-  if (!isAuthorized) {
-    return <UnAthorized />;
-  }
+ 
   const [formData, setFormData] = useState({
     _id: "",
     logo: "",
@@ -64,6 +61,7 @@ const UpdateCompanyDetails: React.FC<updatedCompanyProps> = ({
       [name]: value,
     }));
   };
+  
   useEffect(() => {
     const getCompanyDetails = async () => {
       try {
@@ -119,6 +117,10 @@ const UpdateCompanyDetails: React.FC<updatedCompanyProps> = ({
         <NotFound />
       </>
     );
+  }
+  const { isAuthorized } = AuthUsers();
+  if (!isAuthorized) {
+    return <UnAthorized />;
   }
   return (
     <>

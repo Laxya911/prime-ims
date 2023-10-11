@@ -18,10 +18,7 @@ const AddCompany = () => {
     }
   }, [session.status, router]);
   
-  const { isSuperAdmin } = AuthUsers();
-  if (!isSuperAdmin) {
-    return <UnAthorized />;
-  }
+
 
   const [formData, setFormData] = useState({
     logo: "",
@@ -97,7 +94,10 @@ const AddCompany = () => {
     router.push("/");
   };
 
-
+  const { isSuperAdmin } = AuthUsers();
+  if (!isSuperAdmin) {
+    return <UnAthorized />;
+  }
   return (
     <>
       <Breadcrumb pageName="Company" />

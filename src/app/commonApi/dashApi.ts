@@ -267,8 +267,8 @@ const Api = () => {
   }, [session.status, session.data]);
 
   // company
-  if (session?.data?.user.role === "superadmin") {
-    useEffect(() => {
+  useEffect(() => {
+    if (session?.data?.user.role === "superadmin") {
       const fetchCompanies = async () => {
         try {
           const res = await fetch("/api/company", {
@@ -285,8 +285,9 @@ const Api = () => {
         }
       };
       fetchCompanies();
-    }, [session.status, session.data]);
-  }
+    }
+  }, [session.status, session.data]);
+  
   return {
     totalVendor,
     totalCustomers,
