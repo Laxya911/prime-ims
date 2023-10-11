@@ -258,9 +258,7 @@ const PoList = () => {
                       <th className=" py-2 px-4 font-medium text-black dark:text-white">
                         PO Date
                       </th>
-                      <th className=" py-2 px-4 font-medium text-black dark:text-white">
-                        Added By
-                      </th>
+             
                       {session?.data?.user.role === "superadmin" && (
                         <th className=" py-2 px-4 font-medium text-black dark:text-white">
                           CompID
@@ -318,9 +316,7 @@ const PoList = () => {
                         <td className=" py-2 px-0 border-b dark:border-[#eee] border-strokedark">
                           {new Date(product.date_created).toDateString()}
                         </td>
-                        <td className=" py-2 px-3 border-b dark:border-[#eee] border-strokedark">
-                          {product.created_by}
-                        </td>
+                 
 
                         {session?.data?.user.role === "superadmin" && (
                           <td className=" py-2 px-3 border-b dark:border-[#eee] border-strokedark">

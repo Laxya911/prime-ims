@@ -257,9 +257,7 @@ const QuotationList = () => {
                       <th className=" py-2 font-medium text-black dark:text-white">
                         PO Date
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
-                        Added By
-                      </th>
+                
                       {session?.data?.user.role === "superadmin" && (
                         <th className=" py-2 font-medium text-black dark:text-white">
                           CompID
@@ -317,10 +315,6 @@ const QuotationList = () => {
                         <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
                           {new Date(product.date_created).toDateString()}
                         </td>
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
-                          {product.created_by}
-                        </td>
-
                         {session?.data?.user.role === "superadmin" && (
                           <td className=" py-1 border-b dark:border-[#eee] border-strokedark">
                             {product.companyId}

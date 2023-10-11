@@ -179,7 +179,6 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
                         <th className="px-2 py-1 w-30">Item</th>
                         <th className="px-2 py-1 w-30">iCode</th>
                         <th className="px-2 py-1 w-20">Order Qty</th>
-                  
                         <th className="px-2 py-1 w-20">Rate</th>
                         <th className="px-2 py-1 w-20">Total</th>
                         <th className="px-2 py-1 w-35">Payment</th>

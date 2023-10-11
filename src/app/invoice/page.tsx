@@ -89,7 +89,6 @@ const CreateInvoice = () => {
         gst_vat_no: customer.gst_vat_no,
         invoiceNumber: invoiceNumber,
         total: 0, // You can calculate the total based on newOrder and sellingPrice
-        created_by: session?.data?.user.email,
       };
       // Add the selected product to the products list
       setProducts((prevProducts) => [...prevProducts, newProduct]);

@@ -60,22 +60,6 @@ const UpdatePO: React.FC<UpdateProps> = ({ params: { productid } }) => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    // Filter the formData to include only the fields you want to update
-    // const updatedFields = {
-    //   productName: formData.productName,
-    //   category: formData.category,
-    //   brand: formData.brand,
-    //   quantity: formData.quantity,
-    //   buyingPrice: formData.buyingPrice,
-    //   sellingPrice: formData.sellingPrice,
-    //   unit: formData.unit,
-    //   gst: formData.gst,
-    // };
-    // // Create the updated data object by merging the original data and the updated fields
-    // const updatedFormData = {
-    //   ...formData,
-    //   ...updatedFields,
-    // };
     axios
       .put(`/api/product/${productid}`, formData, {
         headers: {

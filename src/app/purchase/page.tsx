@@ -115,7 +115,6 @@ const Purchase = () => {
           gst_vat_no: vendor.gst_vat_no,
           po_Number: po_number,
           total: (selectedProduct?.newOrder || 0) * minimumBuyingPrice,
-          created_by: session?.data?.user.email,
         };
       } else {
         const selectedProduct = allProducts.find(
@@ -140,7 +139,6 @@ const Purchase = () => {
             gst_vat_no: vendor.gst_vat_no,
             po_Number: po_number,
             total: initialTotal,
-            created_by: session?.data?.user.email,
           };
         }
       }

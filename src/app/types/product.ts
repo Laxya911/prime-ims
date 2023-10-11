@@ -44,14 +44,14 @@ export interface PurchaseProduct {
   email: string;
   address: string;
   gst_vat_no: string;
-  date_created: Date | string;
+  date_created: Date;
   po_Number: string;
   qNumber: string;
   invoiceNumber: string;
   grandTotal: string;
   subTotal: string;
   totalGst: string;
-  created_by?: string;
+  created_by : string;
   companyId: string;
   recvQty: number;
   balQty: number;
@@ -71,6 +71,9 @@ export interface PurchaseProduct {
   status: string;
   inStock: number;
   products: Products[];
+  updatedAt: string;
+  quantity: number;
+
 }
 
 
@@ -80,15 +83,15 @@ export interface ProductTypes {
   productCode: string;
   category: string;
   brand: string;
-  buyingPrice: string;
-  sellingPrice: string;
+  buyingPrice: number;
+  sellingPrice: number;
   gst: number;
   vName: string;
   inStock: number;
-  quantity: string;
   unit: string;
   companyId: string;
-  date_created: string;
+  date_created:  Date;
   created_by: string;
   updatedAt: string;
+  quantity: number;
 }
