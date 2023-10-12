@@ -10,7 +10,7 @@ const Charts = () => {
 
   return (
     <>
-      <div className=" shadow flex flex-col sm:flex-row justify-center mb-6">
+      <div className="flex flex-col sm:flex-row justify-center mb-6 shadow-sm shadow-warning py-2 px-1">
         <div className="w-full  ">
           <ChartCustomers />
         </div>

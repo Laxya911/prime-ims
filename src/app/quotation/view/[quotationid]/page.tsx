@@ -4,12 +4,12 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import styles from "@/app/common.module.css";
-import { useSession } from "next-auth/react";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { PurchaseProduct } from "@/app/types/product";
 import Link from "next/link";
 import Loading from "@/app/loading";
 import NotFound from "@/app/not-found";
+import AuthUsers from "@/utils/auth";
 
 interface UpdateProps {
   params: {
@@ -18,10 +18,10 @@ interface UpdateProps {
 }
 
 const UpdatePurchase: React.FC<UpdateProps> = ({ params: { quotationid } }) => {
-  const session = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-
+  const [isDirty, setIsDirty] = useState(false);
+  const { session } = AuthUsers();
   // Define state variables for the purchase data and calculated values
   const [purchaseData, setPurchaseData] = useState<PurchaseProduct | null>(
     null
@@ -133,6 +133,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { quotationid } }) => {
     }
 
     setProducts(updatedProducts);
+    setIsDirty(true)
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -171,7 +172,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { quotationid } }) => {
         {/* Rest of your form */}
         {purchaseData && (
           <>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="px-4 py-2 shadow-md shadow-warning">
               <div className="flex flex-col sm:flex-row justify-center text-center gap-2  lg:gap-20 mt-6 mb-4">
                 <div>
                   <span className="text-lg "> Quotation Number </span>
@@ -184,12 +185,12 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { quotationid } }) => {
                   />
                 </div>
                 <div>
-                  <span className="text-lg "> Vendor</span>
+                  <span className="text-lg "> Vendor  </span>
                   <input
                     className="rounded h-6 bg-gray text-black text-center "
                     type="text"
                     name="po_Number"
-                    value={purchaseData.customerName}
+                    value={purchaseData.customerName} 
                     readOnly
                   />
                 </div>
@@ -198,33 +199,32 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { quotationid } }) => {
               <p className={styles.heading}> &#10146; Product Details</p>
               <>
                 <div className="overflow-x-auto">
-                  <table className="w-full text-xs text-center mb-4">
+                  <table className="w-full text-xs mb-4">
                     <thead className="mb-4">
-                      <tr className="text-xs text-center ">
-                        <th className="px-2 py-1 w-30">P Name</th>
-                        <th className="px-2 py-1 w-30">P Code</th>
-                        <th className="px-2 py-1 w-20">Order Qty</th>
-                        <th className="px-2 py-1 w-20">Recv Qty</th>
-                        <th className="px-2 py-1 w-30">Bal. Qty</th>
-                        <th className="px-2 py-1 w-15">New Recv</th>
-                        <th className="px-2 py-1 w-15">New Balance</th>
-                        <th className="px-2 py-1 w-20">Rate</th>
-                        <th className="px-2 py-1 w-20">Total</th>
-                        <th className="px-2 py-1 w-35">Status</th>
-                        <th className="px-2 py-1 w-15">GST</th>
-                        <th className="px-2 py-1 w-20">Remarks</th>
-                        <th className="px-2 py-1 w-20"></th>
+                      <tr className="text-xs  ">
+                        <th className="px-2 py-1 ">iName</th>
+                        <th className="px-2 py-1 ">iCode</th>
+                        <th className="px-2 py-1 ">Order</th>
+                        <th className="px-2 py-1 ">Sent</th>
+                        <th className="px-2 py-1 ">Balance</th>
+                        <th className="px-2 py-1 ">Resend</th>
+                        <th className="px-2 py-1 ">New bal.</th>
+                        <th className="px-2 py-1 ">Rate</th>
+                        <th className="px-2 py-1 ">Total</th>
+                        <th className="px-2 py-1 ">Status</th>
+                        <th className="px-2 py-1 ">GST</th>
+                        <th className="px-2 py-1 ">Remarks</th>
+                        <th className="px-2 py-1 "></th>
                       </tr>
                     </thead>
                     {purchaseData.products.length > 0 && (
                       <tbody>
                         {purchaseData.products.map((product, index) => (
                           <tr key={index} className="mb-4 py-2">
-                            <td className="px-4">
+                            <td >
                               <input
                                 type="text"
                                 value={product.productName ?? ""}
-                                placeholder="P. Name"
                                 className="px-2 py-1 w-30 rounded"
                                 readOnly={true}
                               />
@@ -232,8 +232,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { quotationid } }) => {
                             <td>
                               <input
                                 type="text"
-                                className="px-2 py-1 w-20 rounded"
-                                placeholder="P. code"
+                                className="px-2 py-1 w-30 rounded"
                                 value={product.productCode ?? ""}
                                 readOnly={true}
                               />
@@ -273,7 +272,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { quotationid } }) => {
                             <td>
                               <input
                                 type="number"
-                                className="px-2 py-1 w-30 rounded"
+                                className="px-2 py-1 w-20 rounded"
                                 value={
                                   isNaN(product.balQty) ? "0" : product.balQty
                                 }
@@ -284,7 +283,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { quotationid } }) => {
                             <td>
                               <input
                                 type="number"
-                                className="px-2 py-1 w-15 rounded"
+                                className="px-2 py-1 w-20 rounded"
                                 min={0}
                                 max={product.balQty}
                                 value={product.newRecvQty ?? 0}
@@ -318,18 +317,18 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { quotationid } }) => {
                               />
                             </td>
 
-                            <td className="px-4">
+                            <td className="px-2">
                               <input
                                 type="number"
-                                className="px-2 py-1 w-30 rounded"
+                                className="px-2 py-1 w-20 rounded"
                                 value={product.buyingPrice ?? 0}
                                 readOnly={true}
                               />
                             </td>
-                            <td className="px-4">
+                            <td className="px-2">
                               <input
                                 type="number"
-                                className="px-2 py-1 w-30 rounded"
+                                className="px-2 py-1 w-20 rounded"
                                 value={product.total ?? 0}
                                 readOnly={true}
                               />
@@ -345,7 +344,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { quotationid } }) => {
                                     e.target.value
                                   )
                                 }
-                                className="px-2 py-1 w-36 rounded"
+                                className="px-2 py-1 w-25 rounded"
                               >
                                 <option value="Pending">Pending</option>
                                 <option value="Partial">
@@ -355,7 +354,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { quotationid } }) => {
                               </select>
                             </td>
 
-                            <td className="px-4">
+                            <td className="px-2">
                               <input
                                 type="number"
                                 className="px-2 py-1 w-15 rounded"
@@ -364,11 +363,10 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { quotationid } }) => {
                                 readOnly={true}
                               />
                             </td>
-                            <td className="px-4">
+                            <td className="px-2">
                               <input
                                 type="text"
-                                placeholder="Remarks"
-                                className="px-2 py-1 w-30 rounded"
+                                className="px-2 py-1 w-40 rounded"
                                 value={product.remark ?? ""}
                                 onChange={(e) =>
                                   handleProductChange(
@@ -403,8 +401,14 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { quotationid } }) => {
 
               <hr className="mt-1" />
               <div className="flex py-2 px-2 mt-2 sm:px-80 gap-4 flex-col sm:flex-row">
-                <button className={styles.saveButton} onSubmit={handleSubmit}>
-                  Save
+              <button
+                  onSubmit={handleSubmit}
+                  className={ 
+                    isDirty ? styles.saveButton : styles.disabledButton
+                  }
+                  disabled={!isDirty}
+                >
+                  Update
                 </button>
                 <button type="button" className={styles.cancelButton}>
                   <Link href="/"> Cancel</Link>

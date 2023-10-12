@@ -394,7 +394,7 @@ const Purchase = () => {
     return (
       <>
         <Breadcrumb pageName="Add Purchase Order" />
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit}className="shadow-sm shadow-warning px-4 py-2">
           <div className="flex flex-col sm:flex-row justify-center text-center gap-2  lg:gap-20 mt-6 mb-4">
             <div className={styles.heading}>Adding New Purchase </div>
             <div>
@@ -416,11 +416,12 @@ const Purchase = () => {
                 value={selectedVendorId}
                 onChange={handleVendorSelect}
                 required={true}
-                className={styles.input}
+                className="w-full bg-transparent border px-4 py-2 rounded "
+
               >
                 <option value="">Select Vendor</option>
                 {allVendors.map((vendor) => (
-                  <option key={vendor._id} value={vendor._id}>
+                  <option key={vendor._id} value={vendor._id} className="text-black">
                     {vendor.vName}
                   </option>
                 ))}
@@ -428,13 +429,14 @@ const Purchase = () => {
               <select
                 value={selectedProductId || ""}
                 onChange={handleProductSelect}
-                className={styles.input}
+                className="w-full bg-transparent border px-4 py-2 rounded "
+
                 required={true}
                 disabled={!selectedVendorId}
               >
                 <option value="">Select Product</option>
                 {allProducts.map((product) => (
-                  <option key={product._id} value={product._id}>
+                  <option key={product._id} value={product._id} className="text-black">
                     {product.productName}
                   </option>
                 ))}
@@ -445,37 +447,37 @@ const Purchase = () => {
               <table className="w-full text-xs text-center mb-4">
                 <thead className="mb-4">
                   <tr className="text-xs text-center ">
-                    <th className="px-2 py-1 w-30">Item</th>
-                    <th className="px-2 py-1 w-30">iCode</th>
-                    <th className="px-2 py-1 w-15">InStock</th>
-                    <th className="px-2 py-1 w-20">Ordered</th>
-                    <th className="px-2 py-1 w-20">Received</th>
-                    <th className="px-2 py-1 w-30">Balance</th>
-                    <th className="px-2 py-1 w-20">Rate</th>
-                    <th className="px-2 py-1 w-20">Total</th>
-                    <th className="px-2 py-1 w-35">Status</th>
-                    <th className="px-2 py-1 w-15">GST</th>
-                    <th className="px-2 py-1 w-20">Remarks</th>
-                    <th className="px-2 py-1 w-20"></th>
+                    <th className="px-2 py-1">Item</th>
+                    <th className="px-2 py-1">iCode</th>
+                    <th className="px-2 py-1">InStock</th>
+                    <th className="px-2 py-1">Ordered</th>
+                    <th className="px-2 py-1">Received</th>
+                    <th className="px-2 py-1">Balance</th>
+                    <th className="px-2 py-1">Rate</th>
+                    <th className="px-2 py-1">Total</th>
+                    <th className="px-2 py-1">Status</th>
+                    <th className="px-2 py-1">GST</th>
+                    <th className="px-2 py-1">Remarks</th>
+                    <th className="px-2 py-1"></th>
                   </tr>
                 </thead>
                 {products.length > 0 && (
                   <tbody>
                     {products.map((product, index) => (
                       <tr key={index} className="mb-4 py-2">
-                        <td className="px-4">
+                        <td>
                           <input
                             type="text"
                             value={product.productName ?? ""}
                             placeholder="P. Name"
-                            className="px-2 py-1 w-30 rounded"
+                            className="px-2 py-1 w-30 rounded text-black"
                             readOnly={true}
                           />
                         </td>
                         <td>
                           <input
                             type="text"
-                            className="px-2 py-1 w-20 rounded"
+                            className="px-2 py-1 w-30 rounded text-black"
                             placeholder="P. code"
                             value={product.productCode.split("-")[1] ?? ""}
                             readOnly={true}
@@ -485,7 +487,7 @@ const Purchase = () => {
                         <td>
                           <input
                             type="number"
-                            className="px-2 py-1 w-15 rounded"
+                            className="px-2 py-1 w-15 rounded text-black"
                             value={product.inStock ?? 0}
                             readOnly={true}
                           />
@@ -494,7 +496,7 @@ const Purchase = () => {
                         <td>
                           <input
                             type="number"
-                            className="px-2 py-1 w-20 rounded"
+                            className="px-2 py-1 w-20 rounded text-black"
                             value={
                               isNaN(product.newOrder) ? 0 : product.newOrder
                             }
@@ -513,7 +515,7 @@ const Purchase = () => {
                         <td>
                           <input
                             type="number"
-                            className="px-2 py-1 w-20 rounded"
+                            className="px-2 py-1 w-20 rounded text-black"
                             value={isNaN(product.recvQty) ? 0 : product.recvQty}
                             min={0}
                             max={product.newOrder}
@@ -529,16 +531,16 @@ const Purchase = () => {
                         <td>
                           <input
                             type="number"
-                            className="px-2 py-1 w-30 rounded"
+                            className="px-2 py-1 w-20 rounded text-black"
                             value={isNaN(product.balQty) ? 0 : product.balQty}
                             min={0}
                             readOnly={true}
                           />
                         </td>
-                        <td className="px-4">
+                        <td>
                           <input
                             type="number"
-                            className="px-2 py-1 w-30 rounded"
+                            className="px-2 py-1 w-25 rounded text-black"
                             value={product.buyingPrice ?? 0}
                             onChange={(e) =>
                               handleProductChange(
@@ -550,10 +552,10 @@ const Purchase = () => {
                             min={0}
                           />
                         </td>
-                        <td className="px-4">
+                        <td>
                           <input
                             type="number"
-                            className="px-2 py-1 w-30 rounded"
+                            className="px-2 py-1 w-25 rounded text-black"
                             value={product.total ?? 0}
                             readOnly={true}
                           />
@@ -569,7 +571,7 @@ const Purchase = () => {
                                 e.target.value
                               )
                             }
-                            className="px-2 py-1 w-36 rounded"
+                            className="px-2 py-1 w-30 rounded text-black"
                           >
                             <option value="Pending">Pending</option>
                             <option value="Partial">Partial Received</option>
@@ -577,20 +579,20 @@ const Purchase = () => {
                           </select>
                         </td>
 
-                        <td className="px-4">
+                        <td>
                           <input
                             type="number"
-                            className="px-2 py-1 w-15 rounded"
+                            className="px-2 py-1 w-15 rounded text-black"
                             min="0"
                             value={product.gst ?? 0}
                             readOnly={true}
                           />
                         </td>
-                        <td className="px-4">
+                        <td>
                           <input
                             type="text"
                             placeholder="Remarks"
-                            className="px-2 py-1 w-30 rounded"
+                            className="px-2 py-1 w-35 rounded text-black"
                             value={product.remark ?? ""}
                             onChange={(e) =>
                               handleProductChange(
@@ -601,7 +603,7 @@ const Purchase = () => {
                             }
                           />
                         </td>
-                        <td className="px-4">
+                        <td>
                           <FaTrash
                             className="text-danger text-center cursor-pointer"
                             type="button"

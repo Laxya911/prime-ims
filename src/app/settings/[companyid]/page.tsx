@@ -19,6 +19,7 @@ const UpdateCompanyDetails: React.FC<updatedCompanyProps> = ({
   params: { companyid },
 }) => {
   const router = useRouter();
+  const [isDirty, setIsDirty] = useState(false); 
   const [loading, setLoading] = useState(false);
   const { isAuthorized, session } = AuthUsers();
 
@@ -52,6 +53,7 @@ const UpdateCompanyDetails: React.FC<updatedCompanyProps> = ({
       ...prevFormData,
       [name]: value,
     }));
+    setIsDirty(true);
   };
 
   useEffect(() => {
@@ -86,6 +88,7 @@ const UpdateCompanyDetails: React.FC<updatedCompanyProps> = ({
       );
       if (response.status === 201) {
         toast.success("Company Updated successfully!");
+        setIsDirty(false); 
       }
     } catch (error) {
       console.error(error);
@@ -120,9 +123,10 @@ const UpdateCompanyDetails: React.FC<updatedCompanyProps> = ({
         <h2>Update Company Details </h2>
       </div>
       <form
-        className="shadow-xl shadow-warning mt-2 rounded py-4"
+        className="shadow-md shadow-warning mt-2 rounded py-4"
         onSubmit={handleSubmit}
       >
+        {/* Company Details*/}
         <div className={styles.form}>
           <div className={styles.formGroup}>
             <label htmlFor="name">Company Name:</label>
@@ -309,7 +313,6 @@ const UpdateCompanyDetails: React.FC<updatedCompanyProps> = ({
             />
           </div>
         </div>
-
         {/* Bank Details */}
         <div className="text-center text-2xl mt-6 mb-4">
           {" "}
@@ -398,14 +401,14 @@ const UpdateCompanyDetails: React.FC<updatedCompanyProps> = ({
               required
             />
           </div>
-
-          {/* buttons */}
         </div>
-
+        {/* Buttons*/}
         <div className="py-6 ">
           <div className="flex flex-col sm:flex-row gap-6  text-center justify-center ">
-            <button type="submit" className={styles.saveButton}>
-              Submit
+            <button type="submit"   className={
+                isDirty ? styles.saveButton : styles.disabledButton
+              }  disabled={!isDirty}>
+              Update
             </button>
             <button
               type="button"

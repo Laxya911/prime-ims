@@ -46,6 +46,7 @@ export const DELETE = async (
   }
 };
 
+
 export const PUT = async (
   request: NextRequest,
   { params }: { params: { id: string } }
@@ -56,6 +57,7 @@ export const PUT = async (
     // Not Signed in
     return new NextResponse("unauthorized", { status: 401 });
   }
+
   try {
     const { id } = params;
     const isMultipleUpdate = id.includes(",");
@@ -98,30 +100,38 @@ export const PUT = async (
             }
           );
         }
-        // Check if recvQty or newOrder field contains a value
-        const fieldName: "recvQty" | "newOrder" | null =
-          productUpdate.recvQty || productUpdate.newOrder
+
+        // Check if recvQty, newRecvQty, newOrder, or anotherOrder field contains a value
+        const fieldName: "recvQty" | "newRecvQty" | "newOrder" | "anotherOrder" | null =
+          productUpdate.recvQty || productUpdate.newRecvQty || productUpdate.newOrder || productUpdate.anotherOrder
             ? productUpdate.recvQty
               ? "recvQty"
-              : "newOrder"
+              : productUpdate.newRecvQty
+                ? "newRecvQty"
+                : productUpdate.newOrder
+                  ? "newOrder"
+                  : "anotherOrder"
             : null;
 
         if (fieldName === null) {
-          console.warn(`No 'recvQty' or 'newOrder' value for ID: ${productId}`);
+          console.warn(`No valid quantity field for ID: ${productId}`);
         }
+
         const { ...otherFields } = productUpdate;
 
         const updateQuery: Record<string, any> = {};
 
-        if (fieldName === "recvQty") {
-          updateQuery.$inc = { inStock: parseInt(productUpdate.recvQty, 10) };
-        } else if (fieldName === "newOrder") {
-          updateQuery.$inc = { inStock: -parseInt(productUpdate.newOrder, 10) };
+        if (fieldName === "recvQty" || fieldName === "newRecvQty") {
+          updateQuery.$inc = { inStock: parseInt(productUpdate.recvQty || productUpdate.newRecvQty, 10) };
+        } else if (fieldName === "newOrder" || fieldName === "anotherOrder") {
+          updateQuery.$inc = { inStock: -parseInt(productUpdate.newOrder || productUpdate.anotherOrder, 10) };
         }
+
         // Use $set for other fields
         updateQuery.$set = {
           ...otherFields,
         };
+
         const updatedProduct = await Product.findByIdAndUpdate(
           productId,
           updateQuery,
@@ -142,28 +152,38 @@ export const PUT = async (
       });
     } else {
       // Handle single product update
-      const { recvQty, newOrder, ...otherFields } = await request.json();
+      const { recvQty, newRecvQty, newOrder, anotherOrder, ...otherFields } = await request.json();
       await connectDB();
 
-      // Check if recvQty or newOrder field contains a value
-      const fieldName: "recvQty" | "newOrder" | null =
-        recvQty || newOrder ? (recvQty ? "recvQty" : "newOrder") : null;
+      // Check if any of the quantity fields contain a value
+      const fieldName: "recvQty" | "newRecvQty" | "newOrder" | "anotherOrder" | null =
+        recvQty || newRecvQty || newOrder || anotherOrder
+          ? recvQty
+            ? "recvQty"
+            : newRecvQty
+              ? "newRecvQty"
+              : newOrder
+                ? "newOrder"
+                : "anotherOrder"
+          : null;
 
       if (fieldName === null) {
-        console.warn(`No 'recvQty' or 'newOrder' value`);
+        console.warn(`No valid quantity field`);
       }
 
       const updateQuery: Record<string, any> = {};
 
-      if (fieldName === "recvQty") {
-        updateQuery.$inc = { inStock: parseInt(recvQty, 10) };
-      } else if (fieldName === "newOrder") {
-        updateQuery.$inc = { inStock: -parseInt(newOrder, 10) };
+      if (fieldName === "recvQty" || fieldName === "newRecvQty") {
+        updateQuery.$inc = { inStock: parseInt(recvQty || newRecvQty, 10) };
+      } else if (fieldName === "newOrder" || fieldName === "anotherOrder") {
+        updateQuery.$inc = { inStock: -parseInt(newOrder || anotherOrder, 10) };
       }
+
       // Use $set for other fields
       updateQuery.$set = {
         ...otherFields,
       };
+
       const updatedProduct = await Product.findByIdAndUpdate(id, updateQuery, {
         new: true,
       });
@@ -175,6 +195,7 @@ export const PUT = async (
           status: 404, // Not Found
         });
       }
+
       return new NextResponse("Product has been updated", {
         status: 200, // OK
       });

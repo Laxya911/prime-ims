@@ -26,7 +26,7 @@ const FirstSec = () => {
         <div className="flex  md:flex-row justify-center text-center py-2 mb-4 gap-2 lg:gap-8">
           <h3 className=" text-xl"> Welcome {session.data.user.name}, Good Day 🙏</h3>
         </div>
-        <div className="  grid grid-cols-2 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-8 2xl:gap-7.5">
+        <div className=" shadow-2xl shadow-black px-1 rounded dark:shadow-white py-2  grid grid-cols-2 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-8 2xl:gap-7.5">
           <div className="flex shadow flex-col items-center py-2 border  rounded-lg hover:scale-105 transition-transform duration-300   ">
             <span className="text-md py-1  font-medium">
               Quotations {totalQuotations}

@@ -165,8 +165,8 @@ const ProductList = () => {
     return (
       <>
         <Breadcrumb pageName="Products" />
-        <div className="relative mb-10 shadow-md sm:rounded-lg">
-          <div className="flex justify-center text-center text-2xl m-2 sfont-medium">
+        <div className="relative mb-10 shadow-sm shadow-warning mt-2 px-1 rounded py-4 sm:rounded-lg">
+          <div className="flex justify-center text-center shadow-md py-1 text-2xl sfont-medium">
            Products List
           </div>
           {dataLength ? (

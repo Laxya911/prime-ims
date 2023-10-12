@@ -341,13 +341,13 @@ const CreateInvoice = () => {
     return (
       <>
         <Breadcrumb pageName="Add Invoices" />
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="shadow-sm shadow-warning px-4 py-2">
           <div className="flex flex-col sm:flex-row justify-center text-center gap-2  lg:gap-20 mt-6 mb-4">
             <div className={styles.heading}>Adding New Invoice </div>
             <div>
               <span className="text-lg "> Invoice Number </span>
               <input
-                className="rounded h-6 bg-gray text-black text-center "
+                className="rounded  h-6 bg-gray text-black text-center "
                 type="text"
                 name="invoiceNumber"
                 value={invoiceNumber}
@@ -358,16 +358,16 @@ const CreateInvoice = () => {
 
           <p className={styles.heading}> &#10146; Product Details</p>
           <>
-            <div className="flex gap-8 px-6 mb-4">
+            <div className="w-full flex gap-8 px-6 mb-4 ">
               <select
                 value={selectedCustomerId}
                 onChange={handleCustomerSelect}
                 required={true}
-                className={styles.input}
+                 className="w-full bg-transparent border px-4 py-2 rounded"
               >
                 <option value="">Select Customer</option>
                 {allCustomers.map((customer) => (
-                  <option key={customer._id} value={customer._id}>
+                  <option key={customer._id} value={customer._id}  className="text-black">
                     {customer.customerName}
                   </option>
                 ))}
@@ -375,13 +375,13 @@ const CreateInvoice = () => {
               <select
                 value={selectedProductId || ""}
                 onChange={handleProductSelect}
-                className={styles.input}
+                 className="w-full bg-transparent border px-4 py-2 rounded "
                 required={true}
                 disabled={!selectedCustomerId}
               >
                 <option value="">Select Product</option>
                 {allProducts.map((product) => (
-                  <option key={product._id} value={product._id}>
+                  <option key={product._id} value={product._id}  className="text-black">
                     {product.productName}
                   </option>
                 ))}
@@ -392,35 +392,35 @@ const CreateInvoice = () => {
               <table className="w-full text-xs text-center mb-4">
                 <thead className="mb-4">
                   <tr className="text-xs text-center ">
-                    <th className="px-1 py-1 w-30">Item</th>
-                    <th className="px-1 py-1 w-30">iCode</th>
-                    <th className="px-1 py-1 w-15">InStock</th>
-                    <th className="px-1 py-1 w-20">Qty </th>
-                    <th className="px-1 py-1 w-20">Rate</th>
-                    <th className="px-1 py-1 w-20">Total</th>
-                    <th className="px-1 py-1 w-35">Payment</th>
-                    <th className="px-1 py-1 w-15">GST</th>
-                    <th className="px-1 py-1 w-20">Remarks</th>
-                    <th className="px-1 py-1 w-20"></th>
+                    <th className="p-1 ">Item</th>
+                    <th className="p-1 ">iCode</th>
+                    <th className="p-1 ">InStock</th>
+                    <th className="p-1 ">Qty </th>
+                    <th className="p-1 ">Rate</th>
+                    <th className="p-1 ">Total</th>
+                    <th className="p-1 ">Payment</th>
+                    <th className="p-1 ">GST</th>
+                    <th className="p-1 ">Remarks</th>
+                    <th className="p-1 "></th>
                   </tr>
                 </thead>
                 {products.length > 0 && (
                   <tbody>
                     {products.map((product, index) => (
                       <tr key={index} className="mb-4 py-2">
-                        <td className="px-4">
+                        <td >
                           <input
                             type="text"
                             value={product.productName ?? ""}
                             placeholder="P. Name"
-                            className="px-1 py-1 w-30 rounded"
+                            className="p-1 w-30 rounded text-black "
                             readOnly={true}
                           />
                         </td>
                         <td>
                           <input
                             type="text"
-                            className="px-1 py-1 w-20 rounded"
+                            className="p-1 w-30 rounded text-black "
                             placeholder="P. code"
                             value={product.productCode.split("-")[1] ?? ""}
                             readOnly={true}
@@ -430,7 +430,7 @@ const CreateInvoice = () => {
                         <td>
                           <input
                             type="number"
-                            className="px-1 py-1 w-15 rounded"
+                            className="p-1 w-15 rounded text-black "
                             value={product.inStock ?? 0}
                             readOnly={true}
                           />
@@ -439,7 +439,7 @@ const CreateInvoice = () => {
                         <td>
                           <input
                             type="number"
-                            className="px-1 py-1 w-20 rounded"
+                            className="p-1 w-15 rounded text-black "
                             value={
                               isNaN(product.newOrder) ? 0 : product.newOrder
                             }
@@ -456,10 +456,10 @@ const CreateInvoice = () => {
                           />
                         </td>
 
-                        <td className="px-4">
+                        <td >
                           <input
                             type="number"
-                            className="px-1 py-1 w-30 rounded"
+                            className="p-1 w-20 rounded text-black "
                             value={product.sellingPrice ?? 0}
                             onChange={(e) =>
                               handleProductChange(
@@ -471,10 +471,10 @@ const CreateInvoice = () => {
                             min={0}
                           />
                         </td>
-                        <td className="px-4">
+                        <td >
                           <input
                             type="number"
-                            className="px-1 py-1 w-30 rounded"
+                            className="p-1 w-25 rounded text-black "
                             value={product.total ?? 0}
                             readOnly={true}
                           />
@@ -490,7 +490,7 @@ const CreateInvoice = () => {
                                 e.target.value
                               )
                             }
-                            className="px-1 py-1 w-36 rounded"
+                            className="p-1 w-30 rounded text-black "
                           >
                             <option value="Pending">Pending</option>
                             <option value="Partial">Partial Paid</option>
@@ -498,20 +498,20 @@ const CreateInvoice = () => {
                           </select>
                         </td>
 
-                        <td className="px-4">
+                        <td >
                           <input
                             type="number"
-                            className="px-1 py-1 w-15 rounded"
+                            className="p-1 w-12 rounded text-black "
                             min="0"
                             value={product.gst ?? 0}
                             readOnly={true}
                           />
                         </td>
-                        <td className="px-4">
+                        <td >
                           <input
                             type="text"
                             placeholder="Remarks"
-                            className="px-1 py-1 w-30 rounded"
+                            className="p-1 w-35 rounded text-black "
                             value={product.remark ?? ""}
                             onChange={(e) =>
                               handleProductChange(
@@ -522,7 +522,7 @@ const CreateInvoice = () => {
                             }
                           />
                         </td>
-                        <td className="px-4">
+                        <td >
                           <FaTrash
                             className="text-danger text-center cursor-pointer"
                             type="button"

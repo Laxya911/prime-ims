@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -19,16 +18,17 @@ interface updatedCompanyProps {
 const UpdateCompany: React.FC<updatedCompanyProps> = ({
   params: { companyid },
 }) => {
-  const session = useSession();
   const router = useRouter();
+  const { isSuperAdmin, session } = AuthUsers();
 
   useEffect(() => {
     if (session.status === "unauthenticated") {
       router.replace("/auth/signin");
     }
   }, [session.status, router]);
+
   const [loading, setLoading] = useState(false);
-  
+  const [isDirty, setIsDirty] = useState(false);
 
   const [formData, setFormData] = useState({
     _id: "",
@@ -60,6 +60,7 @@ const UpdateCompany: React.FC<updatedCompanyProps> = ({
       ...prevFormData,
       [name]: value,
     }));
+    setIsDirty(true);
   };
   useEffect(() => {
     const getCompanyDetails = async () => {
@@ -70,7 +71,6 @@ const UpdateCompany: React.FC<updatedCompanyProps> = ({
         // console.log(companyData);
         setFormData(companyData);
         setLoading(false);
-
       } catch (error) {
         console.error(error);
         setLoading(false);
@@ -95,6 +95,7 @@ const UpdateCompany: React.FC<updatedCompanyProps> = ({
       );
       if (response.status === 201) {
         toast.success("Company Updated successfully!");
+        setIsDirty(false);
       }
     } catch (error) {
       console.error(error);
@@ -120,7 +121,6 @@ const UpdateCompany: React.FC<updatedCompanyProps> = ({
       </>
     );
   }
-  const { isSuperAdmin } = AuthUsers();
   if (!isSuperAdmin) {
     return <UnAthorized />;
   }
@@ -402,8 +402,12 @@ const UpdateCompany: React.FC<updatedCompanyProps> = ({
 
         <br />
         <div className={styles.buttonGroup}>
-          <button type="submit" className={styles.saveButton}>
-            Submit
+          <button
+            type="submit"
+            className={isDirty ? styles.saveButton : styles.disabledButton}
+            disabled={!isDirty}
+          >
+            Update
           </button>
           <button
             type="button"

@@ -136,7 +136,7 @@ const UserLists = () => {
       <>
         <Breadcrumb pageName="Users" />
 
-        <div className="relative mb-10 overflow-x-auto shadow-md sm:rounded-lg">
+        <div className="relative mb-10 overflow-x-auto shadow-sm shadow-warning sm:rounded-lg">
           <div className="flex justify-center text-center text-2xl mb-6 font-medium">
             Users List
           </div>

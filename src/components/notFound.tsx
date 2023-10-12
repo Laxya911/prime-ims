@@ -12,7 +12,7 @@ const NotFound = () => {
     </h4>
     <div className='space-x-4 text-xl'>
       <Link
-        className='  hover:text-success duration-300'
+        className='  underline text-primary hover:text-success text-2xl duration-300'
         href='/'
       >
         Home

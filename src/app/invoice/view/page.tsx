@@ -190,12 +190,12 @@ const QuotationList = () => {
     return (
       <>
         <Breadcrumb pageName="Purchase Orders" />
-        <div className="relative mb-10 shadow-md sm:rounded-lg">
+        <div className="relative mb-10 sm:rounded-lg">
           <div className="flex justify-center  text-center text-2xl m-2 sfont-medium">
             Invoices List
           </div>
           {dataLength ? (
-            <>
+            < >
               {/* Search Input */}
               <div className="flex flex-col items-center lg:flex-row-reverse lg:items-end gap-2 sm:gap-4 sm:text-center sm:mb-4 lg:mb-0 px-8 py-1">
                 <button
@@ -215,51 +215,51 @@ const QuotationList = () => {
               </div>
 
               <div className=" overflow-x-auto">
-                <table className="w-full text-xs text-left text-gray-700 ">
-                  <thead className="border-b text-gray-700  bg-gray-50 ">
+                <table className="w-full border text-xs text-left ">
+                  <thead className="border-b  ">
                     <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Cust. Name
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Invoice Number
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         P Name
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         P Code
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Order
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Sent
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Balance
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Rate
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         GST
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Total
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Status
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Remarks
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         PO Date
                       </th>
                 
                       {session?.data?.user.role === "superadmin" && (
-                        <th className=" py-2 font-medium text-black dark:text-white">
+                        <th className=" py-2 px-1 font-medium text-black dark:text-white">
                           CompID
                         </th>
                       )}
@@ -271,48 +271,48 @@ const QuotationList = () => {
                         key={_id}
                         className=" text-gray-800  hover:bg-hoverl dark:hover:bg-dark-hover"
                       >
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark ">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark ">
                           {product.customerName}
                         </td>
 
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.invoiceNumber?.toString()}
                         </td>
 
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.productName}
                         </td>
 
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.productCode}
                         </td>
 
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.newOrder}
                         </td>
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.recvQty?.toString()}
                         </td>
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.balQty?.toString()}
                         </td>
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.sellingPrice}
                         </td>
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.gst}
                         </td>
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.total}
                         </td>
 
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.status}
                         </td>
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.remark}
                         </td>
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {new Date(product.date_created).toLocaleString()}
                         </td>
                         {session?.data?.user.role === "superadmin" && (
@@ -399,42 +399,41 @@ const QuotationList = () => {
                   </li>
                 </ul>
               </nav>
-
               <div className="flex flex-col text-lg  items-center lg:mb-0 py-1 mt-4">
                 <p>Invoices</p>
               </div>
-              <div className=" overflow-x-auto">
-                <table className="w-full text-xs text-left text-gray-700 ">
-                  <thead className=" border-b text-gray-700  bg-gray-50 ">
-                    <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                      <th className=" py-2 font-medium text-black dark:text-white">
+              <div className=" overflow-x-auto ">
+                <table className="w-full border text-xs text-left">
+                  <thead className=" border-b ">
+                    <tr className="bg-gray-2 text-left dark:bg-meta-4 ">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Cust. Name
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Invoice Number
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Sub Total
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Total Gst
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Grand Total
                       </th>
 
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         PO Date
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Added By
                       </th>
                       {session?.data?.user.role === "superadmin" && (
-                        <th className=" py-2 font-medium text-black dark:text-white">
+                        <th className=" py-2 px-1 font-medium text-black dark:text-white">
                           CompID
                         </th>
                       )}
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Action
                       </th>
                     </tr>
@@ -445,37 +444,37 @@ const QuotationList = () => {
                         key={_id}
                         className=" text-gray-800  hover:bg-hoverl dark:hover:bg-dark-hover"
                       >
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark ">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark ">
                           {product.customerName}
                         </td>
 
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.invoiceNumber?.toString()}
                         </td>
 
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.subTotal}
                         </td>
 
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.totalGst}
                         </td>
 
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.grandTotal}
                         </td>
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {new Date(product.date_created).toDateString()}
                         </td>
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.created_by}
                         </td>
                         {session?.data?.user.role === "superadmin" && (
-                          <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                          <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                             {product.companyId}
                           </td>
                         )}
-                        <td className="py-3 flex gap-6 border-b dark:border-[#eee] border-strokedark">
+                        <td className="py-3 px-1 flex gap-6 border-b dark:border-[#eee] border-strokedark">
                           {isCompanyDataLoaded ? (
                             purchaseData?._id === product._id ? (
                               <button

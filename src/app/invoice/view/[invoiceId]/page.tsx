@@ -4,12 +4,12 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import styles from "@/app/common.module.css";
-import { useSession } from "next-auth/react";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { PurchaseProduct } from "@/app/types/product";
 import Link from "next/link";
 import Loading from "@/app/loading";
 import NotFound from "@/app/not-found";
+import AuthUsers from "@/utils/auth";
 
 interface UpdateProps {
   params: {
@@ -18,9 +18,10 @@ interface UpdateProps {
 }
 
 const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
-  const session = useSession();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
+  const [isDirty, setIsDirty] = useState(false);
+  const { session } = AuthUsers();
 
   // Define state variables for the purchase data and calculated values
   const [purchaseData, setPurchaseData] = useState<PurchaseProduct | null>(
@@ -83,11 +84,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
   ) => {
     const updatedProducts = [...products];
 
-    if (
-      field === "newOrder" ||
-      field === "sellingPrice" ||
-      field === "gst" 
-    ) {
+    if (field === "newOrder" || field === "sellingPrice" || field === "gst") {
       let parsedValue = 0; // Initialize with a default value
       // Check if the value is a valid number representation
       if (typeof value === "string" && !isNaN(parseFloat(value))) {
@@ -107,6 +104,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
     }
 
     setProducts(updatedProducts);
+    setIsDirty(true);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -122,7 +120,49 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
         updatedData
       );
       toast.success("Invoice updated successfully");
-   
+      // if (selectedProductIds.length === 1) {
+      //   // Handle a single ID
+      //   const productId = selectedProductIds[0];
+      //   const product = products.find((product) => product._id === productId);
+      //   const newRecvQty = product?.newRecvQty || 0; // Use the appropriate quantity field
+      //   // Proceed with the PUT request to api/product for a single ID
+      //   axios
+      //     .put(`/api/product/${productId}`, { newRecvQty })
+      //     .then((response) => {
+      //       // Handle success of the PUT request
+      //       toast.success("Product updated successfully");
+      //       // Continue with the rest of your logic (clearing data, generating numbers, etc.)
+      //     })
+      //     .catch((error) => {
+      //       toast.error("Error updating Product");
+      //       // Handle error of the PUT request
+      //       console.error("Error updating product", error);
+      //     });
+      // } else if (selectedProductIds.length > 1) {
+      //   // Handle multiple IDs
+      //   const productUpdates = products.map((product) => ({
+      //     productId: product._id,
+      //     newRecvQty: product.newRecvQty || 0, // Use the appropriate quantity field
+      //   }));
+      //   // Proceed with the PUT request to api/product for multiple IDs
+      //   axios
+      //     .put(`/api/product/${selectedProductIds.join(",")}`, {
+      //       productUpdates,
+      //     })
+      //     .then((response) => {
+      //       // Handle success of the PUT request
+      //       toast.success("Products updated successfully");
+      //       // Continue with the rest of your logic (clearing data, generating numbers, etc.)
+      //     })
+      //     .catch((error) => {
+      //       toast.error("Error updating Products");
+      //       // Handle error of the PUT request
+      //       console.error("Error updating products", error);
+      //     });
+      // } else {
+      //   // Handle the case where no products are selected
+      //   toast.warning("No products selected for update");
+      // }
     } catch (error) {
       console.error("Error updating Invoice:", error);
       toast.error("Error updating Invoice");
@@ -146,7 +186,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
         {/* Rest of your form */}
         {purchaseData && (
           <>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="shadow-sm shadow-warning px-4 py-2">
               <div className="flex flex-col sm:flex-row justify-center text-center gap-2  lg:gap-20 mt-6 mb-4">
                 <div>
                   <span className="text-lg "> Invoice Number </span>
@@ -159,7 +199,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
                   />
                 </div>
                 <div>
-                  <span className="text-lg "> Customer</span>
+                  <span className="text-lg "> Customer </span>
                   <input
                     className="rounded h-6 bg-gray text-black text-center "
                     type="text"
@@ -176,15 +216,15 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
                   <table className="w-full text-xs text-center mb-4">
                     <thead className="mb-4">
                       <tr className="text-xs text-center ">
-                        <th className="px-2 py-1 w-30">Item</th>
-                        <th className="px-2 py-1 w-30">iCode</th>
-                        <th className="px-2 py-1 w-20">Order Qty</th>
-                        <th className="px-2 py-1 w-20">Rate</th>
-                        <th className="px-2 py-1 w-20">Total</th>
-                        <th className="px-2 py-1 w-35">Payment</th>
-                        <th className="px-2 py-1 w-15">GST</th>
-                        <th className="px-2 py-1 w-20">Remarks</th>
-                        <th className="px-2 py-1 w-20"></th>
+                        <th className="px-2 py-1 ">Item</th>
+                        <th className="px-2 py-1 ">iCode</th>
+                        <th className="px-2 py-1 ">Order Qty</th>
+                        <th className="px-2 py-1 ">Rate</th>
+                        <th className="px-2 py-1 ">Total</th>
+                        <th className="px-2 py-1 ">Payment</th>
+                        <th className="px-2 py-1 ">GST</th>
+                        <th className="px-2 py-1 ">Remarks</th>
+                        <th className="px-2 py-1 "></th>
                       </tr>
                     </thead>
                     {purchaseData.products.length > 0 && (
@@ -196,14 +236,14 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
                                 type="text"
                                 value={product.productName ?? ""}
                                 placeholder="P. Name"
-                                className="px-2 py-1 w-30 rounded"
+                                className="px-2 py-1 w-30 rounded text-black"
                                 readOnly={true}
                               />
                             </td>
                             <td>
                               <input
                                 type="text"
-                                className="px-2 py-1 w-20 rounded"
+                                className="px-2 py-1 w-20 rounded text-black"
                                 placeholder="P. code"
                                 value={product.productCode ?? ""}
                                 readOnly={true}
@@ -212,7 +252,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
                             <td>
                               <input
                                 type="number"
-                                className="px-2 py-1 w-20 rounded"
+                                className="px-2 py-1 w-20 rounded text-black"
                                 value={
                                   isNaN(product.newOrder) ? 0 : product.newOrder
                                 }
@@ -222,12 +262,10 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
                               />
                             </td>
 
-                       
-
                             <td className="px-4">
                               <input
                                 type="number"
-                                className="px-2 py-1 w-30 rounded"
+                                className="px-2 py-1 w-30 rounded text-black"
                                 value={product.sellingPrice ?? 0}
                                 readOnly={true}
                               />
@@ -235,7 +273,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
                             <td className="px-4">
                               <input
                                 type="number"
-                                className="px-2 py-1 w-30 rounded"
+                                className="px-2 py-1 w-30 rounded text-black"
                                 value={product.total ?? 0}
                                 readOnly={true}
                               />
@@ -251,12 +289,10 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
                                     e.target.value
                                   )
                                 }
-                                className="px-2 py-1 w-36 rounded"
+                                className="px-2 py-1 w-36 rounded text-black"
                               >
                                 <option value="Pending">Pending</option>
-                                <option value="Partial">
-                                  Partial Paid
-                                </option>
+                                <option value="Partial">Partial Paid</option>
                                 <option value="Paid">Paid</option>
                               </select>
                             </td>
@@ -264,7 +300,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
                             <td className="px-4">
                               <input
                                 type="number"
-                                className="px-2 py-1 w-15 rounded"
+                                className="px-2 py-1 w-15 rounded text-black"
                                 min="0"
                                 value={product.gst ?? 0}
                                 readOnly={true}
@@ -274,7 +310,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
                               <input
                                 type="text"
                                 placeholder="Remarks"
-                                className="px-2 py-1 w-30 rounded"
+                                className="px-2 py-1 w-30 rounded text-black"
                                 value={product.remark ?? ""}
                                 onChange={(e) =>
                                   handleProductChange(
@@ -309,8 +345,14 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { invoiceId } }) => {
 
               <hr className="mt-1" />
               <div className="flex py-2 px-2 mt-2 sm:px-80 gap-4 flex-col sm:flex-row">
-                <button className={styles.saveButton} onSubmit={handleSubmit}>
-                  Save
+                <button
+                  onSubmit={handleSubmit}
+                  className={ 
+                    isDirty ? styles.saveButton : styles.disabledButton
+                  }
+                  disabled={!isDirty}
+                >
+                  Update
                 </button>
                 <button type="button" className={styles.cancelButton}>
                   <Link href="/"> Cancel</Link>

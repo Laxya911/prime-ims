@@ -11,10 +11,10 @@ export default function NotFound() {
      
         <div className='space-x-4'>
           <Link
-            className='underline text-primary hover:text-success duration-300'
+            className='underline text-primary hover:text-success text-2xl duration-300'
             href='/'
           >
-            Homepage
+            Home
           </Link>
       
         </div>

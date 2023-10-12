@@ -11,7 +11,6 @@ const [loading, setLoading]= useState(false)
 
   const [allPurchase, setAllPurchase] = useState<PurchaseProduct[]>([]);
   useEffect(() => {
-    setLoading(true)
     const fetchProducts = async () => {
       try {
         const response = await fetch(`/api/purchase`);

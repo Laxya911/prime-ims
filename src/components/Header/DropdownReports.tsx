@@ -49,7 +49,7 @@ const DropdownReports = () => {
         >
           <span className=" text-right ">
             <span className="block text-sm font-medium text-black dark:text-white">
-             Reports
+             Manage
             </span>
           </span>
          
@@ -82,20 +82,20 @@ const DropdownReports = () => {
           <ul className="flex flex-col gap-4 border-b border-stroke px-4 py-1.5 dark:border-strokedark">
             <li>
               <Link
+                href="/invoice"
+                className="flex items-center gap-1.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
+              >
+                Add Invoice
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/invoice/view"
                 className="flex items-center gap-1.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
               >
-                Invoices
+               View Invoices
               </Link>
             </li>
-            {/* <li>
-              <Link
-                href="/consignment/viewConsignments"
-                className="flex items-center gap-1.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base"
-              >
-               Consignments
-              </Link>
-            </li> */}
             <li>
               <Link
                 href="/vendor"

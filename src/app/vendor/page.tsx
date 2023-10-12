@@ -252,17 +252,18 @@ const Vendor = () => {
             <select
               onChange={handleVendorSelect}
               value={selectedVendorId}
-              className="px-4 py-1 rounded"
+              className="px-4 py-1 rounded text-black"
             >
-              <option value="">Select Vendor</option>
+              <option value="" >Select Vendor</option>
               {allvendor.map((vendor) => (
-                <option key={vendor._id} value={vendor._id}>
+                <option key={vendor._id} value={vendor._id} >
                   {vendor.vName}
                 </option>
               ))}
             </select>
           </div>
         </div>
+        <div className="shadow-sm shadow-warning mt-2 rounded py-4">
         <form
           name="form"
           id="form"
@@ -595,9 +596,11 @@ const Vendor = () => {
             </>
           )}
         </div>
+        </div>
         <div className="relative mb-4 mt-6 shadow-md sm:rounded-lg">
           {dataLength ? (
             <>
+            <div className="flex flex-col sm:flex-row justify-between py-2">
           <div className="flex justify-center text-center text-2xl m-2 sfont-medium">
             Vendors List
           </div>
@@ -618,7 +621,7 @@ const Vendor = () => {
               className="rounded border py-1"
             />
           </div>
-
+          </div>
           <div className=" overflow-x-auto">
             <table className="w-full border text-xs text-left ">
               <thead className="border-b">
@@ -626,7 +629,6 @@ const Vendor = () => {
                   <th className=" py-2 px-1 -md font-medium text-black dark:text-white">
                     Vendor Name
                   </th>
-
                   <th className=" py-2 px-1 font-medium text-black dark:text-white">
                     Vendor Contact
                   </th>

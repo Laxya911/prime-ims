@@ -205,7 +205,7 @@ const SecondSection = () => {
   if (session) {
     return (
       <>
-        <div className="relative mb-4 shadow-md sm:rounded-lg">
+        <div className="relative mb-4  sm:rounded-lg">
           <div className="flex flex-col sm:flex-row px-8 py-4 rounded bg-gray-600 justify-center sm:justify-between mt-6">
             <div className="flex justify-center  text-center text-lg mb-2 sfont-medium">
               Purchase Orders List
@@ -240,8 +240,8 @@ const SecondSection = () => {
             )}
           </div>
           {productLength ? (
-            <>
-              <div className=" overflow-x-auto">
+            <div className="shadow-sm shadow-warning py-2 px-1">
+              <div className=" overflow-x-auto ">
                 <table className=" w-full text-xs text-left text-gray-700 ">
                   <thead className="border-b text-gray-700  bg-gray-50 ">
                     <tr className=" bg-gray-2 text-left dark:bg-meta-4">
@@ -433,7 +433,7 @@ const SecondSection = () => {
                   </li>
                 </ul>
               </nav>
-            </>
+            </div>
           ) : (
             <>
             <div className="flex flex-col items-center justify-center">
@@ -445,7 +445,7 @@ const SecondSection = () => {
             <p>Purchases</p>
           </div>
           {purchaseLength ? (
-            <>
+            <div className="shadow-sm shadow-warning py-2 px-1">
               <div className=" overflow-x-auto">
                 <table className="w-full text-xs text-left text-gray-700 ">
                   <thead className=" border-b text-gray-700  bg-gray-50 ">
@@ -635,7 +635,7 @@ const SecondSection = () => {
                   </li>
                 </ul>
               </nav>
-            </>
+            </div>
           ) : (
             <div className="flex flex-col items-center justify-center">
               <p className="text-lg text-gray-500 p-10">No data available</p>

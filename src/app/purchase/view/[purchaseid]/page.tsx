@@ -4,12 +4,12 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import styles from "@/app/common.module.css";
-import { useSession } from "next-auth/react";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { PurchaseProduct } from "@/app/types/product";
 import Link from "next/link";
 import Loading from "@/app/loading";
 import NotFound from "@/app/not-found";
+import AuthUsers from "@/utils/auth";
 
 interface UpdateProps {
   params: {
@@ -18,9 +18,10 @@ interface UpdateProps {
 }
 
 const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
-  const session = useSession();
   const router = useRouter();
+  const { session } = AuthUsers();
   const [loading, setLoading] = useState(true);
+  const [isDirty, setIsDirty] = useState(false);
 
   // Define state variables for the purchase data and calculated values
   const [purchaseData, setPurchaseData] = useState<PurchaseProduct | null>(
@@ -110,14 +111,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
 
       updatedProducts[index][field] = parsedValue;
 
-      // const newRecvQty = parsedValue;
-      // const newOrder = updatedProducts[index].newOrder;
-      // const balQty = newOrder - newRecvQty;
-      // updatedProducts[index].newBal = balQty;
-      // updatedProducts[index].balQty = balQty;
-
       const newRecvQty = parsedValue;
-      const recvQty = updatedProducts[index].recvQty || 0;
       const balQty = updatedProducts[index].balQty || 0;
 
       // Calculate newBal as balQty - newRecvQty
@@ -125,7 +119,6 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
       updatedProducts[index].newBal = newBal;
 
       const newRecv = updatedProducts[index].newRecvQty;
-      // const balance = updatedProducts[index].balQty;
 
       if (newBal === 0 || newRecv === balQty) {
         updatedProducts[index].status = "Received";
@@ -138,7 +131,8 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
       (updatedProducts[index] as any)[field] = value;
     }
 
-    setProducts(updatedProducts);
+    setProducts(updatedProducts)
+    setIsDirty(true)
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -158,10 +152,10 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
         // Handle a single ID
         const productId = selectedProductIds[0];
         const product = products.find((product) => product._id === productId);
-        const inStock = product?.newRecvQty || 0; // Use the appropriate quantity field
+        const newRecvQty = product?.newRecvQty || 0; // Use the appropriate quantity field
         // Proceed with the PUT request to api/product for a single ID
         axios
-          .put(`/api/product/${productId}`, { inStock })
+          .put(`/api/product/${productId}`, { newRecvQty })
           .then((response) => {
             // Handle success of the PUT request
             toast.success("Product updated successfully");
@@ -176,7 +170,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
         // Handle multiple IDs
         const productUpdates = products.map((product) => ({
           productId: product._id,
-          inStock: product.newRecvQty || 0, // Use the appropriate quantity field
+          newRecvQty: product.newRecvQty || 0, // Use the appropriate quantity field
         }));
         // Proceed with the PUT request to api/product for multiple IDs
         axios
@@ -221,7 +215,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
         {/* Rest of your form */}
         {purchaseData && (
           <>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="px-4 py-2 shadow-sm shadow-warning">
               <div className="flex flex-col sm:flex-row justify-center text-center gap-2  lg:gap-20 mt-6 mb-4">
                 <div>
                   <span className="text-lg "> Purchase Number </span>
@@ -234,7 +228,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
                   />
                 </div>
                 <div>
-                  <span className="text-lg "> Vendor</span>
+                  <span className="text-lg "> Vendor </span>
                   <input
                     className="rounded h-6 bg-gray text-black text-center "
                     type="text"
@@ -251,38 +245,38 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
                   <table className="w-full text-xs text-center mb-4">
                     <thead className="mb-4">
                       <tr className="text-xs text-center ">
-                        <th className="px-2 py-1 w-30">Item</th>
-                        <th className="px-2 py-1 w-30">iCode</th>
-                        <th className="px-2 py-1 w-20">Order</th>
-                        <th className="px-2 py-1 w-20">Received</th>
-                        <th className="px-2 py-1 w-30">Balance</th>
-                        <th className="px-2 py-1 w-15">New Recv</th>
-                        <th className="px-2 py-1 w-15">New Balance</th>
-                        <th className="px-2 py-1 w-20">Rate</th>
-                        <th className="px-2 py-1 w-20">Total</th>
-                        <th className="px-2 py-1 w-35">Status</th>
-                        <th className="px-2 py-1 w-15">GST</th>
-                        <th className="px-2 py-1 w-20">Remarks</th>
-                        <th className="px-2 py-1 w-20"></th>
+                        <th className="px-2 py-1 ">Item</th>
+                        <th className="px-2 py-1 ">iCode</th>
+                        <th className="px-2 py-1 ">Order</th>
+                        <th className="px-2 py-1 ">Received</th>
+                        <th className="px-2 py-1 ">Balance</th>
+                        <th className="px-2 py-1 ">New Recv</th>
+                        <th className="px-2 py-1 ">New Balance</th>
+                        <th className="px-2 py-1 ">Rate</th>
+                        <th className="px-2 py-1 ">Total</th>
+                        <th className="px-2 py-1 ">Status</th>
+                        <th className="px-2 py-1 ">GST</th>
+                        <th className="px-2 py-1 ">Remarks</th>
+                        <th className="px-2 py-1 "></th>
                       </tr>
                     </thead>
                     {purchaseData.products.length > 0 && (
                       <tbody>
                         {purchaseData.products.map((product, index) => (
                           <tr key={index} className="mb-4 py-2">
-                            <td className="px-4">
+                            <td >
                               <input
                                 type="text"
                                 value={product.productName ?? ""}
                                 placeholder="P. Name"
-                                className="px-2 py-1 w-30 rounded"
+                                className="px-2 py-1 w-30 rounded text-black"
                                 readOnly={true}
                               />
                             </td>
                             <td>
                               <input
                                 type="text"
-                                className="px-2 py-1 w-20 rounded"
+                                className="px-2 py-1 w-30 rounded text-black"
                                 placeholder="P. code"
                                 value={product.productCode ?? ""}
                                 readOnly={true}
@@ -291,7 +285,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
                             <td>
                               <input
                                 type="number"
-                                className="px-2 py-1 w-20 rounded"
+                                className="px-2 py-1 w-20 rounded text-black"
                                 value={
                                   isNaN(product.newOrder) ? 0 : product.newOrder
                                 }
@@ -304,7 +298,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
                             <td>
                               <input
                                 type="number"
-                                className="px-2 py-1 w-20 rounded"
+                                className="px-2 py-1 w-20 rounded text-black"
                                 value={
                                   isNaN(product.recvQty) ? 0 : product.recvQty
                                 }
@@ -323,7 +317,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
                             <td>
                               <input
                                 type="number"
-                                className="px-2 py-1 w-30 rounded"
+                                className="px-2 py-1 w-20 rounded text-black"
                                 value={
                                   isNaN(product.balQty) ? "0" : product.balQty
                                 }
@@ -334,7 +328,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
                             <td>
                               <input
                                 type="number"
-                                className="px-2 py-1 w-15 rounded"
+                                className="px-2 py-1 w-25 rounded text-black"
                                 min={0}
                                 max={product.balQty}
                                 value={product.newRecvQty ?? 0}
@@ -351,7 +345,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
                             <td>
                               <input
                                 type="number"
-                                className="px-2 py-1 w-20 rounded"
+                                className="px-2 py-1 w-25 rounded text-black"
                                 readOnly={true}
                                 value={
                                   isNaN(product.newBal) ? 0 : product.newBal
@@ -368,18 +362,18 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
                               />
                             </td>
 
-                            <td className="px-4">
+                            <td >
                               <input
                                 type="number"
-                                className="px-2 py-1 w-30 rounded"
+                                className="px-2 py-1 w-20 rounded text-black"
                                 value={product.buyingPrice ?? 0}
                                 readOnly={true}
                               />
                             </td>
-                            <td className="px-4">
+                            <td >
                               <input
                                 type="number"
-                                className="px-2 py-1 w-30 rounded"
+                                className="px-2 py-1 w-20 rounded text-black"
                                 value={product.total ?? 0}
                                 readOnly={true}
                               />
@@ -395,7 +389,7 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
                                     e.target.value
                                   )
                                 }
-                                className="px-2 py-1 w-36 rounded"
+                                className="px-2 py-1 w-30 rounded text-black"
                               >
                                 <option value="Pending">Pending</option>
                                 <option value="Partial">
@@ -405,20 +399,20 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
                               </select>
                             </td>
 
-                            <td className="px-4">
+                            <td >
                               <input
                                 type="number"
-                                className="px-2 py-1 w-15 rounded"
+                                className="px-2 py-1 w-12 rounded text-black"
                                 min="0"
                                 value={product.gst ?? 0}
                                 readOnly={true}
                               />
                             </td>
-                            <td className="px-4">
+                            <td >
                               <input
                                 type="text"
                                 placeholder="Remarks"
-                                className="px-2 py-1 w-30 rounded"
+                                className="px-2 py-1 w-35 rounded text-black"
                                 value={product.remark ?? ""}
                                 onChange={(e) =>
                                   handleProductChange(
@@ -453,9 +447,15 @@ const UpdatePurchase: React.FC<UpdateProps> = ({ params: { purchaseid } }) => {
 
               <hr className="mt-1" />
               <div className="flex py-2 px-2 mt-2 sm:px-80 gap-4 flex-col sm:flex-row">
-            <button className={styles.saveButton} onSubmit={handleSubmit}>
-              Save
-            </button>
+              <button
+                  onSubmit={handleSubmit}
+                  className={ 
+                    isDirty ? styles.saveButton : styles.disabledButton
+                  }
+                  disabled={!isDirty}
+                >
+                  Update
+                </button>
             <button type="button" className={styles.cancelButton}>
               <Link href="/"> Cancel</Link>
             </button>

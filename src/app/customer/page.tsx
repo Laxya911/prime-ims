@@ -120,14 +120,14 @@ const Customer = () => {
   if (session.status === "authenticated") {
     return (
       <>
-        <Breadcrumb pageName="Vendor" />
+        <Breadcrumb pageName="Customer Management" />
         <div className="mb-4 flex flex-col justify-center items-center gap-6 sm:flex-row text-center">
           <div className="px-4 py-1 text-2xl">Customer Management</div>
           <div>
             <select
               onChange={handleCustomerSelect}
               value={selectedCustomerId}
-              className="px-4 py-1 rounded"
+              className="px-4 py-1 rounded text-black"
             >
               <option value="">Select Customer</option>
               {allCustomer.map((customer) => (
@@ -138,6 +138,7 @@ const Customer = () => {
             </select>
           </div>
         </div>
+        <div className="shadow-sm shadow-warning mt-2 rounded py-4">
         <form
           name="form"
           id="form"
@@ -411,6 +412,7 @@ const Customer = () => {
               </button>
             </>
           )}
+        </div>
         </div>
         <div className="relative shadow-md sm:rounded-lg mt-4">
         {dataLength ? (
