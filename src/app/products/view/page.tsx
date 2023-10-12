@@ -189,9 +189,9 @@ const ProductList = () => {
             />
           </div>
 
-          <div className=" overflow-x-auto">
-            <table className="w-full text-xs text-left text-gray-700 ">
-              <thead className=" border-b text-gray-700  bg-gray-50 ">
+          <div className=" overflow-x-auto ">
+            <table className="w-full border text-xs text-left ">
+              <thead className=" border-b ">
                 <tr className="bg-gray-2 text-left dark:bg-meta-4">
                   
                   <th className=" py-2 font-medium text-black dark:text-white">
@@ -277,10 +277,10 @@ const ProductList = () => {
                       {product.created_by}
                     </td>
                     <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
-                      {new Date(product.date_created).toDateString()}
+                      {new Date(product.date_created).toLocaleString()}
                     </td>
                     <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
-                      {new Date(product.updatedAt).toDateString()}
+                      {new Date(product.updatedAt).toLocaleString()}
                     </td>
 
                     {session?.data?.user.role === "superadmin" && (

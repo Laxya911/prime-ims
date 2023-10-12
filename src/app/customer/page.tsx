@@ -142,7 +142,7 @@ const Customer = () => {
           name="form"
           id="form"
           onSubmit={handleSubmit}
-          className={styles.formgroup}
+          className={styles.form}
         >
           {selectedCustomerId ? (
             <>
@@ -437,53 +437,53 @@ const Customer = () => {
           </div>
 
           <div className=" overflow-x-auto">
-            <table className="w-full text-xs text-left text-gray-700 ">
-              <thead className=" border-b text-gray-700  bg-gray-50 ">
+            <table className="w-full border text-xs text-left">
+              <thead className=" border-b ">
                 <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className="px-1 py-2 font-medium text-black dark:text-white">
                     Customer Name
                   </th>
 
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1  font-medium text-black dark:text-white">
                     Customer Contact
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1  font-medium text-black dark:text-white">
                     Email
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1  font-medium text-black dark:text-white">
                     GST/VAT
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1  font-medium text-black dark:text-white">
                     Country
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1  font-medium text-black dark:text-white">
                     State
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1  font-medium text-black dark:text-white">
                     City
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1  font-medium text-black dark:text-white">
                     Address
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1  font-medium text-black dark:text-white">
                     Pin Code
                   </th>
 
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1  font-medium text-black dark:text-white">
                     Created By
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1  font-medium text-black dark:text-white">
                     Added On
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1  font-medium text-black dark:text-white">
                     Updated On
                   </th>
                   {session?.data?.user.role === "superadmin" && (
-                    <th className=" py-2 font-medium text-black dark:text-white">
+                    <th className=" py-2 px-1  font-medium text-black dark:text-white">
                       CompID
                     </th>
                   )}
-                  <th className="py-2 font-medium text-black dark:text-white ">
+                  <th className="py-2 px-1  font-medium text-black dark:text-white ">
                     Action
                   </th>
                 </tr>
@@ -494,51 +494,51 @@ const Customer = () => {
                     key={_id}
                     className="w-full text-gray-800 border-b hover:bg-hoverl dark:hover:bg-dark-hover"
                   >
-                    <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1  border-b dark:border-[#eee] border-strokedark">
                       {customer.customerName}
                     </td>
 
-                    <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1  border-b dark:border-[#eee] border-strokedark">
                       {customer.contact_no}
                     </td>
-                    <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1  border-b dark:border-[#eee] border-strokedark">
                       {customer.email}
                     </td>
-                    <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1  border-b dark:border-[#eee] border-strokedark">
                       {customer.gst_vat_no}
                     </td>
-                    <td className=" px-2 py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1  border-b dark:border-[#eee] border-strokedark">
                       {customer.country}
                     </td>
-                    <td className="px-2 py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1  border-b dark:border-[#eee] border-strokedark">
                       {customer.state}
                     </td>
-                    <td className=" px-2py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1  border-b dark:border-[#eee] border-strokedark">
                       {customer.city}
                     </td>
 
-                    <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1  border-b dark:border-[#eee] border-strokedark">
                       {customer.address}
                     </td>
-                    <td className=" px-2py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1  border-b dark:border-[#eee] border-strokedark">
                       {customer.zip}
                     </td>
-                    <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1  border-b dark:border-[#eee] border-strokedark">
                       {customer.created_by}
                     </td>
-                    <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1  border-b dark:border-[#eee] border-strokedark">
                       {new Date(customer.createdAt).toDateString()}
                     </td>
-                    <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1  border-b dark:border-[#eee] border-strokedark">
                       {new Date(customer.updatedAt).toDateString()}
                     </td>
 
                     {session?.data?.user.role === "superadmin" && (
-                      <td className="py-2 border-b dark:border-[#eee] border-strokedark">
+                      <td className="py-2 px-1  border-b dark:border-[#eee] border-strokedark">
                         {customer.companyId}
                       </td>
                     )}
-                    <td className=" py-2 flex items-center text-center dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1  flex items-center text-center dark:border-[#eee] border-strokedark">
                       <button
                         onClick={() => selectCustomer(customer._id)}
                         className="cursor-pointer border px-1 rounded text-warning"

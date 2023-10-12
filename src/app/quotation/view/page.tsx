@@ -214,8 +214,8 @@ const QuotationList = () => {
               </div>
 
               <div className=" overflow-x-auto">
-                <table className="w-full text-xs text-left text-gray-700 ">
-                  <thead className="border-b text-gray-700  bg-gray-50 ">
+                <table className="w-full border text-xs text-left ">
+                  <thead className="border-b ">
                     <tr className="bg-gray-2 text-left dark:bg-meta-4">
                       <th className=" py-2 font-medium text-black dark:text-white">
                         Cust. Name
@@ -403,37 +403,37 @@ const QuotationList = () => {
                 <p>Quotations</p>
               </div>
               <div className=" overflow-x-auto">
-                <table className="w-full text-xs text-left text-gray-700 ">
-                  <thead className=" border-b text-gray-700  bg-gray-50 ">
+                <table className="w-full border text-xs text-left ">
+                  <thead className=" border-b">
                     <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Cust. Name
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Quote Number
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Sub Total
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Total Gst
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Grand Total
                       </th>
 
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         PO Date
                       </th>
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Added By
                       </th>
                       {session?.data?.user.role === "superadmin" && (
-                        <th className=" py-2 font-medium text-black dark:text-white">
+                        <th className=" py-2 px-1 font-medium text-black dark:text-white">
                           CompID
                         </th>
                       )}
-                      <th className=" py-2 font-medium text-black dark:text-white">
+                      <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         Action
                       </th>
                     </tr>
@@ -444,33 +444,33 @@ const QuotationList = () => {
                         key={_id}
                         className=" text-gray-800  hover:bg-hoverl dark:hover:bg-dark-hover"
                       >
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark ">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark ">
                           {product.customerName}
                         </td>
 
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.qNumber?.toString()}
                         </td>
 
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.subTotal}
                         </td>
 
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.totalGst}
                         </td>
 
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.grandTotal}
                         </td>
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
-                          {new Date(product.date_created).toDateString()}
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
+                          {new Date(product.date_created).toLocaleString()}
                         </td>
-                        <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                        <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                           {product.created_by}
                         </td>
                         {session?.data?.user.role === "superadmin" && (
-                          <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                          <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                             {product.companyId}
                           </td>
                         )}

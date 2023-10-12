@@ -303,6 +303,7 @@ const Purchase = () => {
         console.error('Error refreshing product data: ', error);
       });
   };
+  
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const subTotal = calculateSubTotal();

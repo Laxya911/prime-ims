@@ -141,38 +141,38 @@ const UserLists = () => {
             Users List
           </div>
           <div className=" overflow-x-auto">
-            <table className="w-full text-sm text-left text-gray-700 ">
-              <thead className="text-sm  text-gray-700  bg-gray-50 ">
+            <table className="w-full border text-sm text-left ">
+              <thead className=" border-b">
                 <tr>
-                  <th scope="col" className="px-4 py-2">
+                  <th className="px-4 py-2">
                     Users Name
                   </th>
-                  <th scope="col" className="px-4 py-2">
+                  <th className="px-4 py-2">
                     Email
                   </th>
-                  <th scope="col" className="px-4 py-2">
+                  <th className="px-4 py-2">
                     Role
                   </th>
-                  <th scope="col" className="px-4 py-2">
+                  <th className="px-4 py-2">
                     Status
                   </th>
                   {session?.data?.user.role === "superadmin" && (
                     <>
-                      <th scope="col" className="px-4 py-2">
+                      <th className="px-4 py-2">
                         Assigned Company
                       </th>
-                      <th scope="col" className="px-4 py-2">
+                      <th className="px-4 py-2">
                         Company ID
                       </th>
                     </>
                   )}
-                  <th scope="col" className="px-4 py-2">
+                  <th className="px-4 py-2">
                     Added
                   </th>
-                  <th scope="col" className="px-4 py-4">
+                  <th className="px-4 py-2">
                     Edit
                   </th>
-                  <th scope="col" className="px-4 py-2">
+                  <th className="px-4 py-2">
                     Delete
                   </th>
                 </tr>

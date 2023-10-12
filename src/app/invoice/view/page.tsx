@@ -313,7 +313,7 @@ const QuotationList = () => {
                           {product.remark}
                         </td>
                         <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
-                          {new Date(product.date_created).toDateString()}
+                          {new Date(product.date_created).toLocaleString()}
                         </td>
                         {session?.data?.user.role === "superadmin" && (
                           <td className=" py-1 border-b dark:border-[#eee] border-strokedark">

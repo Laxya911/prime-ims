@@ -3,41 +3,34 @@ import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FaPlus, FaTrash } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import { toast } from "react-toastify";
-// import styles from "./invoice.module.css";
 import styles from "@/app/common.module.css";
-import { useSession } from "next-auth/react";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import { PurchaseProduct } from "../types/product";
-import { CustomerTypes } from "../types/vendor";
+import AuthUsers from "@/utils/auth";
+import ProductApi from "../commonApi/productApi";
+import CustomerApi from "../commonApi/customerApi";
+import Loading from "../loading";
 
 type ProductField = keyof PurchaseProduct;
 
 const Quotations = () => {
-  const session = useSession();
   const router = useRouter();
+  const { session } = AuthUsers();
 
   useEffect(() => {
     if (session.status === "unauthenticated") {
       router.replace("/auth/signin");
     }
   }, [session.status, router]);
+
   const [loading, setLoading] = useState(true);
+
   const [products, setProducts] = useState<PurchaseProduct[]>([]);
-  const [allProduct, setallProduct] = useState<PurchaseProduct[]>([]);
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get("api/product");
-        setallProduct(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching product data:", error);
-      }
-    };
-    if (session?.status === "authenticated") fetchProducts();
-  }, [session]);
+  const {allProducts, updateProducts} = ProductApi();
+
+
   const [customer, setCustomer] = useState({
     customerName: "",
     contact_no: "",
@@ -46,44 +39,31 @@ const Quotations = () => {
     gst_vat_no: "",
   });
 
-  const [allCustomer, setAllCustomer] = useState<CustomerTypes[]>([]);
+  const {allCustomers} = CustomerApi();
+
   const [selectedCustomerId, setSelectedCustomerId] = useState<string>("");
   const [selectedProductIds, setSelectedProductIds] = useState<string[]>([]);
   const [selectedProductId, setSelectedProductId] = useState<string | null>(
     null
   );
 
-  useEffect(() => {
-    const fetchCustomers = async () => {
-      try {
-        const response = await axios.get("api/customer");
-        setAllCustomer(response.data);
-      } catch (error) {
-        console.error("Error fetching customer data:", error);
-      }
-    };
-
-    if (session?.status === "authenticated") {
-      fetchCustomers();
-    }
-  }, [session]);
-
   const handleCustomerSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedId = e.target.value;
     setSelectedCustomerId(selectedId);
-    const selectedCustomer = allCustomer.find(
+    const selectedCustomer = allCustomers.find(
       (customer) => customer._id === selectedId
     );
 
     if (selectedCustomer) {
       setCustomer(selectedCustomer);
     }
-
     // Reset product related states when a new customer is selected
     setProducts([]);
     setSelectedProductId(null);
     setSelectedProductIds([]);
   };
+  const [isProductSelected, setIsProductSelected] = useState(false);
+
   const handleProductSelect = async (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -94,7 +74,7 @@ const Quotations = () => {
       return;
     }
 
-    const selectedProduct = allProduct.find(
+    const selectedProduct = allProducts.find(
       (product) => product._id === selectedId
     );
 
@@ -103,14 +83,15 @@ const Quotations = () => {
       const quoteResponse = await axios.get(
         `/api/quotation?customerId=${selectedCustomerId}`
       );
-      
+
       let maximumSellingPrice = Number.MIN_SAFE_INTEGER; // Initialize with a small value
       let matchingProduct: PurchaseProduct | undefined = undefined;
-      
+
       for (const quote of quoteResponse.data) {
         const selectedCustomerProducts = quote.products.filter(
           (product: { customerId: string; customerName: string }) =>
-            product.customerId === selectedCustomerId || product.customerName === customer.customerName
+            product.customerId === selectedCustomerId ||
+            product.customerName === customer.customerName
         );
 
         for (const product of selectedCustomerProducts) {
@@ -123,9 +104,7 @@ const Quotations = () => {
           }
         }
       }
-
       let newProduct: PurchaseProduct;
-
       if (matchingProduct) {
         newProduct = {
           ...selectedProduct!,
@@ -144,9 +123,9 @@ const Quotations = () => {
         };
       } else {
         // If no matching product is found, use the product's default sellingPrice
-        const selectedProduct = allProduct.find(
+        const selectedProduct = allProducts.find(
           (product) => product._id === selectedId
-          );
+        );
         if (selectedProduct) {
           const initialTotal =
             (selectedProduct.newOrder || 0) *
@@ -166,13 +145,13 @@ const Quotations = () => {
             qNumber: qNumber,
             total: initialTotal,
           };
-      
         }
       }
-      
+
       setSelectedProductIds((prevIds) => [...prevIds, selectedId]);
       setProducts((prevProducts) => [...prevProducts, newProduct]);
       setSelectedProductId(selectedId);
+      setIsProductSelected(selectedId.length > 0);
     } catch (error) {
       console.error("Error fetching quotation data:", error);
       toast.error("Error fetching quotation data");
@@ -240,6 +219,7 @@ const Quotations = () => {
       prevIds.filter((id) => id !== removedProductId)
     );
     // setSelectedProductId(null);
+    setIsProductSelected(products.length > 1);
   };
 
   const calculateSubTotal = () => {
@@ -317,6 +297,21 @@ const Quotations = () => {
     }
   }, [session.status, session.data, companyId, generateQuotationNumber]);
 
+  const handleRefresh = () => {
+    // Implement a function to refresh product data in the ProductApi component
+    // This function should make a request to get the latest product data and update the 'allProducts' state in ProductApi
+    axios
+      .get('/api/product')
+      .then((response) => {
+        const updatedProducts = response.data;
+        // Call the 'updateProducts' function in the ProductApi to update the 'allProducts' state
+        updateProducts(updatedProducts);
+      })
+      .catch((error) => {
+        console.error('Error refreshing product data: ', error);
+      });
+  };
+
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
     const subTotal = calculateSubTotal();
@@ -341,71 +336,25 @@ const Quotations = () => {
     axios
       .post("/api/quotation", quoteData)
       .then((response) => {
-        // Handle success of the POST request
         toast.success("Quotation Created successfully");
-        //     // After the POST request is successful, send a PUT request to update product quantities
-        //     if (selectedProductIds.length === 1) {
-        //       // Handle a single ID
-        //       const productId = selectedProductIds[0];
-        //       const product = products.find((product) => product._id === productId);
-        //       const inStock = product?.recvQty || 0; // Use the appropriate quantity field
-        //       // Proceed with the PUT request to api/product for a single ID
-        //       axios
-        //         .put(`/api/product/${productId}`, { inStock })
-        //         .then((response) => {
-        //           // Handle success of the PUT request
-        //           toast.success("Product updated successfully");
-        //           // Continue with the rest of your logic (clearing data, generating numbers, etc.)
+        handleRefresh();
         setSelectedCustomerId(""); // Clear selected vendor
         setqNumber("");
         setProducts([]); // Clear products
         setSelectedProductIds([]);
         setSelectedProductId(null);
         generateQuotationNumber();
-        //         })
-        //         .catch((error) => {
-        //           toast.error("Error updating Product");
-        //           // Handle error of the PUT request
-        //           console.error("Error updating product", error);
-        //         });
-        //     } else if (selectedProductIds.length > 1) {
-        //       // Handle multiple IDs
-        //       const productUpdates = products.map((product) => ({
-        //         productId: product._id,
-        //         inStock: product.recvQty || 0, // Use the appropriate quantity field
-        //       }));
-        //       // Proceed with the PUT request to api/product for multiple IDs
-        //       axios
-        //         .put(`/api/product/${selectedProductIds.join(",")}`, {
-        //           productUpdates,
-        //         })
-        //         .then((response) => {
-        //           // Handle success of the PUT request
-        //           toast.success("Products updated successfully");
-        //           // Continue with the rest of your logic (clearing data, generating numbers, etc.)
-        //           setSelectedCustomerId(""); // Clear selected vendor
-        //           setqNumber(""); // Clear po number
-        //           setProducts([]); // Clear products
-        //           setSelectedProductIds([]);
-        //           setSelectedProductId(null);
-        //           generateQuotationNumber();
-        //         })
-        //         .catch((error) => {
-        //           toast.error("Error updating Products");
-        //           // Handle error of the PUT request
-        //           console.error("Error updating products", error);
-        //         });
-        //     } else {
-        //       // Handle the case where no products are selected
-        //       toast.warning("No products selected for update");
-        //     }
       })
       .catch((error) => {
-        // Handle error of the POST request
         console.log(error);
         toast.error("Error Creating Purchase");
       });
   };
+if (loading){
+  return(
+    <Loading/>
+  )
+}
 
   if (session) {
     return (
@@ -436,7 +385,7 @@ const Quotations = () => {
                 className={styles.input}
               >
                 <option value="">Select Customer</option>
-                {allCustomer.map((customer) => (
+                {allCustomers.map((customer) => (
                   <option key={customer._id} value={customer._id}>
                     {customer.customerName}
                   </option>
@@ -450,7 +399,7 @@ const Quotations = () => {
                 disabled={!selectedCustomerId}
               >
                 <option value="">Select Product</option>
-                {allProduct.map((product) => (
+                {allProducts.map((product) => (
                   <option key={product._id} value={product._id}>
                     {product.productName}
                   </option>
@@ -650,8 +599,14 @@ const Quotations = () => {
 
           <hr className="mt-1" />
           <div className="flex py-2 px-2 mt-2 sm:px-80 gap-4 flex-col sm:flex-row">
-            <button className={styles.saveButton} onSubmit={handleSubmit}>
-              Save
+          <button
+              className={
+                isProductSelected ? styles.saveButton : styles.disabledButton
+              }
+              onSubmit={handleSubmit}
+              disabled={!isProductSelected}
+            >
+            Save
             </button>
             <button type="button" className={styles.cancelButton}>
               <Link href="/"> Cancel</Link>

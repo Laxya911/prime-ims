@@ -620,53 +620,53 @@ const Vendor = () => {
           </div>
 
           <div className=" overflow-x-auto">
-            <table className="w-full text-xs text-left text-gray-700 ">
-              <thead className=" border-b text-gray-700  bg-gray-50 ">
-                <tr className="bg-gray-2 text-left dark:bg-meta-4">
-                  <th className=" py-2 font-medium text-black dark:text-white">
+            <table className="w-full border text-xs text-left ">
+              <thead className="border-b">
+                <tr className="bg-gray-2 rounded-md text-left dark:bg-meta-4">
+                  <th className=" py-2 px-1 -md font-medium text-black dark:text-white">
                     Vendor Name
                   </th>
 
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1 font-medium text-black dark:text-white">
                     Vendor Contact
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1 font-medium text-black dark:text-white">
                     Email
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1 font-medium text-black dark:text-white">
                     GST/VAT
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1 font-medium text-black dark:text-white">
                     Country
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1 font-medium text-black dark:text-white">
                     State
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1 font-medium text-black dark:text-white">
                     City
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1 font-medium text-black dark:text-white">
                     Address
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1 font-medium text-black dark:text-white">
                     Pin Code
                   </th>
 
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1 font-medium text-black dark:text-white">
                     Created By
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1 font-medium text-black dark:text-white">
                     Added On
                   </th>
-                  <th className=" py-2 font-medium text-black dark:text-white">
+                  <th className=" py-2 px-1 font-medium text-black dark:text-white">
                     Updated On
                   </th>
                   {session?.data?.user.role === "superadmin" && (
-                    <th className=" py-2 font-medium text-black dark:text-white">
+                    <th className=" py-2 px-1 font-medium text-black dark:text-white">
                       CompID
                     </th>
                   )}
-                  <th className="py-2 font-medium text-black dark:text-white ">
+                  <th className="py-2 px-1 font-medium text-black dark:text-white ">
                     Action
                   </th>
                 </tr>
@@ -677,51 +677,51 @@ const Vendor = () => {
                     key={_id}
                     className="w-full text-gray-800 border-b hover:bg-hoverl dark:hover:bg-dark-hover"
                   >
-                    <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                       {vendor.vName}
                     </td>
 
-                    <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                       {vendor.contact_no}
                     </td>
-                    <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                       {vendor.email}
                     </td>
-                    <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                       {vendor.gst_vat_no.split("-")[1]}
                     </td>
-                    <td className=" px-2 py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                       {vendor.country}
                     </td>
-                    <td className="px-2 py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                       {vendor.state}
                     </td>
-                    <td className=" px-2py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                       {vendor.city}
                     </td>
 
-                    <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                       {vendor.address}
                     </td>
-                    <td className=" px-2py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                       {vendor.zip}
                     </td>
-                    <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                       {vendor.created_by}
                     </td>
-                    <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                       {new Date(vendor.createdAt).toDateString()}
                     </td>
-                    <td className=" py-2 border-b dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                       {new Date(vendor.updatedAt).toDateString()}
                     </td>
 
                     {session?.data?.user.role === "superadmin" && (
-                      <td className="py-2 border-b dark:border-[#eee] border-strokedark">
+                      <td className="py-2 px-1 border-b dark:border-[#eee] border-strokedark">
                         {vendor.companyId}
                       </td>
                     )}
-                    <td className=" py-2 flex items-center text-center dark:border-[#eee] border-strokedark">
+                    <td className=" py-2 px-1 flex items-center text-center dark:border-[#eee] border-strokedark">
                       <button
                         onClick={() => selectVendor(vendor._id)}
                         className="cursor-pointer border px-1 rounded text-warning"
@@ -751,7 +751,7 @@ const Vendor = () => {
                 <button
                   onClick={handlePrevious}
                   disabled={itemonPage === 1}
-                  className="block px-2 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 "
+                  className="block px-2 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover "
                 >
                   <span className="sr-only">Previous</span>
                   <svg

@@ -215,8 +215,8 @@ const PoList = () => {
               </div>
 
               <div className=" overflow-x-auto">
-                <table className="w-full text-xs text-left text-gray-700 ">
-                  <thead className="border-b text-gray-700  bg-gray-50 ">
+                <table className="w-full border text-xs text-left ">
+                  <thead className="border-b ">
                     <tr className="bg-gray-2 text-left dark:bg-meta-4">
                       <th className=" py-2 px-4 font-medium text-black dark:text-white">
                         V. Name
@@ -407,8 +407,8 @@ const PoList = () => {
                 <p>Purchases</p>
               </div>
               <div className=" overflow-x-auto">
-                <table className="w-full text-xs text-left text-gray-700 ">
-                  <thead className=" border-b text-gray-700  bg-gray-50 ">
+                <table className="w-full border text-xs text-left ">
+                  <thead className=" border-b">
                     <tr className="bg-gray-2 text-left dark:bg-meta-4">
                       <th className=" py-2 px-3 font-medium text-black dark:text-white">
                         V. Name
@@ -468,7 +468,7 @@ const PoList = () => {
                           {product.grandTotal}
                         </td>
                         <td className=" py-2 px-0 border-b dark:border-[#eee] border-strokedark">
-                          {new Date(product.date_created).toDateString()}
+                          {new Date(product.date_created).toLocaleString()}
                         </td>
                         <td className=" py-2 px-3 border-b dark:border-[#eee] border-strokedark">
                           {product.created_by}

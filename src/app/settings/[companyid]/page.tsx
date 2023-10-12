@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
@@ -19,17 +18,10 @@ interface updatedCompanyProps {
 const UpdateCompanyDetails: React.FC<updatedCompanyProps> = ({
   params: { companyid },
 }) => {
-  const session = useSession();
   const router = useRouter();
-
-  useEffect(() => {
-    if (session.status === "unauthenticated") {
-      router.replace("/auth/signin");
-    }
-  }, [session.status, router]);
   const [loading, setLoading] = useState(false);
+  const { isAuthorized, session } = AuthUsers();
 
- 
   const [formData, setFormData] = useState({
     _id: "",
     logo: "",
@@ -61,7 +53,7 @@ const UpdateCompanyDetails: React.FC<updatedCompanyProps> = ({
       [name]: value,
     }));
   };
-  
+
   useEffect(() => {
     const getCompanyDetails = async () => {
       try {
@@ -118,7 +110,6 @@ const UpdateCompanyDetails: React.FC<updatedCompanyProps> = ({
       </>
     );
   }
-  const { isAuthorized } = AuthUsers();
   if (!isAuthorized) {
     return <UnAthorized />;
   }
@@ -128,7 +119,10 @@ const UpdateCompanyDetails: React.FC<updatedCompanyProps> = ({
       <div className="text-center text-2xl justify-center rounded mb-6 py-1 shadow-sm shadow-warning ">
         <h2>Update Company Details </h2>
       </div>
-      <form className="shadow-xl shadow-warning mt-2 rounded py-4" onSubmit={handleSubmit}>
+      <form
+        className="shadow-xl shadow-warning mt-2 rounded py-4"
+        onSubmit={handleSubmit}
+      >
         <div className={styles.form}>
           <div className={styles.formGroup}>
             <label htmlFor="name">Company Name:</label>
