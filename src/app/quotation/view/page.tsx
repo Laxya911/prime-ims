@@ -256,7 +256,7 @@ const QuotationList = () => {
                       <th className=" py-2 font-medium text-black dark:text-white">
                         PO Date
                       </th>
-               
+
                       {session?.data?.user.role === "superadmin" && (
                         <th className=" py-2 font-medium text-black dark:text-white">
                           CompID
@@ -368,7 +368,7 @@ const QuotationList = () => {
                           productPage === index + 1
                             ? "z-10 px-3 py-2 leading-tight text-blue-600 border border-blue-300 bg-blue-100 hover:bg-blue-200 hover:text-blue-700"
                             : "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300  "
-                        } hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white`}
+                        } hover:bg-secondary hover:text-gray dark:hover:bg-gray dark:hover:text-black`}
                       >
                         {index + 1}
                       </button>
@@ -399,7 +399,7 @@ const QuotationList = () => {
                 </ul>
               </nav>
 
-              <div className="flex flex-col text-lg  items-center lg:mb-0 py-1 mt-4">
+              <div className="flex flex-col text-2xl  items-center lg:mb-0 py-1 mt-4 mb-2">
                 <p>Quotations</p>
               </div>
               <div className=" overflow-x-auto">
@@ -535,7 +535,7 @@ const QuotationList = () => {
                     <button
                       onClick={handlePrevious}
                       disabled={productPage === 1}
-                      className="block px-2 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 "
+                      className="block px-2 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray hover:text-black "
                     >
                       <span className="sr-only">Previous</span>
                       <svg
@@ -561,7 +561,7 @@ const QuotationList = () => {
                           purchasePage === index + 1
                             ? "z-10 px-3 py-2 leading-tight text-blue-600 border border-blue-300 bg-blue-100 hover:bg-blue-200 hover:text-blue-700"
                             : "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300  "
-                        } hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white`}
+                        } hover:bg-secondary hover:text-gray dark:hover:bg-gray dark:hover:text-black`}
                       >
                         {index + 1}
                       </button>
@@ -571,7 +571,7 @@ const QuotationList = () => {
                     <button
                       onClick={handleNext}
                       disabled={purchaseEndIndex >= filterPurchase.length}
-                      className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 "
+                      className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray hover:text-black "
                     >
                       <span className="sr-only">Next</span>
                       <svg

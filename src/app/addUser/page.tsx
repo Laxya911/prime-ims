@@ -101,7 +101,7 @@ return (
 
   return (
     <>
-      <Breadcrumb pageName="New User" />
+      <Breadcrumb pageName="Add New User" />
       <div className="rounded-md border border-stroke bg-white items-center justify-center shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="w-full border-stroke dark:border-strokedark  ">
           <h2 className=" text-xl font-bold text-black  text-center dark:text-white sm:text-title-xl2">

@@ -7,7 +7,7 @@ import { PurchaseProduct } from "@/app/types/product";
 
 const PurchaseOrder = () => {
   const session = useSession();
-const [loading, setLoading]= useState(false)
+const [loading, setLoading]= useState(true)
 
   const [allPurchase, setAllPurchase] = useState<PurchaseProduct[]>([]);
   useEffect(() => {
@@ -63,7 +63,7 @@ const [loading, setLoading]= useState(false)
         axios
           .delete(`/api/purchase/${_id}`)
           .then((response) => {
-            toast.success("po Deleted Successfully");
+            toast.success("Purchase Deleted Successfully");
             setAllPurchase((prevInvoice) =>
               prevInvoice.filter(
                 (allPurchaseOrder) => allPurchaseOrder._id !== _id
@@ -71,8 +71,8 @@ const [loading, setLoading]= useState(false)
             );
           })
           .catch((error) => {
-            toast.error("PO Not Deleted");
-            console.error(error); // Handle the error
+            toast.error("Purchase Not Deleted");
+            console.error(error);
           });
       }
     }

@@ -68,8 +68,6 @@ const generatePrintableContent = (
               </Text> */}
             </View>
 
-            {/* Display Right side */}
-
             <View style={styles.customerDetails}>
               <Text style={styles.detailsText}>
                 Supplier Details: {purchaseData.vName}
@@ -84,7 +82,7 @@ const generatePrintableContent = (
                 Address: {purchaseData.address}
               </Text>
               <Text style={styles.detailsText}>
-                GST No: {purchaseData.gst_vat_no}
+                GST No: {purchaseData.gst_vat_no.split("-")[1]}
               </Text>
             </View>
           </View>
@@ -103,7 +101,9 @@ const generatePrintableContent = (
             {purchaseData.products.map((product, index) => (
               <View key={index} style={styles.tableRow}>
                 <Text style={styles.tableCell}>{product.productName}</Text>
-                <Text style={styles.tableCell}>{product.productCode}</Text>
+                <Text style={styles.tableCell}>
+                  {product.productCode.split("-")[1]}
+                </Text>
                 <Text style={styles.tableCell}>{product.newOrder}</Text>
                 <Text style={styles.tableCell}>{product.unit}</Text>
                 <Text style={styles.tableCell}>{product.buyingPrice}</Text>
@@ -112,28 +112,24 @@ const generatePrintableContent = (
               </View>
             ))}
           </View>
-          {/* // html example */}
 
           {/* Display Calculation */}
           <View style={styles.Details}>
             <View style={styles.companyDetails}>
               <Text style={styles.note}>
-                Note*:- taxes will be calculate as percentage base if applicable!
+                Note*:- taxes will be calculate as percentage base if
+                applicable!
               </Text>
             </View>
             <View style={styles.calculation}>
               <Text style={styles.amount}>
-                Sub Total: {purchaseData.subTotal}
-              </Text>
-              {/* <Text style={styles.amount}>GST: {purchaseData.gst}</Text> */}
-
-              <Text style={styles.amount}>
-                Total GST: &nbsp;
-                {purchaseData.totalGst}
+                Sub Total: &nbsp;&nbsp;Rs{purchaseData.subTotal}
               </Text>
               <Text style={styles.amount}>
-                Grand Total: &nbsp;
-                {purchaseData.grandTotal}
+                Total GST: &nbsp; Rs{purchaseData.totalGst}
+              </Text>
+              <Text style={styles.amount}>
+                Grand Total: Rs{purchaseData.grandTotal}
               </Text>
             </View>
           </View>
@@ -153,12 +149,12 @@ const generatePrintableContent = (
             </View>
             <View style={styles.bankDetails}>
               <Text>BANK DETAILS: </Text>
-              <Text>Bank Name: {companyData.bank_name}</Text>
-              <Text>A/C NO. {companyData.account_no}</Text>
-              <Text>IFSC CODE: {companyData.ifsc_code}</Text>
-              <Text>A/C TYPE : {companyData.account_type}</Text>
-              <Text>Branch : {companyData.b_branch}</Text>
-              <Text>Address : {companyData.b_address}</Text>
+              <Text>Name: &nbsp; {companyData.bank_name}</Text>
+              <Text>A/C NO: &nbsp; {companyData.account_no}</Text>
+              <Text>IFSC : &nbsp; {companyData.ifsc_code}</Text>
+              <Text>A/C Type: &nbsp; {companyData.account_type}</Text>
+              <Text>Branch: &nbsp; {companyData.b_branch}</Text>
+              <Text>Address: &nbsp; {companyData.b_address}</Text>
             </View>
           </View>
           <View style={styles.terms}>
@@ -196,6 +192,7 @@ const styles = StyleSheet.create({
     fontSize: "10px",
     textAlign: "left",
     marginRight: 10,
+    marginTop: 15,
     padding: 1,
   },
 
@@ -267,8 +264,8 @@ const styles = StyleSheet.create({
 
   calculation: {
     maxHeight: "240px",
-    justifyContent: "center", // Change justifyContent to "flex-start"
-    alignItems: "center", // Change alignItems to "flex-start"
+    justifyContent: "center",
+    alignItems: "center",
     width: "50%",
     display: "flex",
     flexDirection: "column",
@@ -277,13 +274,14 @@ const styles = StyleSheet.create({
   note: {
     fontSize: "10px",
     textAlign: "center",
+    marginTop: 10,
   },
   amount: {
     fontSize: "8px",
     marginLeft: 90,
     padding: 3,
     alignItems: "flex-end",
-    width: "50%", // Add width: "100%" to make the text take full width
+    width: "50%",
   },
 
   terms: {
@@ -302,9 +300,10 @@ const styles = StyleSheet.create({
   },
   bankDetails: {
     marginTop: "8px",
-    marginLeft: "225px",
+    marginLeft: "210px",
     fontSize: 10,
     width: "50%",
+    textAlign: "left",
     alignSelf: "flex-end",
   },
 
@@ -315,10 +314,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   horizontalLine: {
-    borderTop: 1, // Adjust the thickness as needed
-    borderColor: "black", // Adjust the color as needed
-    marginTop: 5, // Adjust the spacing before the line
-    marginBottom: 5, // Adjust the spacing after the line
+    borderTop: 1, 
+    borderColor: "black", 
+    marginTop: 5,
+    marginBottom: 5,
   },
 });
 

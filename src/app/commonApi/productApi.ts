@@ -16,10 +16,10 @@ const ProductApi = () => {
         const response = await fetch(`/api/product`);
         const data = await response.json();
         // console.log(data)
-        // Filter Invoices based on user role and ownership
+        // Filter Products based on user role and ownership
         if (session.status === "authenticated" && session.data) {
           if (session.data.user.role === "superadmin") {
-            // Display all Invoices for superadmin
+            // Display all Products for superadmin
             const sortedPurchaseOrder = data.sort(
               (a: PurchaseProduct, b: PurchaseProduct) =>
                 new Date(b.date_created).getTime() -
@@ -27,7 +27,7 @@ const ProductApi = () => {
             );
             setAllProducts(sortedPurchaseOrder);
           } else {
-            // Filter Invoices to display only the ones created by the logged-in user
+            // Filter Products to display only the ones created by the logged-in user
             const filteredData = data.filter(
               (po: { companyId: string }) =>
                 po.companyId === session.data.user.companyId

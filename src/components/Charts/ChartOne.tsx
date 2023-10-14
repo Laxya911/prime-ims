@@ -19,16 +19,9 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
       position: "bottom",
       horizontalAlign: "center",
     },
-    theme: {
-      mode: "light",
-      monochrome: {
-        enabled: true,
-        shadeTo: "dark",
-      },
-    },
     colors: [
+      "#3056D3",
       "#bd7f7b",
-      "#c231cc",
       "#3C50E0",
       "#375E83",
       "#259AE6",
@@ -38,12 +31,13 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
       "#ff6666",
     ],
     chart: {
-      fontFamily: "robotto, sans-serif",
+      fontFamily: "sans-serif",
+      height: 335,
       type: "area",
       dropShadow: {
         enabled: true,
         color: "#623CEA14",
-        top: 5,
+        top: 10,
         blur: 4,
         left: 0,
         opacity: 0.1,
@@ -54,14 +48,6 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
       },
     },
     responsive: [
-      {
-        breakpoint: 786,
-        options: {
-          chart: {
-            height: 375,
-          },
-        },
-      },
       {
         breakpoint: 1024,
         options: {
@@ -80,60 +66,35 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
       },
     ],
     stroke: {
-      width: [1, 1],
+      width: [2, 2],
       curve: "straight",
     },
     grid: {
-     
       xaxis: {
         lines: {
-          show: true,
+          show: false,
         },
       },
       yaxis: {
         lines: {
-          show: true,
-         
+          show: false,
         },
       },
     },
     dataLabels: {
-      enabled: true,
+      enabled: false,
     },
     markers: {
       size: 4,
-       colors: [
-        "#c231cc",
-        "#3056D3",
-        "#80CAEE",
-        "#bd7f7b",
-        "#3C50E0",
-        "#375E83",
-        "#259AE6",
-        "#80CAEE",
-        "#FFA70B",
-        "#10B981",
-        "#ff6666",
-      ],
-      strokeColors: [
-        "#c231cc",
-        "#3056D3",
-        "#80CAEE",
-        "#bd7f7b",
-        "#3C50E0",
-        "#375E83",
-        "#259AE6",
-        "#80CAEE",
-        "#FFA70B",
-        "#10B981",
-        "#ff6666",
-      ],
+      colors: "#fff",
+      strokeColors: ["#3056D3", "#80CAEE"],
       strokeWidth: 3,
       strokeOpacity: 0.9,
       strokeDashArray: 0,
       fillOpacity: 1,
       discrete: [],
       hover: {
+        size: undefined,
         sizeOffset: 5,
       },
     },
@@ -144,17 +105,16 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
       title: {
         text: "Purchases by months",
         style: {
-          fontSize: "12px",
-          color: "#259AE6",
+          fontSize: "10px",
+          color: "#2E3A47",
         },
       },
     },
     tooltip: {
       enabled: true,
-      shared: false,
+      shared: true,
     },
   });
-
   const { totalSells } = SalesPurchases();
 
   const [totalBuyingPrice, setTotalBuyingPrice] = useState(0);
@@ -288,8 +248,15 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
   if (!isWindowAvailable()) return <></>;
   const isDataAvailable = allPurchase.length > 0;
 
+  // const handleReset = () => {
+  //   setChartOptions((prevState) => ({
+  //     ...prevState,
+  //   }));
+  // };
+
+  // handleReset;
   return (
-    <div className="col-span-12 rounded-sm border border-stroke bg-white px-1 pt-7.5  shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
+    <div className="col-span-12 rounded-sm border border-stroke bg-white px-5 pt-7.5 pb-5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:col-span-8">
       <div className="flex flex-wrap items-start justify-between gap-3 sm:flex-nowrap">
         <div className="flex w-full flex-wrap gap-2 sm:gap-5 mb-2">
           <div className="flex min-w-47.5 ">
@@ -298,7 +265,7 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
             </span>
             <div className="w-full">
               <p className="font-semibold text-primary">Total Purchases</p>
-              <p className="text-sm font-medium">${totalBuyingPrice}</p>
+              <p className="text-sm font-medium">₹{totalBuyingPrice}</p>
             </div>
           </div>
           <div className="flex min-w-47.5">
@@ -307,7 +274,7 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
             </span>
             <div className="w-full">
               <p className="font-semibold text-secondary">Total Sales</p>
-              <p className="text-sm font-medium">${totalSells}</p>
+              <p className="text-sm font-medium">₹{totalSells}</p>
             </div>
           </div>
           <div className="flex min-w-47.5">
@@ -316,7 +283,16 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
             </span>
             <div className="w-full">
               <p className="font-semibold text-primary">Total Revenue</p>
-              <p className="text-sm font-medium"> {revenue} </p>
+
+              <p
+                className={`text-sm font-medium ${
+                  revenue <= 0 ? "text-success" : "text-danger"
+                }`}
+              >
+                {revenue <= 0
+                  ? `+ ₹${Math.abs(revenue)}`
+                  : `- ₹${Math.abs(revenue)}`}
+              </p>
             </div>
           </div>
         </div>
@@ -329,23 +305,28 @@ const ChartOne: React.FC<ChartOneProps> = ({ allPurchase }) => {
               Week
             </button>
             <button className="rounded py-1 px-3 text-xs font-medium text-black hover:bg-white hover:shadow-card dark:text-white dark:hover:bg-boxdark">
-              Month
+               Month
             </button>
           </div>
         </div> */}
       </div>
-      {isDataAvailable ? (
-        <div id="chartOne" className=" h-[355px] w-[100%] mx-2 bg-bodydark1">
-          <ReactApexChart
-            options={chartOptions}
-            series={chartOptions.series || []}
-          />
-        </div>
-      ) : (
-        <div className="flex flex-col items-center justify-center">
-          <p className="text-lg text-gray-500 p-10">No data available</p>
-        </div>
-      )}
+      <>
+        {isDataAvailable ? (
+          <div id="chartOne" className="-ml-5 h-[355px] w-[103%] bg-secondary">
+            <ReactApexChart
+              options={chartOptions}
+              series={chartOptions.series}
+              type="area"
+              height="100%"
+              width="100%"
+            />
+          </div>
+        ) : (
+          <div className="flex flex-col items-center justify-center">
+            <p className="text-lg text-gray-500 p-10">No data available</p>
+          </div>
+        )}
+      </>
     </div>
   );
 };

@@ -29,8 +29,7 @@ const SecondSection = () => {
     }
   }, [session.status, router]);
 
-  const { allPurchase, handleDelete ,loading} = PurchaseOrder();
-
+  const { allPurchase, handleDelete, loading } = PurchaseOrder();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [purchaseData, setPurchaseData] = useState<PurchaseProduct>(
@@ -377,7 +376,7 @@ const SecondSection = () => {
                     <button
                       onClick={handlePreviousPage}
                       disabled={productPage === 1}
-                      className="block px-2 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 "
+                      className="block px-2 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray hover:text-black "
                     >
                       <span className="sr-only">Previous</span>
                       <svg
@@ -403,7 +402,7 @@ const SecondSection = () => {
                           productPage === index + 1
                             ? "z-10 px-3 py-2 leading-tight text-blue-600 border border-blue-300 bg-blue-100 hover:bg-blue-200 hover:text-blue-700"
                             : "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300  "
-                        } hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white`}
+                        } hover:bg-secondary hover:text-gray dark:hover:bg-gray dark:hover:text-black`}
                       >
                         {index + 1}
                       </button>
@@ -413,7 +412,7 @@ const SecondSection = () => {
                     <button
                       onClick={handleNextPage}
                       disabled={productEndIndex >= filteredProducts.length}
-                      className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 "
+                      className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray hover:text-black "
                     >
                       <span className="sr-only">Next</span>
                       <svg
@@ -436,9 +435,9 @@ const SecondSection = () => {
             </div>
           ) : (
             <>
-            <div className="flex flex-col items-center justify-center">
-              <p className="text-lg text-gray-500 p-10">No data available</p>
-            </div>
+              <div className="flex flex-col items-center justify-center">
+                <p className="text-lg text-gray-500 p-10">No data available</p>
+              </div>
             </>
           )}
           <div className="flex flex-col text-xl  items-center lg:mb-1 py-1 mt-4">
@@ -579,7 +578,7 @@ const SecondSection = () => {
                     <button
                       onClick={handlePrevious}
                       disabled={productPage === 1}
-                      className="block px-2 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 "
+                      className="block px-2 py-2 ml-0 leading-tight text-gray-500 bg-white border rounded-l-lg hover:bg-gray hover:text-black "
                     >
                       <span className="sr-only">Previous</span>
                       <svg
@@ -605,7 +604,7 @@ const SecondSection = () => {
                           purchasePage === index + 1
                             ? "z-10 px-3 py-2 leading-tight text-blue-600 border border-blue-300 bg-blue-100 hover:bg-blue-200 hover:text-blue-700"
                             : "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300  "
-                        } hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white`}
+                        } hover:bg-secondary hover:text-gray dark:hover:bg-gray dark:hover:text-black`}
                       >
                         {index + 1}
                       </button>
@@ -615,7 +614,7 @@ const SecondSection = () => {
                     <button
                       onClick={handleNext}
                       disabled={purchaseEndIndex >= filterPurchase.length}
-                      className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 "
+                      className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray hover:text-black "
                     >
                       <span className="sr-only">Next</span>
                       <svg

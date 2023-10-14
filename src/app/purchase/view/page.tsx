@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import * as XLSX from "xlsx";
@@ -18,10 +17,12 @@ import { generatePrintableContent } from "./PrintableContent";
 import PurchaseOrder from "@/app/commonApi/purchaseApi";
 import { CompanyTypes } from "@/app/types/company";
 import { PurchaseProduct, Products } from "@/app/types/product";
+import Loading from "@/app/loading";
+import AuthUsers from "@/utils/auth";
 
 const PoList = () => {
-  const session = useSession();
   const router = useRouter();
+const {session} = AuthUsers();
 
   useEffect(() => {
     if (session.status === "unauthenticated") {
@@ -29,7 +30,7 @@ const PoList = () => {
     }
   }, [session.status, router]);
 
-  const { allPurchase, handleDelete } = PurchaseOrder();
+  const { allPurchase, handleDelete, loading} = PurchaseOrder();
 
   const [searchTerm, setSearchTerm] = useState("");
   const [purchaseData, setPurchaseData] = useState<PurchaseProduct>(
@@ -185,18 +186,25 @@ const PoList = () => {
   const pageCounts = Math.ceil(filterPurchase.length / purchasePerPage);
 
   const dataLength = allPurchase.length > 0;
-
+  if (loading) {
+    return (
+      <>
+        <Loading />
+      </>
+    );
+  }
   if (session) {
     return (
       <>
         <Breadcrumb pageName="Purchase Orders" />
         <div className="relative mb-10 shadow-md sm:rounded-lg">
-          <div className="flex justify-center text-center text-2xl m-2 sfont-medium">
-            Purchase Orders List
-          </div>
-          {dataLength ? (
-            <>
-              {/* Search Input */}
+        <div className="flex flex-col sm:flex-row px-8 py-2 rounded bg-gray-600 justify-center sm:justify-between mt-6">
+            <div className="flex justify-center  text-center text-lg mb-2 sfont-medium">
+              Purchase Orders List
+            </div>
+
+            {/* Search Input */}
+            {dataLength ? (
               <div className="flex flex-col items-center lg:flex-row-reverse lg:items-end gap-2 sm:gap-4 sm:text-center sm:mb-4 lg:mb-0 px-8 py-1">
                 <button
                   className="bg-success text-white rounded  flex px-4 py-1"
@@ -213,7 +221,12 @@ const PoList = () => {
                   className="rounded border py-1"
                 />
               </div>
-
+            ) : (
+              <></>
+            )}
+          </div>
+          {dataLength ? (
+            <>
               <div className=" overflow-x-auto">
                 <table className="w-full border text-xs text-left ">
                   <thead className="border-b ">
@@ -258,7 +271,7 @@ const PoList = () => {
                       <th className=" py-2 px-4 font-medium text-black dark:text-white">
                         PO Date
                       </th>
-             
+
                       {session?.data?.user.role === "superadmin" && (
                         <th className=" py-2 px-4 font-medium text-black dark:text-white">
                           CompID
@@ -316,7 +329,6 @@ const PoList = () => {
                         <td className=" py-2 px-0 border-b dark:border-[#eee] border-strokedark">
                           {new Date(product.date_created).toDateString()}
                         </td>
-                 
 
                         {session?.data?.user.role === "superadmin" && (
                           <td className=" py-2 px-3 border-b dark:border-[#eee] border-strokedark">
@@ -346,7 +358,7 @@ const PoList = () => {
                     <button
                       onClick={handlePreviousPage}
                       disabled={productPage === 1}
-                      className="block px-2 py-2  ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 "
+                      className="block px-2 py-2  ml-0 leading-tight  bg-white border  rounded-l-lg hover:bg-gray hover:text-black "
                     >
                       <span className="sr-only">Previous</span>
                       <svg
@@ -368,11 +380,11 @@ const PoList = () => {
                     <li key={index}>
                       <button
                         onClick={() => handlePageClick(index + 1)}
-                        className={`block px-3 py-2  leading-tight text-gray-500 ${
+                        className={`block px-3 py-2  leading-tight  ${
                           productPage === index + 1
-                            ? "z-10 px-3 py-2  leading-tight text-blue-600 border border-blue-300 bg-blue-100 hover:bg-blue-200 hover:text-blue-700"
-                            : "px-3 py-2  leading-tight text-gray-500 bg-white border border-gray-300  "
-                        } hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white`}
+                            ? "z-10 px-3 py-2  leading-tight text-blue-600 border border-blue-300  hover:text-blue-700"
+                            : "px-3 py-2  leading-tight  bg-white border  "
+                        } hover:bg-secondary hover:text-gray dark:hover:bg-gray dark:hover:text-black`}
                       >
                         {index + 1}
                       </button>
@@ -382,7 +394,7 @@ const PoList = () => {
                     <button
                       onClick={handleNextPage}
                       disabled={productEndIndex >= filteredProducts.length}
-                      className="block px-3 py-2  leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 "
+                      className="block px-3 py-2  leading-tight  bg-white border rounded-r-lg hover:bg-gray hover:text-black "
                     >
                       <span className="sr-only">Next</span>
                       <svg
@@ -403,7 +415,7 @@ const PoList = () => {
                 </ul>
               </nav>
 
-              <div className="flex flex-col text-lg underline items-center lg:mb-0 py-1 mt-4">
+              <div className="flex flex-col text-2xl  items-center lg:mb-0 py-1 mt-4 mb-2">
                 <p>Purchases</p>
               </div>
               <div className=" overflow-x-auto">
@@ -539,7 +551,7 @@ const PoList = () => {
                     <button
                       onClick={handlePrevious}
                       disabled={productPage === 1}
-                      className="block px-2 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 "
+                      className="block px-2 py-2 ml-0 leading-tight  bg-white border rounded-l-lg hover:bg-gray hover:text-black "
                     >
                       <span className="sr-only">Previous</span>
                       <svg
@@ -561,11 +573,11 @@ const PoList = () => {
                     <li key={index}>
                       <button
                         onClick={() => handleClick(index + 1)}
-                        className={`block px-3 py-2 leading-tight text-gray-500 ${
+                        className={`block px-3 py-2 leading-tight  ${
                           purchasePage === index + 1
-                            ? "z-10 px-3 py-2  leading-tight text-blue-600 border border-blue-300 bg-blue-100 hover:bg-blue-200 hover:text-blue-700"
-                            : "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300  "
-                        } hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white`}
+                            ? "z-10 px-3 py-2  leading-tight border   "
+                            : "px-3 py-2 leading-tight  bg-white border  "
+                        } hover:bg-secondary hover:text-gray dark:hover:bg-gray dark:hover:text-black`}
                       >
                         {index + 1}
                       </button>
@@ -575,7 +587,7 @@ const PoList = () => {
                     <button
                       onClick={handleNext}
                       disabled={purchaseEndIndex >= filterPurchase.length}
-                      className="block px-3 py-2  leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 "
+                      className="block px-3 py-2  leading-tight  bg-white border rounded-r-lg hover:bg-gray hover:text-black"
                     >
                       <span className="sr-only">Next</span>
                       <svg
@@ -598,7 +610,7 @@ const PoList = () => {
             </>
           ) : (
             <div className="flex flex-col items-center justify-center">
-              <p className="text-lg text-gray-500 p-10">No data available</p>
+              <p className="text-lg  p-10">No data available</p>
             </div>
           )}
         </div>

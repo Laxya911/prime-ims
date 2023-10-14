@@ -84,7 +84,7 @@ const generatePrintableContent = (
 
               <View style={styles.tableRow}>
                 <Text style={styles.tableCell}>{invoiceData.productName}</Text>
-                <Text style={styles.tableCell}>{invoiceData.productCode}</Text>
+                <Text style={styles.tableCell}>{invoiceData.productCode.split("-")[1]}</Text>
                 <Text style={styles.tableCell}>{invoiceData.category}</Text>
                 <Text style={styles.tableCell}>{invoiceData.inStock}</Text>
                 <Text style={styles.tableCell}>{invoiceData.buyingPrice}</Text>
@@ -97,9 +97,8 @@ const generatePrintableContent = (
           {/* Display Calculation */}
           <View style={styles.companyDetails}>
             <View style={styles.companyDetails}>
-              <Text style={styles.amount}>
-                {" "}
-                Note:- taxes will be calculate as percentage base if applicable
+            <Text style={styles.note}>
+                Note*:- taxes will be calculate as percentage base if applicable!
               </Text>
             </View>
             <View style={styles.calculation}>
@@ -124,13 +123,13 @@ const generatePrintableContent = (
               </Text>
             </View>
             <View style={styles.bankDetails}>
-              <Text>BANK DETAILS: </Text>
-              <Text>A/C NO: {companyData.account_no} </Text>
+            <Text>BANK DETAILS: </Text>
               <Text>Bank Name: {companyData.bank_name}</Text>
-              <Text>Bank Address: {companyData.b_address}</Text>
-              <Text>Branch: {companyData.b_branch}</Text>
-              <Text>IFSC: {companyData.ifsc_code}</Text>
-              <Text>A/C Type: Current</Text>
+              <Text>A/C NO. {companyData.account_no}</Text>
+              <Text>IFSC CODE: {companyData.ifsc_code}</Text>
+              <Text>A/C TYPE : {companyData.account_type}</Text>
+              <Text>Branch : {companyData.b_branch}</Text>
+              <Text>Address : {companyData.b_address}</Text>
             </View>
           </View>
           <View style={styles.terms}>
@@ -246,6 +245,10 @@ const styles = StyleSheet.create({
     padding: 3,
     alignItems: "flex-end",
     width: "50%", // Add width: "100%" to make the text take full width
+  },
+  note: {
+    fontSize: "10px",
+    textAlign: "center",
   },
   totalInWords: {
     fontSize: "12px",

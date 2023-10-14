@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import * as XLSX from "xlsx";
@@ -18,10 +17,11 @@ import { generatePrintableContent } from "./PrintableContent";
 import PrimeInvoiceApi from "@/app/commonApi/primeInvoiceApi";
 import { CompanyTypes } from "@/app/types/company";
 import { PurchaseProduct, Products } from "@/app/types/product";
+import AuthUsers from "@/utils/auth";
 
 const QuotationList = () => {
-  const session = useSession();
   const router = useRouter();
+  const { session } = AuthUsers();
 
   useEffect(() => {
     if (session.status === "unauthenticated") {
@@ -195,7 +195,7 @@ const QuotationList = () => {
             Invoices List
           </div>
           {dataLength ? (
-            < >
+            <>
               {/* Search Input */}
               <div className="flex flex-col items-center lg:flex-row-reverse lg:items-end gap-2 sm:gap-4 sm:text-center sm:mb-4 lg:mb-0 px-8 py-1">
                 <button
@@ -257,7 +257,7 @@ const QuotationList = () => {
                       <th className=" py-2 px-1 font-medium text-black dark:text-white">
                         PO Date
                       </th>
-                
+
                       {session?.data?.user.role === "superadmin" && (
                         <th className=" py-2 px-1 font-medium text-black dark:text-white">
                           CompID
@@ -343,7 +343,7 @@ const QuotationList = () => {
                     <button
                       onClick={handlePreviousPage}
                       disabled={productPage === 1}
-                      className="block px-2 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 "
+                      className="block px-2 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg  hover:text-black "
                     >
                       <span className="sr-only">Previous</span>
                       <svg
@@ -365,11 +365,11 @@ const QuotationList = () => {
                     <li key={index}>
                       <button
                         onClick={() => handlePageClick(index + 1)}
-                        className={`block px-3 py-2 leading-tight text-gray-500 ${
+                        className={`block px-3 py-2 leading-tight  ${
                           productPage === index + 1
-                            ? "z-10 px-3 py-2 leading-tight text-blue-600 border border-blue-300 bg-blue-100 hover:bg-blue-200 hover:text-blue-700"
-                            : "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300  "
-                        } hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white`}
+                            ? "z-10 px-3 py-2 leading-tight border "
+                            : "px-3 py-2 leading-tight  bg-white border   "
+                        } hover:bg-secondary hover:text-gray dark:hover:bg-gray dark:hover:text-black`}
                       >
                         {index + 1}
                       </button>
@@ -379,7 +379,7 @@ const QuotationList = () => {
                     <button
                       onClick={handleNextPage}
                       disabled={productEndIndex >= filteredProducts.length}
-                      className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 "
+                      className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray hover:text-black "
                     >
                       <span className="sr-only">Next</span>
                       <svg
@@ -399,7 +399,7 @@ const QuotationList = () => {
                   </li>
                 </ul>
               </nav>
-              <div className="flex flex-col text-lg  items-center lg:mb-0 py-1 mt-4">
+              <div className="flex flex-col text-2xl  items-center lg:mb-0 py-1 mt-4 mb-2">
                 <p>Invoices</p>
               </div>
               <div className=" overflow-x-auto ">
@@ -535,7 +535,7 @@ const QuotationList = () => {
                     <button
                       onClick={handlePrevious}
                       disabled={productPage === 1}
-                      className="block px-2 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 "
+                      className="block px-2 py-2 ml-0 leading-tight text-gray-500 bg-white border  rounded-l-lg hover:bg-gray hover:text-black "
                     >
                       <span className="sr-only">Previous</span>
                       <svg
@@ -561,7 +561,7 @@ const QuotationList = () => {
                           purchasePage === index + 1
                             ? "z-10 px-3 py-2 leading-tight text-blue-600 border border-blue-300 bg-blue-100 hover:bg-blue-200 hover:text-blue-700"
                             : "px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300  "
-                        } hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-gray-700 dark:hover:text-white`}
+                        } hover:bg-secondary hover:text-gray dark:hover:bg-gray dark:hover:text-black`}
                       >
                         {index + 1}
                       </button>
@@ -571,7 +571,7 @@ const QuotationList = () => {
                     <button
                       onClick={handleNext}
                       disabled={purchaseEndIndex >= filterPurchase.length}
-                      className="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 "
+                      className="block px-3 py-2 leading-tight bg-white border rounded-r-lg hover:bg-gray  hover:text-black"
                     >
                       <span className="sr-only">Next</span>
                       <svg

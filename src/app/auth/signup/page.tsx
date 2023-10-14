@@ -72,7 +72,6 @@ const Register = () => {
 
   return (
     <>
-      <Breadcrumb pageName="Sign Up" />
       <div className="rounded-md border border-stroke bg-white items-center justify-center shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="w-full px-2 sm:px-40 border-stroke dark:border-strokedark  ">
           <h2 className=" text-xl font-bold text-black  text-center dark:text-white sm:text-title-xl2">

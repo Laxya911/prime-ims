@@ -17,14 +17,15 @@ const generatePrintableContent = (
   if (!purchaseData || !companyData) {
     return null;
   }
-
+  const removeCompanyID = purchaseData.qNumber.split("-");
+  const newInvoiceNumber = removeCompanyID.slice(1).join("-");
   // Create the PDF content using react-pdf/renderer
   const MyDocument = () => (
     <Document>
       <Page>
         <View style={styles.container}>
-          <View>
-             {/* eslint-disable-next-line jsx-a11y/alt-text */}
+          <View style={styles.topHeading}>
+            {/* eslint-disable-next-line jsx-a11y/alt-text */}
             <Image
               src={
                 companyData.logo
@@ -33,26 +34,22 @@ const generatePrintableContent = (
               }
               style={styles.logo}
             />
-          </View>
-          <View style={styles.heading}>
             <View>
-              <Text style={styles.title}>Purchase Details</Text>
+              <Text style={styles.title}>Quotation Details</Text>
             </View>
-            <View>
-            <Text style={styles.invoiceNumber}>
+            <View style={styles.invoiceNumber}>
+              <Text>
                 Date: {new Date(purchaseData.date_created).toDateString()}
               </Text>
-
-              <Text style={styles.invoiceNumber}>
-                PO Number: {purchaseData.po_Number}
-              </Text>
-            
+              <Text>Invoice Number: {newInvoiceNumber}</Text>
             </View>
           </View>
           <View style={styles.Details}>
             {/* Display Left side */}
             <View style={styles.companyDetails}>
-              <Text  style={styles.companyText}>Buyer Name: {companyData.name} </Text>
+              <Text style={styles.companyText}>
+                Buyer Name: {companyData.name}{" "}
+              </Text>
               <Text style={styles.companyText}>
                 Number: {companyData.contact}{" "}
               </Text>
@@ -65,25 +62,27 @@ const generatePrintableContent = (
               <Text style={styles.companyText}>
                 GST No. {companyData.gstNo}{" "}
               </Text>
-              <Text style={styles.companyText}>
+              {/* <Text style={styles.companyText}>
                 PAN No. {companyData.pancard}{" "}
-              </Text>
+              </Text> */}
             </View>
 
-            {/* Display Right side */}
-
             <View style={styles.customerDetails}>
-              <Text style={styles.detailsText}>Customer Details: {purchaseData.vName}</Text>
+              <Text style={styles.detailsText}>
+                Customer Name: {purchaseData.customerName}
+              </Text>
               <Text style={styles.detailsText}>
                 Contact: {purchaseData.contact_no}
               </Text>
-              <Text style={styles.detailsText}>Email: {purchaseData.email}</Text>
+              <Text style={styles.detailsText}>
+                Email: {purchaseData.email}
+              </Text>
               <Text style={styles.detailsText}>
                 Address: {purchaseData.address}
               </Text>
-              <Text style={styles.detailsText}>
+              {/* <Text style={styles.detailsText}>
                 GST No: {purchaseData.gst_vat_no}
-              </Text>
+              </Text> */}
             </View>
           </View>
 
@@ -101,43 +100,38 @@ const generatePrintableContent = (
             {purchaseData.products.map((product, index) => (
               <View key={index} style={styles.tableRow}>
                 <Text style={styles.tableCell}>{product.productName}</Text>
-                <Text style={styles.tableCell}>{product.productCode}</Text>
+                <Text style={styles.tableCell}>
+                  {product.productCode.split("-")[1]}
+                </Text>
                 <Text style={styles.tableCell}>{product.newOrder}</Text>
                 <Text style={styles.tableCell}>{product.unit}</Text>
-                <Text style={styles.tableCell}>{product.buyingPrice}</Text>
+                <Text style={styles.tableCell}>{product.sellingPrice}</Text>
                 <Text style={styles.tableCell}>{product.gst}</Text>
                 <Text style={styles.tableCell}>{product.total}</Text>
               </View>
             ))}
           </View>
-          {/* // html example */}
 
           {/* Display Calculation */}
           <View style={styles.Details}>
             <View style={styles.companyDetails}>
-              <Text style={styles.amount}>
-                {" "}
-                Note:- taxes will be calculate as percentage base if applicable
+              <Text style={styles.note}>
+                Note:- taxes will be calculate as percentage base if applicable!
               </Text>
             </View>
             <View style={styles.calculation}>
               <Text style={styles.amount}>
-                Sub Total: {purchaseData.subTotal}
-              </Text>
-              {/* <Text style={styles.amount}>GST: {purchaseData.gst}</Text> */}
-
-              <Text style={styles.amount}>
-                Total GST: &nbsp;
-                {purchaseData.totalGst}
+                Sub Total: &nbsp;&nbsp;Rs.{purchaseData.subTotal}
               </Text>
               <Text style={styles.amount}>
-                Grand Total: &nbsp;
-                {purchaseData.grandTotal}
+                Total GST: &nbsp; Rs.{purchaseData.totalGst}
+              </Text>
+              <Text style={styles.amount}>
+                Grand Total: Rs.{purchaseData.grandTotal}
               </Text>
             </View>
           </View>
           <View style={styles.horizontalLine} />
-
 
           <View style={styles.conditions}>
             <View>
@@ -147,18 +141,18 @@ const generatePrintableContent = (
                 2. All disputes are subject to Delhi Jurisdiction only.
               </Text>
               <Text>
-                3. {companyData.name}&rsquo;s laibility is as per the clause specified in
-                Airwaybill.
+                3. {companyData.name}&rsquo;s slaibility is as per the clause
+                specified in Airwaybill.
               </Text>
             </View>
             <View style={styles.bankDetails}>
               <Text>BANK DETAILS: </Text>
-              <Text>Bank Name: {companyData.bank_name}</Text>
-              <Text>A/C NO. {companyData.account_no}</Text>
-              <Text>IFSC CODE: {companyData.ifsc_code}</Text>
-              <Text>A/C TYPE : {companyData.account_type}</Text>
-              <Text>Branch : {companyData.b_branch}</Text>
-              <Text>Address : {companyData.b_address}</Text>
+              <Text>Name: &nbsp; {companyData.bank_name}</Text>
+              <Text>A/C NO: &nbsp; {companyData.account_no}</Text>
+              <Text>IFSC : &nbsp; {companyData.ifsc_code}</Text>
+              <Text>A/C Type: &nbsp; {companyData.account_type}</Text>
+              <Text>Branch: &nbsp; {companyData.b_branch}</Text>
+              <Text>Address: &nbsp; {companyData.b_address}</Text>
             </View>
           </View>
           <View style={styles.terms}>
@@ -181,6 +175,13 @@ const styles = StyleSheet.create({
     padding: 15,
     margin: 10,
   },
+  topHeading: {
+    flexDirection: "row",
+    marginRight: 35,
+    marginLeft: 35,
+    justifyContent: "space-between",
+  },
+
   heading: {
     display: "flex",
     marginBottom: 3,
@@ -191,20 +192,22 @@ const styles = StyleSheet.create({
     paddingBottom: "4px",
   },
   title: {
-    alignSelf: "flex-end",
-    fontSize: "16px",
+    textAlign: "center",
+    marginLeft: 20,
+    fontSize: "12px",
   },
+
   invoiceNumber: {
     fontSize: "10px",
-    marginBottom: "4px",
-    alignSelf: "flex-end",
+    textAlign: "left",
+    marginRight: 10,
+    marginTop: 15,
+    padding: 1,
   },
+
   logo: {
     height: 36,
-    width: "100%",
     justifyContent: "center",
-    paddingLeft: "220px",
-    paddingRight: "220px",
     marginBottom: "10px",
     textAlign: "center",
   },
@@ -220,18 +223,19 @@ const styles = StyleSheet.create({
   },
   customerDetails: {
     width: "50%",
+    textAlign: "center",
   },
   companyText: {
     fontSize: "10px",
-    marginLeft: 50,
+    marginLeft: 40,
     textAlign: "left",
     flexWrap: "wrap",
     padding: 2,
   },
   detailsText: {
     fontSize: "10px",
-    marginRight: 10,
-    textAlign: "center",
+    marginLeft: 80,
+    textAlign: "left",
     flexWrap: "wrap",
     padding: 2,
   },
@@ -269,19 +273,24 @@ const styles = StyleSheet.create({
 
   calculation: {
     maxHeight: "240px",
-    justifyContent: "center", // Change justifyContent to "flex-start"
-    alignItems: "center", // Change alignItems to "flex-start"
+    justifyContent: "center",
+    alignItems: "center",
     width: "50%",
     display: "flex",
     flexDirection: "column",
     alignSelf: "flex-end",
+  },
+  note: {
+    fontSize: "10px",
+    textAlign: "center",
+    marginTop: 10,
   },
   amount: {
     fontSize: "8px",
     marginLeft: 90,
     padding: 3,
     alignItems: "flex-end",
-    width: "50%", // Add width: "100%" to make the text take full width
+    width: "50%",
   },
   totalInWords: {
     fontSize: "12px",
@@ -305,9 +314,10 @@ const styles = StyleSheet.create({
   },
   bankDetails: {
     marginTop: "8px",
-    marginLeft: "225px",
+    marginLeft: "210px",
     fontSize: 10,
     width: "50%",
+    textAlign: "left",
     alignSelf: "flex-end",
   },
 
@@ -318,10 +328,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   horizontalLine: {
-    borderTop: 1, // Adjust the thickness as needed
-    borderColor: "black", // Adjust the color as needed
-    marginTop: 5, // Adjust the spacing before the line
-    marginBottom: 5, // Adjust the spacing after the line
+    borderTop: 1,
+    borderColor: "black",
+    marginTop: 5,
+    marginBottom: 5,
   },
 });
 
